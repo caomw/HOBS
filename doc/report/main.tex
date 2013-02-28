@@ -1,0 +1,92 @@
+\documentclass{sig-alternate}
+
+\usepackage{times}
+\usepackage{graphics}
+
+\usepackage{subfigure}
+\usepackage{booktabs}
+\usepackage{colortbl}
+\usepackage{tabularx}
+\usepackage{color}
+\usepackage{xspace}
+\usepackage{hyperref}    % Creates hyperlinks from ref/cite
+\hypersetup{pdfstartview=FitH}
+\usepackage{graphicx}    % For importing graphics
+\usepackage{url}         %
+
+\hypersetup{%
+pdftitle={Your Title}, pdfauthor={Your Authors}, pdfkeywords={your
+keywords}, bookmarksnumbered, pdfstartview={FitH}, colorlinks,
+citecolor=black, filecolor=black, linkcolor=black, urlcolor=black,
+breaklinks=true,}
+
+\renewcommand{\arraystretch}{1.2} % Space out rows in tables
+
+\newcommand{\ml}[1]{{\color{green} {\it ML: #1}}}
+
+% No space between bibliography items:
+\let\oldthebibliography=\thebibliography
+  \let\endoldthebibliography=\endthebibliography
+  \renewenvironment{thebibliography}[1]{%
+    \begin{oldthebibliography}{#1}%
+      \setlength{\parskip}{0ex}%
+      \setlength{\itemsep}{0ex}%
+  }%
+  {%
+    \end{oldthebibliography}%
+  }
+
+%\pagenumbering{arabic}  % Arabic page numbers for submission.  Remove this line to eliminate page numbers for the camera ready copy
+
+\begin{document}
+
+% use this command to override the default ACM copyright statement
+% (e.g. for preprints). Remove for camera ready copy.
+%\toappear{Submitted for review to IPSN 2012.}
+% \conferenceinfo{ConfName} {Date, Location}
+% \CopyrightYear{Year} 
+% \crdata{978-1-4503-1227-1/12/04} 
+% \clubpenalty=10000 
+% \widowpenalty = 10000
+
+
+% to make various LaTeX processors do the right thing with page size
+\special{papersize=8.5in,11in}
+\setlength{\paperheight}{11in}
+\setlength{\paperwidth}{8.5in}
+\setlength{\pdfpageheight}{\paperheight}
+\setlength{\pdfpagewidth}{\paperwidth}
+
+\title{Attention Tracker}
+
+\author{
+{Ben Zhang, Sean Chen}\\
+\affaddr{University of California, Berkeley}\\
+%\affaddr{}\\
+\email{benzh@eecs.berkeley.edu, sean.yhc@berkeley.edu}
+}
+
+\maketitle
+
+% \begin{abstract}
+
+% \end{abstract}
+
+%\category{C.2.1}{Computer-Communication Networks}{Network Architecture and Design}[Wireless communication]
+%\keywords{Collection, CTP, Sensor Network, Routing}
+
+% \category{B.0}{Hardware}{General}
+% \category{B.4}{Hardware}{Input/Output \& Data Communication} 
+% \category{H.4.m}{Information Systems Applications}{Miscellaneous}
+
+% \terms{Design, Experimentation, Measurement} 
+% \keywords{Localization, Magneto-Inductive, Tracking, Virtual Zone}
+
+\input{intro.tex}
+
+% \section{Acknowledgments}
+
+\bibliographystyle{abbrv}
+\bibliography{reference}
+
+\end{document}
