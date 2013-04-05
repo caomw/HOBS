@@ -3,6 +3,12 @@ CS294-84Project
 
 Repo for CS294-84 Project
 
+Configuration v1.1:
+connect digital pin 2 and 3 to XBee RX, TX
+connect power and ground to XBee
+connect led to pin 13
+connect IR sensor to pin 8
+
 Configuration v1.0:
 
 connect digital pin 2 and 3 to XBee RX, TX
