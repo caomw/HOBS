@@ -44,7 +44,4 @@ while True:
 	text = raw_input("text message to send:")
 	ser.write(text)
 	print ser.readline()
-
-
-
 	
