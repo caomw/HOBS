@@ -41,7 +41,8 @@ except Exception as e:
   print "failed to connect the serial port", e
 	
 while True:
-	ser.write("testing")
+	text = raw_input("text message to send:")
+	ser.write(text)
 	print ser.readline()
 
 
