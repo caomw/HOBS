@@ -23,7 +23,7 @@ struct XBeeMessage {
 IRsend irsend;
 int softpotPin = A0; //analog pin 0
 int sendState = 0;
-int ledPin = 13;
+int ledPin = 8;
 int state = 0;
 int softpotReading = 0;
 unsigned long start_time;
@@ -31,7 +31,9 @@ unsigned long new_time;
 struct XBeeMessage XBeeMsgArr[20];
 int XBeeMsgPointer;
 int selectedXBee;
-  
+
+const char segmentDeliminater = ':';
+
 void setup()
 {
   Serial.begin(9600);
@@ -73,21 +75,33 @@ void loop() {
   case WAIT:
     // When entering this state, wait for 1 sec to determine how many signals have been received
     new_time = millis() - start_time;
+    Serial.println(new_time);
     if (new_time > 1000) {
-      Serial.print("[WAIT] One sec expires, client count:  ");      
+      Serial.println("What happens here?");
+      digitalWrite(ledPin, HIGH);
+
+      Serial.println("What happens here?");
       Serial.println(XBeeMsgPointer);
       if (XBeeMsgPointer == 0) {
-	// 
+	// No packet received, or damaged packet received
+	state = INIT;
+	break;
       }
       else if (XBeeMsgPointer == 1) {
 	// only one responded, cool, just go to confirm stage
-	Serial.println("[CONFIRM] entering");
 	state = CONFIRM;
 	selectedXBee = XBeeMsgPointer - 1;
+	Serial.print("[CONFIRM] entering with id=");
+	Serial.println(XBeeMsgArr[selectedXBee].deviceId);
       }
       else {
+	Serial.print("[VERIFYING] entering with Number of devices");
+	Serial.print(XBeeMsgPointer);
 	state = VERIFY;
       }
+    }
+    else {
+      delay(10);
     }
     if(XBee.available()) {
       char packet[50];
@@ -103,50 +117,69 @@ void loop() {
 	// Serial.print( (char) ( XBee.read()) );
       }
       packet[i] = '\0';
-
-      // a weak design, you should be cautious when packets are corrupted
-      str = strtok_r(p, ":", &p);
-      strcpy(id, str);
-      str = strtok_r(p, ":", &p);
-      strcpy(msg, str);
-
-      // assert( (str = strtok_r(p, ":", &p)) != NULL);
-      // for debugging
-      Serial.println("[WAIT] Get XBee reading:");
-      Serial.print("id:");
-      Serial.print(id);
-      Serial.print(" msg:");
-      Serial.println(msg);
+      Serial.print("[WAIT] Get Packet:");
+      Serial.print(packet);
       
-      for(i = 0; i <= XBeeMsgPointer; i++) {
-	if (XBeeMsgArr[i].deviceId == atoi(id))
-	  break;
+      // a weak design, you should be cautious when packets are corrupted
+      // do a checksum
+      char *pos = strchr (packet, ':');
+      if (pos == NULL || pos == packet) {
+	Serial.println("Corrupted packet");
       }
-      if (i > XBeeMsgPointer) {
-	// not found, insert it
-	XBeeMsgArr[XBeeMsgPointer].deviceId = atoi(id);
-	XBeeMsgArr[XBeeMsgPointer].msg = atoi(msg);
-	XBeeMsgPointer++;
-	break;
-      }      
+      else {
+	str = strtok_r(p, ":", &p);
+	strcpy(id, str);
+	str = strtok_r(p, ":", &p);
+	strcpy(msg, str);
+
+	// assert( (str = strtok_r(p, ":", &p)) != NULL);
+	/* // for debugging */
+	/* Serial.println("[WAIT] Get XBee reading:"); */
+	/* Serial.print("id:"); */
+	/* Serial.print(id); */
+	/* Serial.print(" msg:"); */
+	/* Serial.println(msg); */
+	
+	for(i = 0; i <= XBeeMsgPointer; i++) {
+	  if (XBeeMsgArr[i].deviceId == atoi(id))
+	    break;
+	}
+	if (i > XBeeMsgPointer) {
+	  Serial.print("Found new id:"); 
+	  Serial.println(id);
+	  // not found, insert it
+	  XBeeMsgArr[XBeeMsgPointer].deviceId = atoi(id);
+	  XBeeMsgArr[XBeeMsgPointer].msg = atoi(msg);
+	  XBeeMsgPointer++;
+	  break;
+	}
+      }
     }
     break;
   case CONFIRM:
     // send out the signal to THE selected XBee
     assert(selectedXBee == -1);
     XBee.print(XBeeMsgArr[selectedXBee].deviceId);
-    XBee.print(": ");
+    XBee.print(":");
     XBee.println("Confirmation");
+    Serial.print(XBeeMsgArr[selectedXBee].deviceId);
+    Serial.print(":");
+    Serial.println("Confirmation");
     state = CONNECTED;
     break;
   case VERIFY:
     // when there are multiple targets who have responded
     // one of the LED should be on at this case
-    digitalWrite(ledPin, HIGH);
+
+    // digitalWrite(ledPin, HIGH);
     // then based on the gesture, we start to rotate them 
-  
+    state = CONNECTED;
     break;
   case CONNECTED:
+
+    // temporarily for debugging 
+    delay(3000);
+    state = INIT;
     // start Gesture recognition and communication
     break;
   default:
