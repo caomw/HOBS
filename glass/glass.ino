@@ -1,6 +1,7 @@
 #include <SoftwareSerial.h>
 #include <IRremote.h>
 #include <assert.h>
+#include <TimerOne.h>
 
 // define all the states here
 #define IDLE 0
@@ -10,7 +11,7 @@
 #define VERIFY 4
 #define CONNECTED 5
 #define SOFTPOT_THREASHOLD 950
-
+#define DELAY_IN_WAIT 1000000
 SoftwareSerial XBee(2, 4); // RX, TX
 unsigned long session_id = 0xA90;
 
@@ -26,23 +27,47 @@ int sendState = 0;
 int ledPin = 8;
 int state = 0;
 int softpotReading = 0;
-unsigned long start_time;
-unsigned long new_time;
 struct XBeeMessage XBeeMsgArr[20];
 int XBeeMsgPointer;
-int selectedXBee;
+volatile int selectedXBee;
+unsigned long start_time;
+unsigned long end_time;
+
 
 const char segmentDeliminater = ':';
 
 void setup()
 {
   Serial.begin(9600);
-  state = INIT;
+  state = IDLE;
   digitalWrite(softpotPin, HIGH); //enable pullup resistor
   randomSeed(analogRead(5));
   digitalWrite(ledPin, LOW);
   XBee.begin(9600);
   XBeeMsgPointer = 0;
+}
+
+void checkForReplies(int num, int *state) {
+  // check for the number of replies and act accordingly
+  Serial.println("FUCK");
+  Serial.println(num);
+  if (num == 0) {
+    Serial.println("No Msg received");
+    // No packet received, or damaged packet received
+    *state = INIT;
+  }
+  else if (num == 1) {
+    // only one responded, cool, just go to confirm stage
+    *state = CONFIRM;
+    selectedXBee = XBeeMsgPointer - 1;
+    Serial.print("[CONFIRM] entering with id=");
+    Serial.println(XBeeMsgArr[selectedXBee].deviceId);
+  }
+  else {
+    Serial.print("[VERIFYING] entering with Number of devices");
+    Serial.print(XBeeMsgPointer);
+    *state = VERIFY;
+  }
 }
 
 void loop() {
@@ -53,6 +78,7 @@ void loop() {
     Serial.println(softpotReading);
     delay(20);
     if (softpotReading < SOFTPOT_THREASHOLD) {
+      Serial.println("[INIT] Entering");      
       state = INIT;
     }
     selectedXBee = -1;
@@ -60,50 +86,55 @@ void loop() {
   case INIT:
     Serial.println("[INIT] Sending IR");
     session_id = random(0xFFFF);
-    irsend.sendSony(session_id, 16);
+    // irsend.sendSony(session_id, 16);
+    XBee.print(session_id);   
+
     // at the same time listening to any response
-    if(XBee.available()) {
-      state = WAIT;
-      start_time = millis();
-      Serial.print("[WAIT] entering state, time=");
-      Serial.println(start_time);
-      XBeeMsgPointer = 0;
-    }
-    // this delay is purely for rate limiting now
-    delay(30);
+    state = WAIT;
+    Serial.println("[WAIT] entering state");
+    XBeeMsgPointer = 0;
+    start_time = millis();
     break;
   case WAIT:
     // When entering this state, wait for 1 sec to determine how many signals have been received
-    new_time = millis() - start_time;
-    Serial.println(new_time);
-    if (new_time > 1000) {
-      Serial.println("What happens here?");
-      digitalWrite(ledPin, HIGH);
-
-      Serial.println("What happens here?");
+    end_time = millis();
+    if (end_time - start_time > DELAY_IN_WAIT/1000) {
+      // soft timer expires
       Serial.println(XBeeMsgPointer);
+      // check for the number of replies and act accordingly
+      Serial.println("FUCK");
+
       if (XBeeMsgPointer == 0) {
-	// No packet received, or damaged packet received
-	state = INIT;
-	break;
+	Serial.println("No Msg received");
       }
       else if (XBeeMsgPointer == 1) {
-	// only one responded, cool, just go to confirm stage
-	state = CONFIRM;
 	selectedXBee = XBeeMsgPointer - 1;
-	Serial.print("[CONFIRM] entering with id=");
-	Serial.println(XBeeMsgArr[selectedXBee].deviceId);
+      	Serial.print("[CONFIRM] entering with id=");
+      	Serial.println(XBeeMsgArr[selectedXBee].deviceId);
+	state = CONFIRM;
       }
-      else {
-	Serial.print("[VERIFYING] entering with Number of devices");
-	Serial.print(XBeeMsgPointer);
-	state = VERIFY;
-      }
-    }
-    else {
-      delay(10);
+      
+      /* 	Serial.println("No Msg received"); */
+      /* 	// No packet received, or damaged packet received */
+      /* 	state = INIT; */
+      /* } */
+      /* else if (XBeeMsgPointer == 1) { */
+      /* 	// only one responded, cool, just go to confirm stage */
+      /* 	state = CONFIRM; */
+      /* 	selectedXBee = XBeeMsgPointer - 1; */
+      /* 	Serial.print("[CONFIRM] entering with id="); */
+      /* 	Serial.println(XBeeMsgArr[selectedXBee].deviceId); */
+      /* } */
+      /* else { */
+      /* 	Serial.print("[VERIFYING] entering with Number of devices"); */
+      /* 	Serial.print(XBeeMsgPointer); */
+      /* 	state = VERIFY; */
+      /* } */
     }
     if(XBee.available()) {
+      Serial.println("[WAIT] in state, adding new data");
+      // delay for the complete of transmission
+      delay(10);
       char packet[50];
       char id[10];
       char msg[40];

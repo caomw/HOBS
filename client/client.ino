@@ -57,21 +57,29 @@ void loop()
     // purely listening and then react by response
     // for now test use random
     // if(irrecv.decode(&results)) {
-    tmpTest = random(100);
-    Serial.print("[IDLE] tmp:");
-    Serial.println(tmpTest);
-    if (tmpTest > 90) {
-      randomDelay = random(100);
+    
+    if(XBee.available()) {
+      delay(5);
+      char packet[50];
+      int i = 0;
+      while(XBee.available()) {
+	packet[i++] = XBee.read();
+      }
+      packet[i] = '\0';
+      Serial.print("Packet received: ");
+      Serial.println(packet);
+
+      randomDelay = random(1000);
       delay(randomDelay);
 
       Serial.print(deviceId);
-      Serial.print(": ");
-      Serial.print(tmpTest);
+      Serial.print(":");
+      Serial.print(packet);
       Serial.println();
 
       XBee.print(deviceId);
-      XBee.print(": ");
-      XBee.print(tmpTest);
+      XBee.print(":");
+      XBee.print(packet);
       XBee.println();
     }
     break;
