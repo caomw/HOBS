@@ -16,7 +16,7 @@ IRrecv irrecv(RECV_PIN);
 decode_results results;
 int deviceStatus = 0;
 int pendingTimer;
-int deviceId = 1;
+int deviceId = 2;
 char XBeeInString[50];
 int state = IDLE;
 unsigned long randomDelay = 0;
@@ -89,7 +89,7 @@ void loop()
       char packet[50];
       int len = readXBeeString(packet);
       
-      Serial.print("Packet received: ");
+      Serial.print("\nPacket received: ");
       Serial.println(packet);
       Serial.print("Packet len: ");
       Serial.println(len);
@@ -97,12 +97,12 @@ void loop()
       randomDelay = random(1000);
       delay(randomDelay);
 
-      Serial.println("01:a:0101:0");
+      Serial.println("02:a:ABCD:0");
 
       struct XBeePacket p;
-      string_copy(p.id, "01", 0, 1);
+      string_copy(p.id, "02", 0, 1);
       string_copy(p.type, "a", 0, 0);
-      string_copy(p.data, packet, 0, 3);
+      string_copy(p.data, "ABCD", 0, 3);
       string_copy(p.cksum, "0", 0, 0);
       printXBeePacket(p);
       sendXBeePacket(p);
