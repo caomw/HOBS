@@ -17,7 +17,7 @@ IRrecv irrecv(RECV_PIN);
 decode_results results;
 int deviceStatus = 0;
 int pendingTimer;
-const char deviceId = "02";
+char deviceId[2] = "02";
 char XBeeInString[50];
 int state = IDLE;
 unsigned long randomDelay = 0;
@@ -95,42 +95,43 @@ void loop()
       printXBeePacket(p);
 
       if (atoi(p.id) == atoi(deviceId) && p.type[0] == 'c') {
-	// have been confirmed
-	Serial.println("[CONNECTED] entering state");
+      	// have been confirmed
+      	Serial.println("[CONNECTED] entering state");
 
-	// turn on the ligth to indicate
-	digitalWrite(ledPin, HIGH);
+      	// turn on the ligth to indicate
+      	digitalWrite(ledPin, HIGH);
 
-	state = CONNECTED;
+      	state = CONNECTED;
       }
-      // verifying this selection
+            // verifying this selection
       else if (atoi(p.id) == atoi(deviceId) && p.type[0] == 'v') {
-	// have been confirmed
-	Serial.println("[WAIT] being verified");
+      	// have been confirmed
+      	Serial.println("[WAIT] being verified");
 
-	// may flash the light to indicate this
-	
-	state = PENDING;
+      	// may flash the light to indicate this
+      	
+      	state = PENDING;
       }      
       // verifying this selection
       else if (atoi(p.id) != atoi(deviceId) && p.type[0] == 'v') {
-	// have been confirmed
-	Serial.println("[WAIT] verifying others");
-	state = PENDING;
+      	// have been confirmed
+      	Serial.println("[WAIT] verifying others");
+      	state = PENDING;
       }      
       else {
-	Serial.println("[IDLE] id not equal");
-	state = IDLE;
+      	Serial.println("[IDLE] id not equal");
+      	state = IDLE;
       }
     }
     break;
+
   case CONNECTED:
 
     // temporarily for debugging 
     delay(10000);
     state = IDLE;
-    
     break;
+
   default:
     break;
   }
