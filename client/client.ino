@@ -11,7 +11,7 @@
 #define DELAY_IN_WAIT 1000000
 
 SoftwareSerial XBee(2, 3); // RX, TX
-int ledStatusPin = 13;
+int ledStatePin = 13;
 int ledSignalPin = 11;
 int RECV_PIN = 8;
 IRrecv irrecv(RECV_PIN);
@@ -42,7 +42,7 @@ void setup()
 {
   // Open serial communications and wait for port to open:
   Serial.begin(9600);
-  pinMode(ledStatusPin, OUTPUT);
+  pinMode(ledStatePin, OUTPUT);
   pinMode(ledSignalPin, OUTPUT); 
   Serial.println("system begins!");
   // set the data rate for the SoftwareSerial port
@@ -73,7 +73,7 @@ void loop()
     // for now test use random
     // if(irrecv.decode(&results)) {
 
-    digitalWrite(ledStatusPin, LOW);
+    digitalWrite(ledStatePin, LOW);
     
     if(XBee.available()) {
 
@@ -98,6 +98,8 @@ void loop()
       printXBeePacket(p);
       sendXBeePacket(&XBee, p);
       start_time = millis();
+
+      Serial.println("[PENDING] entering PENDING state");
       state = PENDING;
     }
 
@@ -106,7 +108,7 @@ void loop()
     end_time = millis();
 
     if(end_time - toggle_time > 500) {
-      digitalToggle(ledStatusPin);
+      digitalToggle(ledStatePin);
       toggle_time = millis();
     }
 
@@ -128,7 +130,7 @@ void loop()
       	Serial.println("[CONNECTED] entering state");
 
       	// turn on the ligth to indicate
-      	digitalWrite(ledStatusPin, HIGH);
+      	digitalWrite(ledStatePin, HIGH);
 
       	state = CONNECTED;
       }
@@ -157,7 +159,7 @@ void loop()
   case CONNECTED:
 
     // temporarily for debugging 
-    digitalWrite(ledStatusPin, HIGH);
+    digitalWrite(ledStatePin, HIGH);
     delay(10000);
     state = IDLE;
     break;
