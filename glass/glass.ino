@@ -13,6 +13,7 @@ SoftwareSerial XBee(2, 4); // RX, TX
 #define VERIFY 4
 #define CONNECTED 5
 #define SOFTPOT_THREASHOLD 950
+#define SOFTPOT_DELTA_THREASHOLD 111
 #define DELAY_IN_WAIT 1000000
 unsigned long session_id = 0xA90;
 
@@ -23,11 +24,31 @@ int sendState = 0;
 int ledPin = 8;
 int state = 0;
 int softpotReading = 0;
+int softpotInitV = 0;
+int delta_threshold = 0;
+int changes = 0;
 struct XBeePacket XBeePacketArr[20];
 volatile int XBeePacketCounter;
 volatile int selectedXBee;
 unsigned long start_time;
+unsigned long last_release_time;
+bool released;
+bool pressed;
 unsigned long end_time;
+
+
+int readXBeeString (char *strArray) {
+  int i = 0;
+  if(!XBee.available()) {
+    return -1;
+  }
+  while (XBee.available()) {
+    strArray[i] = XBee.read();
+    i++;
+  }
+  strArray[i] = '\0';
+  return i;
+}
 
 void setup()
 {
@@ -38,6 +59,53 @@ void setup()
   digitalWrite(ledPin, LOW);
   XBee.begin(9600);
   XBeePacketCounter = 0;
+  pressed = false;
+  released = false;
+  last_release_time = 0;
+}
+
+// void test slider detection
+void loop3() {
+  delay(10);
+  int delta_threshold = SOFTPOT_DELTA_THREASHOLD;
+  if (XBeePacketCounter > 5) {
+    // this happens really rare
+    // you will only have 800 of the whole slider to use
+    // then each step is 800/XBeePacketCounter
+    delta_threshold = 800/XBeePacketCounter;
+  }
+    
+  softpotReading = analogRead(softpotPin);
+  
+  Serial.print("Softpot Reading: ");
+  Serial.println(softpotReading);
+
+  if (softpotReading < SOFTPOT_THREASHOLD){
+    // tapped on
+    pressed = true;    
+  }
+  
+  // should detect double click here:
+  if (pressed == true && softpotReading > SOFTPOT_THREASHOLD) {
+    // hand left, expected to have double tap
+    // bug is the release time is updated every time here
+    last_release_time = millis();
+    Serial.println("pressed");
+    released = true;
+    pressed = false;
+  }
+  if (released == true && softpotReading < SOFTPOT_THREASHOLD) {
+    // detect if tapped again in a timely fashion
+    unsigned long new_press_time = millis();
+    if (new_press_time - last_release_time < 300) {
+      // definitely timeout
+      Serial.println("tap event detected");
+      delay(4000);
+      released = false;
+      pressed = false;
+    }
+    
+  }
 }
 
 void loop() {
@@ -50,6 +118,8 @@ void loop() {
     if (softpotReading < SOFTPOT_THREASHOLD) {
       Serial.println("[INIT] Entering");      
       state = INIT;
+      softpotInitV = softpotReading;
+      pressed = true;
     }
     selectedXBee = -1;
     break;
@@ -90,8 +160,10 @@ void loop() {
       else {
 	// there are multiple repliers, need to adjust
 	// sort the received Id or actually no need if we have TDMA
-	
-	// complex part to implement, take a coffee and then start	
+
+	// complex part to implement, take a coffee and then start
+	selectedXBee = XBeePacketCounter / 2;
+	released = false;
 	state = VERIFY;
       }
     }
@@ -119,19 +191,52 @@ void loop() {
   case CONFIRM:
     // send out the signal to THE selected XBee
     // WAIT for the confirmation message to arrive
-    
     state = CONNECTED;
     break;
   case VERIFY:
     // when there are multiple targets who have responded
     // one of the LED should be on at this case
-    Serial.println("[VERIFY] Detecting gestures");
+    Serial.print("[VERIFY] now trying id=");
+    Serial.println(selectedXBee);
+    sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "v", XBeePacketArr[selectedXBee].data);
 
-    softpotReading = analogRead(softpotPin);
+    // configure the slider dynamically    
+    delta_threshold = SOFTPOT_DELTA_THREASHOLD;
+    changes = 0;
+    if (XBeePacketCounter > 5) {
+      // this happens really rare
+      // you will only have 800 of the whole slider to use
+      // then each step is 800/XBeePacketCounter
+      delta_threshold = 800/XBeePacketCounter;
+    }
     
-    // digitalWrite(ledPin, HIGH);
-    // then based on the gesture, we start to rotate them 
-    state = CONNECTED;
+    softpotReading = analogRead(softpotPin);
+    if (softpotReading < SOFTPOT_THREASHOLD){
+      // still in hold
+      pressed = true;    
+    }
+     
+    // should detect double click here:
+    if (pressed == true && softpotReading > SOFTPOT_THREASHOLD) {
+      // hand left, expected to have a tap
+      last_release_time = millis();
+      pressed = false;
+      released = true;
+    }
+    if (released == true && softpotReading < SOFTPOT_THREASHOLD) {
+      // detect if tapped again in a timely fashion
+      unsigned long new_release_time = millis();
+      if (new_release_time - last_release_time < 400) {
+	// definitely timeout
+	Serial.println("tap event detected");
+	sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "c", XBeePacketArr[selectedXBee].data);
+	state = CONNECTED;	
+      }      
+    }     
+    
+    changes = (softpotReading - softpotInitV) / delta_threshold;
+    selectedXBee += changes;
+    
     break;
   case CONNECTED:
 
