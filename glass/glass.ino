@@ -15,10 +15,85 @@
 SoftwareSerial XBee(2, 4); // RX, TX
 unsigned long session_id = 0xA90;
 
-struct XBeeMessage {
-  int deviceId;
-  unsigned long msg;
+// to give it a second thought, the packet should be correctly
+// from someone's comment online, XBee samples arrive at a rate of 2.5mSec
+// so having a packet smaller than 40 will guarantee collision-free (10 nodes at most)
+// I was thinking to have the XBeeMessage in a format that each with specific length
+// though this limit the readability and extensibility, but easier to parse
+
+// deviceId   msg     data   checksum
+struct XBeePacket {
+  char id[2+1];
+  char data[4+1];
+  char type[1+1];
+  char cksum[1+1];
 };
+
+// notice, '\0' is not appended
+void string_copy(char *dst, const char *src, int start, int end) {
+  int i = start;
+  while (i <= end) {
+    dst[i-start] = src[i++];
+  }
+  dst[i] = '\0';
+}
+
+// to guarantee, dst should be longer than end-start+1
+void string_concat(char *dst, const char *src, int pos) {
+  int i = 0;
+  while (src[i] != '\0') {
+    dst[i+pos] = src[i++];
+  }
+}
+
+// print packet
+void printXBeePacket (struct XBeePacket p) {
+  Serial.print("[PACKET] id:");
+  Serial.print(p.id);
+  Serial.print("  type:");
+  Serial.print(p.type);
+  Serial.print("  data:");
+  Serial.print(p.data);
+  Serial.print("  cksum:");
+  Serial.println(p.cksum);
+}
+
+// define this as a function so that we can flexible change the way we parse packet
+// read from the serial port and return the packet
+struct XBeePacket readXBeePacket () {
+  struct XBeePacket p;
+  char strArray[20];
+  int i = 0;
+
+  // 'e' indicates error
+  string_copy(p.type, "e", 0, 0);
+  
+  /* if(!XBee.available()) { */
+  /*   return p; */
+  /* } */
+  while (XBee.available()) {
+    strArray[i] = XBee.read();
+    i++;
+  }
+  strArray[i] = '\0';
+  Serial.print("got packet: ");
+  Serial.print(strArray);
+  // don't quite understand why i=10 here
+  Serial.print(" now i=");
+  Serial.println(i);
+  
+  if (i == 10) {
+    string_copy(p.id, strArray, 0, 1);
+    string_copy(p.type, strArray, 2, 2);
+    string_copy(p.data, strArray, 3, 6);
+    string_copy(p.cksum, strArray, 7, 7);
+  }
+  Serial.println("finished parsing packet"); 
+  printXBeePacket(p);
+  Serial.println("Seems to be garbage here"); 
+  return p;
+}
+
 
 // An IR LED must be connected to Arduino PWM pin 3.
 IRsend irsend;
@@ -27,12 +102,11 @@ int sendState = 0;
 int ledPin = 8;
 int state = 0;
 int softpotReading = 0;
-struct XBeeMessage XBeeMsgArr[20];
-int XBeeMsgPointer;
+struct XBeePacket XBeePacketArr[20];
+volatile int XBeePacketCounter;
 volatile int selectedXBee;
 unsigned long start_time;
 unsigned long end_time;
-
 
 const char segmentDeliminater = ':';
 
@@ -44,31 +118,9 @@ void setup()
   randomSeed(analogRead(5));
   digitalWrite(ledPin, LOW);
   XBee.begin(9600);
-  XBeeMsgPointer = 0;
+  XBeePacketCounter = 0;
 }
 
-void checkForReplies(int num, int *state) {
-  // check for the number of replies and act accordingly
-  Serial.println("FUCK");
-  Serial.println(num);
-  if (num == 0) {
-    Serial.println("No Msg received");
-    // No packet received, or damaged packet received
-    *state = INIT;
-  }
-  else if (num == 1) {
-    // only one responded, cool, just go to confirm stage
-    *state = CONFIRM;
-    selectedXBee = XBeeMsgPointer - 1;
-    Serial.print("[CONFIRM] entering with id=");
-    Serial.println(XBeeMsgArr[selectedXBee].deviceId);
-  }
-  else {
-    Serial.print("[VERIFYING] entering with Number of devices");
-    Serial.print(XBeeMsgPointer);
-    *state = VERIFY;
-  }
-}
 
 void loop() {
   switch(state) {
@@ -87,115 +139,70 @@ void loop() {
     Serial.println("[INIT] Sending IR");
     session_id = random(0xFFFF);
     // irsend.sendSony(session_id, 16);
-    XBee.print(session_id);   
+    XBee.print(session_id);  
 
     // at the same time listening to any response
     state = WAIT;
     Serial.println("[WAIT] entering state");
-    XBeeMsgPointer = 0;
+    XBeePacketCounter = 0;
     start_time = millis();
     break;
   case WAIT:
     // When entering this state, wait for 1 sec to determine how many signals have been received
     end_time = millis();
     if (end_time - start_time > DELAY_IN_WAIT/1000) {
-      // soft timer expires
-      Serial.println(XBeeMsgPointer);
       // check for the number of replies and act accordingly
       Serial.println("FUCK");
+      // soft timer expires
+      state = IDLE;
+      Serial.println(XBeePacketCounter);
 
-      if (XBeeMsgPointer == 0) {
+      if (XBeePacketCounter == 0) {
 	Serial.println("No Msg received");
       }
-      else if (XBeeMsgPointer == 1) {
-	selectedXBee = XBeeMsgPointer - 1;
-      	Serial.print("[CONFIRM] entering with id=");
-      	Serial.println(XBeeMsgArr[selectedXBee].deviceId);
+      else if (XBeePacketCounter == 1) {
+	selectedXBee = XBeePacketCounter - 1;
+      	Serial.print("[CONFIRM] entering with selected: ");
+	Serial.print(selectedXBee);
+	Serial.print(" deviceId:");
+	Serial.println(XBeePacketArr[selectedXBee].id);
 	state = CONFIRM;
       }
-      
-      /* 	Serial.println("No Msg received"); */
-      /* 	// No packet received, or damaged packet received */
-      /* 	state = INIT; */
-      /* } */
-      /* else if (XBeeMsgPointer == 1) { */
-      /* 	// only one responded, cool, just go to confirm stage */
-      /* 	state = CONFIRM; */
-      /* 	selectedXBee = XBeeMsgPointer - 1; */
-      /* 	Serial.print("[CONFIRM] entering with id="); */
-      /* 	Serial.println(XBeeMsgArr[selectedXBee].deviceId); */
-      /* } */
-      /* else { */
-      /* 	Serial.print("[VERIFYING] entering with Number of devices"); */
-      /* 	Serial.print(XBeeMsgPointer); */
-      /* 	state = VERIFY; */
-      /* } */
     }
     if(XBee.available()) {
-      Serial.println("[WAIT] in state, adding new data");
       // delay for the complete of transmission
       delay(10);
-      char packet[50];
-      char id[10];
-      char msg[40];
-      int i = 0;
-      char *str;
-      char *p = packet;
+      Serial.println("[WAIT] Reading Packet");
+      struct XBeePacket p = readXBeePacket();
+      printXBeePacket(p);
+      break;
       
-      // obtain the packet
-      while (XBee.available()) {
-	packet[i++] = (char) XBee.read();	
-	// Serial.print( (char) ( XBee.read()) );
-      }
-      packet[i] = '\0';
-      Serial.print("[WAIT] Get Packet:");
-      Serial.print(packet);
-      
-      // a weak design, you should be cautious when packets are corrupted
-      // do a checksum
-      char *pos = strchr (packet, ':');
-      if (pos == NULL || pos == packet) {
-	Serial.println("Corrupted packet");
-      }
-      else {
-	str = strtok_r(p, ":", &p);
-	strcpy(id, str);
-	str = strtok_r(p, ":", &p);
-	strcpy(msg, str);
+      Serial.println("[WAIT] in state, adding new data");
 
-	// assert( (str = strtok_r(p, ":", &p)) != NULL);
-	/* // for debugging */
-	/* Serial.println("[WAIT] Get XBee reading:"); */
-	/* Serial.print("id:"); */
-	/* Serial.print(id); */
-	/* Serial.print(" msg:"); */
-	/* Serial.println(msg); */
-	
-	for(i = 0; i <= XBeeMsgPointer; i++) {
-	  if (XBeeMsgArr[i].deviceId == atoi(id))
-	    break;
-	}
-	if (i > XBeeMsgPointer) {
-	  Serial.print("Found new id:"); 
-	  Serial.println(id);
-	  // not found, insert it
-	  XBeeMsgArr[XBeeMsgPointer].deviceId = atoi(id);
-	  XBeeMsgArr[XBeeMsgPointer].msg = atoi(msg);
-	  XBeeMsgPointer++;
-	  break;
-	}
-      }
+      /* for(int i = 0; i <= XBeePacketCounter; i++) { */
+      /* 	  if (XBeePacketArr[i].id == atoi(id)) */
+      /* 	    break; */
+      /* 	} */
+      /* 	if (i > XBeePacketCounter) { */
+      /* 	  Serial.print("Found new id:");  */
+      /* 	  Serial.println(id); */
+      /* 	  Serial.print("Now total Msg:");  */
+      /* 	  Serial.println(XBeeMsgPointer); */
+      /* 	  // not found, insert it */
+      /* 	  XBeeMsgArr[XBeeMsgPointer].deviceId = atoi(id); */
+      /* 	  XBeeMsgArr[XBeeMsgPointer].msg = atoi(msg); */
+      /* 	  Serial.print("Added to the array with deviceId:"); */
+      /* 	  Serial.print(XBeeMsgArr[XBeeMsgPointer].deviceId); */
+      /* 	  Serial.print(" msg:"); */
+      /* 	  Serial.println(XBeeMsgArr[XBeeMsgPointer].msg); */
+      /* 	  XBeeMsgPointer++; */
+      /* 	  break; */
+      /* 	} */
+      /* } */
     }
     break;
   case CONFIRM:
     // send out the signal to THE selected XBee
-    assert(selectedXBee == -1);
-    XBee.print(XBeeMsgArr[selectedXBee].deviceId);
-    XBee.print(":");
-    XBee.println("Confirmation");
-    Serial.print(XBeeMsgArr[selectedXBee].deviceId);
-    Serial.print(":");
-    Serial.println("Confirmation");
     state = CONNECTED;
     break;
   case VERIFY:
@@ -217,3 +224,5 @@ void loop() {
     break;
   }
 }
+
+
