@@ -7,6 +7,7 @@
 #define IDLE 0
 #define PENDING 1
 #define CONNECTED 2
+#define DELAY_IN_WAIT 1000000
 
 SoftwareSerial XBee(2, 3); // RX, TX
 int ledPin = 13;
@@ -19,6 +20,8 @@ int deviceId = 1;
 char XBeeInString[50];
 int state = IDLE;
 unsigned long randomDelay = 0;
+unsigned long start_time;
+unsigned long end_time;
 
 #define statusOff 0
 #define statusPending 1
@@ -99,40 +102,45 @@ void loop()
       struct XBeePacket p;
       string_copy(p.id, "01", 0, 1);
       string_copy(p.type, "a", 0, 0);
-      string_copy(p.data, "0101", 0, 3);
+      string_copy(p.data, packet, 0, 3);
       string_copy(p.cksum, "0", 0, 0);
       printXBeePacket(p);
       sendXBeePacket(p);
-      
-      // state = PENDING;
-    }
-    break;
-  case PENDING:
-    if(XBee.available()) {
-      Serial.print(XBee.read());
-      return;
-      
-      // determine if the designated id is the deviceId
-      // read XBee message first
-      if (1 == deviceId) {
-	// have been confirmed
-	state = CONNECTED;
-      }
-      else {
-	state = IDLE;
-      }
-    }
-    if(irrecv.decode(&results)) {
-      randomDelay = random(100);
-      delay(randomDelay);
-      XBee.print(deviceId);
-      XBee.print(":");
-      XBee.println(results.value, HEX);
+      start_time = millis();
       state = PENDING;
     }
     break;
+  case PENDING:
+    end_time = millis();
+    // soft timer expires
+    if (end_time - start_time > DELAY_IN_WAIT/1000) {
+      // timeout, return to IDLE
+      state = IDLE;
+    }
+    if(XBee.available()) {
+      // delay for the complete of transmission
+      delay(10);
+      Serial.println("[WAIT] Reading Packet");
+      struct XBeePacket p = readXBeePacket();
+      printXBeePacket(p);
+
+      if (atoi(p.id) == deviceId && p.type[0] == 'c') {
+	// have been confirmed
+	Serial.println("[CONNECTED] entering state");
+	state = CONNECTED;
+      }
+      else {
+	Serial.println("[IDLE] id not equal");
+	state = IDLE;
+      }
+    }
+    break;
   case CONNECTED:
-    // pass
+
+    // temporarily for debugging 
+    delay(10000);
+    state = IDLE;
+    
     break;
   default:
     break;
@@ -173,15 +181,34 @@ int readXBeeString (char *strArray) {
 
 // define this as a function so that we can flexible change the way we parse packet
 // read from the serial port and return the packet
+int sendXBeePacketFromRaw (const char *id,
+			   const char *type,
+			   const char *data) {
+  char str[20];
+  str[0] = '\0';
+  string_concat(str, id, 0);
+  string_concat(str, type, 2);
+  string_concat(str, data, 3);
+  string_concat(str, "", 7);
+  str[8] = '\0';
+  Serial.print("(in sendXBeePacketFromRaw) packet being sent: ");
+  Serial.println(str);
+  XBee.println(str);
+  return 1;
+}
+
+
+// define this as a function so that we can flexible change the way we parse packet
+// read from the serial port and return the packet
 int sendXBeePacket (struct XBeePacket p) {
   char str[20];
   str[0] = '\0';
-  Serial.println(str);
   string_concat(str, p.id, 0);
   string_concat(str, p.type, 2);
   string_concat(str, p.data, 3);
   string_concat(str, p.cksum, 7);
   str[8] = '\0';
+  Serial.print("(in sendXBeePacket) packet being sent: ");
   Serial.println(str);
   XBee.println(str);
   return 1;
@@ -216,8 +243,15 @@ struct XBeePacket readXBeePacket () {
     i++;
   }
   strArray[i] = '\0';
-  
-  if (i == 8) {
+
+  Serial.print("got packet: ");
+  Serial.print(strArray);
+
+  // don't quite understand why i=10 here
+  Serial.print(" now i=");
+  Serial.println(i);
+
+  if (i == 10) {
     string_copy(p.id, strArray, 0, 1);
     string_copy(p.type, strArray, 2, 2);
     string_copy(p.data, strArray, 3, 6);

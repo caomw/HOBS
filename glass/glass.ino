@@ -58,6 +58,44 @@ void printXBeePacket (struct XBeePacket p) {
   Serial.println(p.cksum);
 }
 
+
+
+// define this as a function so that we can flexible change the way we parse packet
+// read from the serial port and return the packet
+int sendXBeePacketFromRaw (const char *id,
+			   const char *type,
+			   const char *data) {
+  char str[20];
+  str[0] = '\0';
+  string_concat(str, id, 0);
+  string_concat(str, type, 2);
+  string_concat(str, data, 3);
+  string_concat(str, "", 7);
+  str[8] = '\0';
+  Serial.print("(in sendXBeePacketFromRaw) packet being sent: ");
+  Serial.println(str);
+  XBee.println(str);
+  return 1;
+}
+
+
+// define this as a function so that we can flexible change the way we parse packet
+// read from the serial port and return the packet
+int sendXBeePacket (struct XBeePacket p) {
+  char str[20];
+  str[0] = '\0';
+  string_concat(str, p.id, 0);
+  string_concat(str, p.type, 2);
+  string_concat(str, p.data, 3);
+  string_concat(str, p.cksum, 7);
+  str[8] = '\0';
+  Serial.print("(in sendXBeePacket) packet being sent: ");
+  Serial.println(str);
+  XBee.println(str);
+  return 1;
+}
+
+
 // define this as a function so that we can flexible change the way we parse packet
 // read from the serial port and return the packet
 struct XBeePacket readXBeePacket () {
@@ -78,6 +116,7 @@ struct XBeePacket readXBeePacket () {
   strArray[i] = '\0';
   Serial.print("got packet: ");
   Serial.print(strArray);
+
   // don't quite understand why i=10 here
   Serial.print(" now i=");
   Serial.println(i);
@@ -88,9 +127,10 @@ struct XBeePacket readXBeePacket () {
     string_copy(p.data, strArray, 3, 6);
     string_copy(p.cksum, strArray, 7, 7);
   }
-  Serial.println("finished parsing packet"); 
-  printXBeePacket(p);
-  Serial.println("Seems to be garbage here"); 
+
+  /* Serial.println("finished parsing packet");  */
+  /* printXBeePacket(p); */
+  /* Serial.println("Seems to be garbage here");  */
   return p;
 }
 
@@ -139,7 +179,7 @@ void loop() {
     Serial.println("[INIT] Sending IR");
     session_id = random(0xFFFF);
     // irsend.sendSony(session_id, 16);
-    XBee.print(session_id);  
+    XBee.print(session_id, HEX);  
 
     // at the same time listening to any response
     state = WAIT;
@@ -150,15 +190,14 @@ void loop() {
   case WAIT:
     // When entering this state, wait for 1 sec to determine how many signals have been received
     end_time = millis();
+    // soft timer expires
     if (end_time - start_time > DELAY_IN_WAIT/1000) {
       // check for the number of replies and act accordingly
-      Serial.println("FUCK");
-      // soft timer expires
-      state = IDLE;
       Serial.println(XBeePacketCounter);
 
       if (XBeePacketCounter == 0) {
 	Serial.println("No Msg received");
+	state = IDLE;
       }
       else if (XBeePacketCounter == 1) {
 	selectedXBee = XBeePacketCounter - 1;
@@ -166,39 +205,30 @@ void loop() {
 	Serial.print(selectedXBee);
 	Serial.print(" deviceId:");
 	Serial.println(XBeePacketArr[selectedXBee].id);
+	// send out the selected message
+	sendXBeePacketFromRaw(XBeePacketArr[selectedXBee].id, "c", XBeePacketArr[selectedXBee].data);
 	state = CONFIRM;
       }
     }
     if(XBee.available()) {
+      int i = 0;
       // delay for the complete of transmission
       delay(10);
       Serial.println("[WAIT] Reading Packet");
       struct XBeePacket p = readXBeePacket();
       printXBeePacket(p);
-      break;
-      
-      Serial.println("[WAIT] in state, adding new data");
 
-      /* for(int i = 0; i <= XBeePacketCounter; i++) { */
-      /* 	  if (XBeePacketArr[i].id == atoi(id)) */
-      /* 	    break; */
-      /* 	} */
-      /* 	if (i > XBeePacketCounter) { */
-      /* 	  Serial.print("Found new id:");  */
-      /* 	  Serial.println(id); */
-      /* 	  Serial.print("Now total Msg:");  */
-      /* 	  Serial.println(XBeeMsgPointer); */
-      /* 	  // not found, insert it */
-      /* 	  XBeeMsgArr[XBeeMsgPointer].deviceId = atoi(id); */
-      /* 	  XBeeMsgArr[XBeeMsgPointer].msg = atoi(msg); */
-      /* 	  Serial.print("Added to the array with deviceId:"); */
-      /* 	  Serial.print(XBeeMsgArr[XBeeMsgPointer].deviceId); */
-      /* 	  Serial.print(" msg:"); */
-      /* 	  Serial.println(XBeeMsgArr[XBeeMsgPointer].msg); */
-      /* 	  XBeeMsgPointer++; */
-      /* 	  break; */
-      /* 	} */
-      /* } */
+      // now add this packet to packet array if id is new
+      for (i = 0; i < XBeePacketCounter; i++) {
+	if ( atoi(p.id) == atoi(XBeePacketArr[i].id) ) {
+	  break;
+	}
+      }
+      if (i == XBeePacketCounter) {
+	// not found, add to the array
+	XBeePacketArr[i] =  p;
+	XBeePacketCounter++;
+      }
     }
     break;
   case CONFIRM:
@@ -216,9 +246,11 @@ void loop() {
   case CONNECTED:
 
     // temporarily for debugging 
-    delay(3000);
-    state = INIT;
+    delay(10000);
+    state = IDLE;
+    
     // start Gesture recognition and communication
+
     break;
   default:
     break;
