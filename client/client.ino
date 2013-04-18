@@ -63,7 +63,7 @@ void loop()
   if(XBee.available()) {
     digitalWrite(ledSignalPin, HIGH);
     signal_time = millis();
-  } else if(millis() - signal_time > 500) {
+  } else if(millis() - signal_time > 200) {
     digitalWrite(ledSignalPin, LOW);
   }
 
@@ -107,7 +107,7 @@ void loop()
   case PENDING:
     end_time = millis();
 
-    if(end_time - toggle_time > 500) {
+    if(end_time - toggle_time > 200) {
       digitalToggle(ledStatePin);
       toggle_time = millis();
     }
