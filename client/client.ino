@@ -1,5 +1,6 @@
 #include <SoftwareSerial.h>
 #include <IRremote.h>
+#include "utils.h"
 
 // Trying to elucidate the way communication works first
 // current design enforces a simplest design on the receiver side
@@ -36,10 +37,9 @@ struct XBeePacket {
   char cksum[1+1];
 };
 
-
 //////////////////////////////////////////////////////////////
 // to guarantee, dst should be longer than end-start+1
-void string_copy(char *dst, const char *src, int start, int end) {
+void string_copy1(char *dst, const char *src, int start, int end) {
   int i = start;
   while (i <= end) {
     dst[i-start] = src[i++];
