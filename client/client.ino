@@ -11,18 +11,22 @@
 #define DELAY_IN_WAIT 1000000
 
 SoftwareSerial XBee(2, 3); // RX, TX
-int ledPin = 13;
+int ledStatusPin = 13;
+int ledSignalPin = 11;
 int RECV_PIN = 8;
 IRrecv irrecv(RECV_PIN);
 decode_results results;
 int deviceStatus = 0;
 int pendingTimer;
-char deviceId[2] = "02";
+char deviceId[3] = "??";
 char XBeeInString[50];
 int state = IDLE;
 unsigned long randomDelay = 0;
 unsigned long start_time;
 unsigned long end_time;
+unsigned long toggle_time;
+unsigned long signal_time;
+
 
 #define statusOff 0
 #define statusPending 1
@@ -33,28 +37,46 @@ const unsigned long signalInit = 0xC1AA09F6;
 const unsigned long signalVerify = 0xAF0;
 const unsigned long signalConfirm = 0xA70;
 
+
 void setup()  
 {
   // Open serial communications and wait for port to open:
   Serial.begin(9600);
-  pinMode(ledPin, OUTPUT);   
+  pinMode(ledStatusPin, OUTPUT);
+  pinMode(ledSignalPin, OUTPUT); 
   Serial.println("system begins!");
   // set the data rate for the SoftwareSerial port
   XBee.begin(9600);
   irrecv.enableIRIn(); // Start the receiver
 
   randomSeed(analogRead(5));
+
+  readXBeeDeviceId();
+  
+  toggle_time = millis();
+  signal_time = millis();
+
 }
 
 void loop()
 {
+  if(XBee.available()) {
+    digitalWrite(ledSignalPin, HIGH);
+    signal_time = millis();
+  } else if(millis() - signal_time > 500) {
+    digitalWrite(ledSignalPin, LOW);
+  }
+
   switch(state) {
   case IDLE:
     // purely listening and then react by response
     // for now test use random
     // if(irrecv.decode(&results)) {
+
+    digitalWrite(ledStatusPin, LOW);
     
     if(XBee.available()) {
+
       delay(5);
       char packet[50];
       int len = readXBeeString(packet);
@@ -78,9 +100,16 @@ void loop()
       start_time = millis();
       state = PENDING;
     }
+
     break;
   case PENDING:
     end_time = millis();
+
+    if(end_time - toggle_time > 500) {
+      digitalToggle(ledStatusPin);
+      toggle_time = millis();
+    }
+
     // soft timer expires
     if (end_time - start_time > DELAY_IN_WAIT/1000) {
       Serial.println("[PENDING] Timer expires, back to IDLE");
@@ -99,7 +128,7 @@ void loop()
       	Serial.println("[CONNECTED] entering state");
 
       	// turn on the ligth to indicate
-      	digitalWrite(ledPin, HIGH);
+      	digitalWrite(ledStatusPin, HIGH);
 
       	state = CONNECTED;
       }
@@ -128,6 +157,7 @@ void loop()
   case CONNECTED:
 
     // temporarily for debugging 
+    digitalWrite(ledStatusPin, HIGH);
     delay(10000);
     state = IDLE;
     break;
@@ -152,18 +182,58 @@ void sendMsg(String msg) {
 }
 
 int readXBeeString (char *strArray) {
+  Serial.print("start read XBee: ");
   int i = 0;
   if(!XBee.available()) {
     return -1;
+    // delay(100);
   }
   while (XBee.available()) {
     strArray[i] = XBee.read();
     i++;
   }
   strArray[i] = '\0';
-  return i;
-  
   Serial.print("read XBee: ");
   Serial.println(strArray);
+  return i;
+  
+  
   // sendMsg(XBeeInString);
+}
+
+void readXBeeDeviceId() {
+  delay(1000);
+
+  memset(XBeeInString, 0, 50);
+  Serial.println("sending +++");
+  XBee.print("+++");
+  delay(3000);
+  // Serial.println("reading...");
+  readXBeeString(XBeeInString);
+  // Serial.println(XBeeInString);
+  
+  delay(1000);
+  
+  memset(XBeeInString, 0, 50);
+  Serial.println("sending ATMY");
+  XBee.print("ATMY\r");
+  delay(3000);
+  readXBeeString(XBeeInString);
+
+  // deviceId = XBeeInString[];
+  int id = atoi(XBeeInString);
+  // string_copy(deviceId, XBeeInString, 0, 1);
+
+  if(id<10) { //append 0 at beginning
+    Serial.println("id<10");
+    deviceId[0] = '0';
+    char a[2];
+    itoa(id, a, 10);
+    deviceId[1] = a[0];
+  } else {
+    itoa(id, deviceId, 10);  
+  }
+  
+  Serial.print("my devide ID: ");
+  Serial.println(deviceId);  
 }
