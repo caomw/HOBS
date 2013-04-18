@@ -88,6 +88,11 @@ void loop() {
 	sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "c", XBeePacketArr[selectedXBee].data);
 	state = CONFIRM;
       }
+      else {
+	// there are multiple repliers, need to adjust
+	// complex part to implement, take a coffee and then start
+
+      }
     }
     if(XBee.available()) {
       int i = 0;

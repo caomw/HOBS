@@ -17,7 +17,7 @@ IRrecv irrecv(RECV_PIN);
 decode_results results;
 int deviceStatus = 0;
 int pendingTimer;
-int deviceId = 2;
+const char deviceId = "02";
 char XBeeInString[50];
 int state = IDLE;
 unsigned long randomDelay = 0;
@@ -60,19 +60,18 @@ void loop()
       int len = readXBeeString(packet);
       
       Serial.print("\nPacket received: ");
-      Serial.println(packet);
-      Serial.print("Packet len: ");
+      Serial.print(packet);
+      Serial.print("  Packet len: ");
       Serial.println(len);
 
       randomDelay = random(1000);
       delay(randomDelay);
 
-      Serial.println("02:a:ABCD:0");
-
+      // send back acknowledge packet
       struct XBeePacket p;
-      string_copy(p.id, "02", 0, 1);
+      string_copy(p.id, deviceId, 0, 1);
       string_copy(p.type, "a", 0, 0);
-      string_copy(p.data, "ABCD", 0, 3);
+      string_copy(p.data, packet, 0, 3);
       string_copy(p.cksum, "0", 0, 0);
       printXBeePacket(p);
       sendXBeePacket(&XBee, p);
@@ -84,6 +83,7 @@ void loop()
     end_time = millis();
     // soft timer expires
     if (end_time - start_time > DELAY_IN_WAIT/1000) {
+      Serial.println("[PENDING] Timer expires, back to IDLE");
       // timeout, return to IDLE
       state = IDLE;
     }
@@ -94,7 +94,7 @@ void loop()
       struct XBeePacket p = readXBeePacket(&XBee);
       printXBeePacket(p);
 
-      if (atoi(p.id) == deviceId && p.type[0] == 'c') {
+      if (atoi(p.id) == atoi(deviceId) && p.type[0] == 'c') {
 	// have been confirmed
 	Serial.println("[CONNECTED] entering state");
 	state = CONNECTED;
