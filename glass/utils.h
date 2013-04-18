@@ -116,8 +116,12 @@ struct XBeePacket readXBeePacket (SoftwareSerial *XBee) {
     string_copy(p.data, strArray, 3, 6);
     string_copy(p.cksum, strArray, 7, 7);
   }
-
   return p;
+}
+
+// well, we don't maximize performance, do we?
+void digitalToggle(int pin){
+  digitalWrite(pin, 1 ^ digitalRead(pin));  
 }
 
 #endif

@@ -97,8 +97,27 @@ void loop()
       if (atoi(p.id) == atoi(deviceId) && p.type[0] == 'c') {
 	// have been confirmed
 	Serial.println("[CONNECTED] entering state");
+
+	// turn on the ligth to indicate
+	digitalWrite(ledPin, HIGH);
+
 	state = CONNECTED;
       }
+      // verifying this selection
+      else if (atoi(p.id) == atoi(deviceId) && p.type[0] == 'v') {
+	// have been confirmed
+	Serial.println("[WAIT] being verified");
+
+	// may flash the light to indicate this
+	
+	state = PENDING;
+      }      
+      // verifying this selection
+      else if (atoi(p.id) != atoi(deviceId) && p.type[0] == 'v') {
+	// have been confirmed
+	Serial.println("[WAIT] verifying others");
+	state = PENDING;
+      }      
       else {
 	Serial.println("[IDLE] id not equal");
 	state = IDLE;
@@ -147,4 +166,3 @@ int readXBeeString (char *strArray) {
   Serial.println(strArray);
   // sendMsg(XBeeInString);
 }
-

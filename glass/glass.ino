@@ -40,7 +40,6 @@ void setup()
   XBeePacketCounter = 0;
 }
 
-
 void loop() {
   switch(state) {
   case IDLE:
@@ -90,8 +89,10 @@ void loop() {
       }
       else {
 	// there are multiple repliers, need to adjust
-	// complex part to implement, take a coffee and then start
-
+	// sort the received Id or actually no need if we have TDMA
+	
+	// complex part to implement, take a coffee and then start	
+	state = VERIFY;
       }
     }
     if(XBee.available()) {
@@ -117,12 +118,17 @@ void loop() {
     break;
   case CONFIRM:
     // send out the signal to THE selected XBee
+    // WAIT for the confirmation message to arrive
+    
     state = CONNECTED;
     break;
   case VERIFY:
     // when there are multiple targets who have responded
     // one of the LED should be on at this case
+    Serial.println("[VERIFY] Detecting gestures");
 
+    softpotReading = analogRead(softpotPin);
+    
     // digitalWrite(ledPin, HIGH);
     // then based on the gesture, we start to rotate them 
     state = CONNECTED;
