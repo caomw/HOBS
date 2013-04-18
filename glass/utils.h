@@ -20,6 +20,11 @@ struct XBeePacket {
   char cksum[1+1];
 };
 
+// type:
+// v: verified
+// c: confirm
+// a: acknowledge
+
 //////////////////////////////////////////////////////////////
 // notice, '\0' is not appended
 void string_copy(char *dst, const char *src, int start, int end) {
