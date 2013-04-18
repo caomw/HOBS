@@ -1,3 +1,6 @@
+#ifndef utils_h
+#define utils_h
+
 #include <SoftwareSerial.h>
 #include "Arduino.h"
 
@@ -116,3 +119,5 @@ struct XBeePacket readXBeePacket (SoftwareSerial *XBee) {
 
   return p;
 }
+
+#endif
