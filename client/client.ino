@@ -1,5 +1,7 @@
 #include <SoftwareSerial.h>
 #include <IRremote.h>
+
+#define DEBUG
 #include "utils.h"
 
 // Trying to elucidate the way communication works first
@@ -45,7 +47,7 @@ void setup()
   Serial.begin(9600);
   pinMode(ledStatePin, OUTPUT);
   pinMode(ledSignalPin, OUTPUT); 
-  Serial.println("system begins!");
+  DEBUG_PRINTLN("system begins!");
   // set the data rate for the SoftwareSerial port
   XBee.begin(9600);
   irrecv.enableIRIn(); // Start the receiver
@@ -82,10 +84,10 @@ void loop()
       char packet[50];
       int len = readXBeeString(packet);
       
-      Serial.print("\nPacket received: ");
-      Serial.print(packet);
-      Serial.print("  Packet len: ");
-      Serial.println(len);
+      DEBUG_PRINT("\nPacket received: ");
+      DEBUG_PRINT(packet);
+      DEBUG_PRINT("  Packet len: ");
+      DEBUG_PRINTLN(len);
 
       randomDelay = random(1000);
       delay(randomDelay);
@@ -100,7 +102,7 @@ void loop()
       sendXBeePacket(&XBee, p);
       start_time = millis();
 
-      Serial.println("[PENDING] entering PENDING state");
+      DEBUG_PRINTLN("[PENDING] entering PENDING state");
       state = PENDING;
     }
 
@@ -115,7 +117,7 @@ void loop()
 
     // soft timer expires, this should be long enough, 20 seconds
     if (end_time - start_time > DELAY_IN_WAIT/50) {
-      Serial.println("[PENDING] Timer expires, back to IDLE");
+      DEBUG_PRINTLN("[PENDING] Timer expires, back to IDLE");
       // timeout, return to IDLE
       state = IDLE;
     }
@@ -123,7 +125,7 @@ void loop()
     if(XBee.available()) {
       // delay for the complete of transmission
       delay(10);
-      Serial.println("[WAIT] Reading Packet");
+      DEBUG_PRINTLN("[WAIT] Reading Packet");
       struct XBeePacket p = readXBeePacket(&XBee);
       printXBeePacket(p);
       // packet not error
@@ -134,14 +136,14 @@ void loop()
 
       if (atoi(p.id) == atoi(deviceId) && p.type[0] == 'c') {
       	// have been confirmed
-      	Serial.println("[CONNECTED] entering state");
+      	DEBUG_PRINTLN("[CONNECTED] entering state");
 
       	state = CONNECTED;
       }
             // verifying this selection
       else if (atoi(p.id) == atoi(deviceId) && p.type[0] == 'v') {
       	// have been confirmed
-      	Serial.println("[WAIT] being verified");
+      	DEBUG_PRINTLN("[WAIT] being verified");
 
       	// may flash the light to indicate this
       	ledStateInterval = 200;
@@ -150,12 +152,12 @@ void loop()
       // verifying this selection
       else if (atoi(p.id) != atoi(deviceId) && p.type[0] == 'v') {
       	// have been confirmed
-      	Serial.println("[WAIT] verifying others");
+      	DEBUG_PRINTLN("[WAIT] verifying others");
 	ledStateInterval = 500;
       	state = PENDING;
       }      
       else {
-      	Serial.println("[IDLE] id not equal");
+      	DEBUG_PRINTLN("[IDLE] id not equal");
       	state = IDLE;
       }
     }
@@ -176,10 +178,10 @@ void loop()
 }
 
 void sendMsg(String msg) {
-  Serial.print(deviceId);
-  Serial.print(": ");
-  Serial.print(msg);
-  Serial.println();
+  DEBUG_PRINT(deviceId);
+  DEBUG_PRINT(": ");
+  DEBUG_PRINT(msg);
+  DEBUG_PRINTLN();
 
   XBee.print(deviceId);
   XBee.print(": ");
@@ -189,7 +191,7 @@ void sendMsg(String msg) {
 }
 
 int readXBeeString (char *strArray) {
-  Serial.print("start read XBee: ");
+  DEBUG_PRINT("start read XBee: ");
   int i = 0;
   if(!XBee.available()) {
     return -1;
@@ -200,8 +202,8 @@ int readXBeeString (char *strArray) {
     i++;
   }
   strArray[i] = '\0';
-  Serial.print("read XBee: ");
-  Serial.println(strArray);
+  DEBUG_PRINT("read XBee: ");
+  DEBUG_PRINTLN(strArray);
   return i;
   
   
@@ -212,17 +214,17 @@ void readXBeeDeviceId() {
   delay(1000);
 
   memset(XBeeInString, 0, 50);
-  Serial.println("sending +++");
+  DEBUG_PRINTLN("sending +++");
   XBee.print("+++");
   delay(3000);
-  // Serial.println("reading...");
+  // DEBUG_PRINTLN("reading...");
   readXBeeString(XBeeInString);
-  // Serial.println(XBeeInString);
+  // DEBUG_PRINTLN(XBeeInString);
   
   delay(1000);
   
   memset(XBeeInString, 0, 50);
-  Serial.println("sending ATMY");
+  DEBUG_PRINTLN("sending ATMY");
   XBee.print("ATMY\r");
   delay(3000);
   readXBeeString(XBeeInString);
@@ -232,7 +234,7 @@ void readXBeeDeviceId() {
   // string_copy(deviceId, XBeeInString, 0, 1);
 
   if(id<10) { //append 0 at beginning
-    Serial.println("id<10");
+    DEBUG_PRINTLN("id<10");
     deviceId[0] = '0';
     char a[2];
     itoa(id, a, 10);
@@ -241,6 +243,6 @@ void readXBeeDeviceId() {
     itoa(id, deviceId, 10);  
   }
   
-  Serial.print("my devide ID: ");
-  Serial.println(deviceId);  
+  DEBUG_PRINT("my devide ID: ");
+  DEBUG_PRINTLN(deviceId);  
 }

@@ -4,6 +4,14 @@
 #include <SoftwareSerial.h>
 #include "Arduino.h"
 
+#ifdef DEBUG
+  #define DEBUG_PRINT(x)  Serial.print(x)
+  #define DEBUG_PRINTLN(x)  Serial.println(x)
+#else
+  #define DEBUG_PRINT(x)
+  #define DEBUG_PRINTLN(x)
+#endif
+
 #define DELAY_IN_WAIT 1000000
 
 // to give it a second thought, the packet should be correctly

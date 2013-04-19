@@ -1,6 +1,7 @@
 #include <SoftwareSerial.h>
 #include <IRremote.h>
 
+#define DEBUG
 #include "utils.h"
 
 SoftwareSerial XBee(2, 4); // RX, TX
@@ -71,11 +72,11 @@ void loop() {
   switch(state) {
   case IDLE:
     softpotReading = analogRead(softpotPin);
-    Serial.print("Softpot Reading: ");
-    Serial.println(softpotReading);
+    DEBUG_PRINT("Softpot Reading: ");
+    DEBUG_PRINTLN(softpotReading);
     delay(20);
     if (softpotReading < SOFTPOT_THREASHOLD) {
-      Serial.println("[INIT] Entering");      
+      DEBUG_PRINTLN("[INIT] Entering");      
       state = INIT;
       softpotInitV = softpotReading;
       pressed = true;
@@ -83,14 +84,14 @@ void loop() {
     selectedXBee = -1;
     break;
   case INIT:
-    Serial.println("[INIT] Sending IR");
+    DEBUG_PRINTLN("[INIT] Sending IR");
     session_id = random(0xFFFF);
     // irsend.sendSony(session_id, 16);
     XBee.print(session_id, HEX);  
 
     // at the same time listening to any response
     state = WAIT;
-    Serial.println("[WAIT] entering state");
+    DEBUG_PRINTLN("[WAIT] entering state");
     XBeePacketCounter = 0;
     start_time = millis();
     break;
@@ -100,10 +101,10 @@ void loop() {
     // soft timer expires
     if (end_time - start_time > DELAY_IN_WAIT/1000) {
       // check for the number of replies and act accordingly
-      Serial.println(XBeePacketCounter);
+      DEBUG_PRINTLN(XBeePacketCounter);
 
       if (XBeePacketCounter == 0) {
-	Serial.println("No Msg received");
+	DEBUG_PRINTLN("No Msg received");
 	state = IDLE;
       }
       else if (XBeePacketCounter == 1) {
@@ -111,7 +112,7 @@ void loop() {
       	Serial.print("[CONFIRM] entering with selected: ");
 	Serial.print(selectedXBee);
 	Serial.print(" deviceId:");
-	Serial.println(XBeePacketArr[selectedXBee].id);
+	DEBUG_PRINTLN(XBeePacketArr[selectedXBee].id);
 	// send out the selected message
 	sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "c", XBeePacketArr[selectedXBee].data);
 	state = CONFIRM;
@@ -132,7 +133,7 @@ void loop() {
       int i = 0;
       // delay for the complete of transmission
       delay(10);
-      Serial.println("[WAIT] Reading Packet");
+      DEBUG_PRINTLN("[WAIT] Reading Packet");
       struct XBeePacket p = readXBeePacket(&XBee);
       printXBeePacket(p);
 
@@ -161,7 +162,7 @@ void loop() {
     Serial.print("[VERIFY] now trying ");
     Serial.print(selectedXBee);
     Serial.print(", id=");
-    Serial.println(XBeePacketArr[selectedXBee].id);
+    DEBUG_PRINTLN(XBeePacketArr[selectedXBee].id);
     if (selectedXBee != previousSelected) {
       sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "v", XBeePacketArr[selectedXBee].data);
       previousSelected = selectedXBee;
@@ -189,13 +190,13 @@ void loop() {
       last_release_time = millis();
       pressed = false;
       released = true;
-      Serial.println("released");
+      DEBUG_PRINTLN("released");
     }
     if (released == true && softpotReading < SOFTPOT_THREASHOLD) {
       // detect if tapped again in a timely fashion
       unsigned long new_release_time = millis();
       if (new_release_time - last_release_time < 400) {
-	Serial.println("tap event detected");
+	DEBUG_PRINTLN("tap event detected");
 	sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "c", XBeePacketArr[selectedXBee].data);
 	state = CONNECTED;
       }      
@@ -205,7 +206,7 @@ void loop() {
       unsigned long new_release_time = millis();
       if (new_release_time - last_release_time > 1000) {
 	// definitely timeout
-	Serial.println("release timeout");
+	DEBUG_PRINTLN("release timeout");
 	state = IDLE;
       }      
     }     
