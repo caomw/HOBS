@@ -121,6 +121,9 @@ struct XBeePacket readXBeePacket (SoftwareSerial *XBee) {
     string_copy(p.data, strArray, 3, 6);
     string_copy(p.cksum, strArray, 7, 7);
   }
+  else {
+    // something wrong with the received packet....
+  }
   return p;
 }
 
