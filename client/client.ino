@@ -21,6 +21,7 @@ int pendingTimer;
 char deviceId[3] = "??";
 char XBeeInString[50];
 int state = IDLE;
+unsigned int ledStateInterval = 500;
 unsigned long randomDelay = 0;
 unsigned long start_time;
 unsigned long end_time;
@@ -107,30 +108,33 @@ void loop()
   case PENDING:
     end_time = millis();
 
-    if(end_time - toggle_time > 200) {
+    if(end_time - toggle_time > ledStateInterval) {
       digitalToggle(ledStatePin);
       toggle_time = millis();
     }
 
-    // soft timer expires
-    if (end_time - start_time > DELAY_IN_WAIT/1000) {
+    // soft timer expires, this should be long enough, 20 seconds
+    if (end_time - start_time > DELAY_IN_WAIT/50) {
       Serial.println("[PENDING] Timer expires, back to IDLE");
       // timeout, return to IDLE
       state = IDLE;
     }
+    
     if(XBee.available()) {
       // delay for the complete of transmission
       delay(10);
       Serial.println("[WAIT] Reading Packet");
       struct XBeePacket p = readXBeePacket(&XBee);
       printXBeePacket(p);
+      // packet not error
+      if (p.type[0] != 'e') {
+	start_time = millis();
+      }
+
 
       if (atoi(p.id) == atoi(deviceId) && p.type[0] == 'c') {
       	// have been confirmed
       	Serial.println("[CONNECTED] entering state");
-
-      	// turn on the ligth to indicate
-      	digitalWrite(ledStatePin, HIGH);
 
       	state = CONNECTED;
       }
@@ -140,13 +144,14 @@ void loop()
       	Serial.println("[WAIT] being verified");
 
       	// may flash the light to indicate this
-      	
+      	ledStateInterval = 200;
       	state = PENDING;
       }      
       // verifying this selection
       else if (atoi(p.id) != atoi(deviceId) && p.type[0] == 'v') {
       	// have been confirmed
       	Serial.println("[WAIT] verifying others");
+	ledStateInterval = 500;
       	state = PENDING;
       }      
       else {
@@ -157,8 +162,8 @@ void loop()
     break;
 
   case CONNECTED:
-
     // temporarily for debugging 
+    // turn on the ligth to indicate
     digitalWrite(ledStatePin, HIGH);
     delay(10000);
     state = IDLE;
