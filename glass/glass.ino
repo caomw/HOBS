@@ -30,6 +30,9 @@ int changes = 0;
 struct XBeePacket XBeePacketArr[20];
 volatile int XBeePacketCounter;
 volatile int selectedXBee;
+volatile int initSelectedXBee;
+volatile int previousSelected;
+
 unsigned long start_time;
 unsigned long last_release_time;
 bool released;
@@ -163,6 +166,8 @@ void loop() {
 
 	// complex part to implement, take a coffee and then start
 	selectedXBee = XBeePacketCounter / 2;
+	initSelectedXBee = selectedXBee;
+	previousSelected = 0;
 	released = false;
 	state = VERIFY;
       }
@@ -198,7 +203,10 @@ void loop() {
     // one of the LED should be on at this case
     Serial.print("[VERIFY] now trying id=");
     Serial.println(selectedXBee);
-    sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "v", XBeePacketArr[selectedXBee].data);
+    if (selectedXBee != previousSelected) {
+      sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "v", XBeePacketArr[selectedXBee].data);
+      previousSelected = selectedXBee;
+    }
 
     // configure the slider dynamically    
     delta_threshold = SOFTPOT_DELTA_THREASHOLD;
@@ -220,6 +228,7 @@ void loop() {
     if (pressed == true && softpotReading > SOFTPOT_THREASHOLD) {
       // hand left, expected to have a tap
       last_release_time = millis();
+      Serial.println("released");
       pressed = false;
       released = true;
     }
@@ -233,9 +242,16 @@ void loop() {
 	state = CONNECTED;	
       }      
     }     
-    
-    changes = (softpotReading - softpotInitV) / delta_threshold;
-    selectedXBee += changes;
+    if (pressed = true) {      
+      changes = (softpotReading - softpotInitV) / delta_threshold;      
+      selectedXBee = initSelectedXBee + changes;
+      if (selectedXBee < 0) {
+	selectedXBee = 0;
+      }
+      if (selectedXBee >= XBeePacketCounter) {
+	selectedXBee = XBeePacketCounter-1;
+      }      
+    }
     
     break;
   case CONNECTED:
