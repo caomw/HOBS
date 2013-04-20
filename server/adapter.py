@@ -43,6 +43,8 @@ try:
 except Exception as e:
   print "failed to connect the serial port", e
 
+# not complete yet
+# sa.get_volume_settings() will return the current volumn settings
 while True:
 	char = ser.read()
 	if char == 'u':
