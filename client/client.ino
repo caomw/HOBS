@@ -167,6 +167,28 @@ void loop()
     // temporarily for debugging 
     // turn on the ligth to indicate
     digitalWrite(ledStatePin, HIGH);
+
+
+    // listen to commands and take actions
+
+    if(XBee.available()) {
+      // delay for the complete of transmission
+      delay(10);
+      DEBUG_PRINTLN("[WAIT] Reading Packet");
+      struct XBeePacket p = readXBeePacket(&XBee);
+      printXBeePacket(p);
+      // packet not error
+      if (p.type[0] != 'e') {
+	start_time = millis();
+      }
+
+      if (atoi(p.id) == atoi(deviceId) && p.type[0] == 'd') {
+      	// disconnected message
+      	DEBUG_PRINTLN("[IDLE] entering state");
+      	state = IDLE;
+      }
+    }
+
     delay(10000);
     state = IDLE;
     break;

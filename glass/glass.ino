@@ -4,6 +4,8 @@
 #define DEBUG
 #include "utils.h"
 
+typedef enum {PRESSED, RELEASED, TAPPED, D_TAPPED} gesture_t;
+
 SoftwareSerial XBee(2, 4); // RX, TX
 
 // define all the states here
@@ -13,8 +15,9 @@ SoftwareSerial XBee(2, 4); // RX, TX
 #define CONFIRM 3
 #define VERIFY 4
 #define CONNECTED 5
+
 #define SOFTPOT_THREASHOLD 950
-#define SOFTPOT_DELTA_THREASHOLD 111
+#define SOFTPOT_DELTA_THREASHOLD 80
 #define DELAY_IN_WAIT 1000000
 unsigned long session_id = 0xA90;
 
@@ -226,12 +229,16 @@ void loop() {
     break;
   case CONNECTED:
 
+    // based on gesture, define actions
+
     // temporarily for debugging 
     delay(10000);
+
+    // disconnected
+    sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "d", XBeePacketArr[selectedXBee].data);
+    
     state = IDLE;
     
-    // start Gesture recognition and communication
-
     break;
   default:
     break;
