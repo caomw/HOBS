@@ -47,6 +47,10 @@ except Exception as e:
 # sa.get_volume_settings() will return the current volumn settings
 while True:
 	char = ser.read()
+	# debugging print out
+	if char != '':
+		print "char read: ", char
+
 	if char == 'u':
 		sa = OSAX()
 		sa.set_volume(100)
