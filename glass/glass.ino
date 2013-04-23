@@ -4,7 +4,6 @@
 #define DEBUG
 #include "utils.h"
 
-typedef enum {PRESSED, RELEASED, TAPPED, D_TAPPED} gesture_t;
 
 SoftwareSerial XBee(2, 4); // RX, TX
 
@@ -19,8 +18,15 @@ SoftwareSerial XBee(2, 4); // RX, TX
 #define SOFTPOT_THREASHOLD 950
 #define SOFTPOT_DELTA_THREASHOLD 80
 #define DELAY_IN_WAIT 1000000
-unsigned long session_id = 0xA90;
 
+#define gIDLE 0
+#define gPRESS 1
+#define gRELEASE 2
+
+
+unsigned long session_id = 0xA90;
+int clicks;
+gesture_t g = gNONE;
 // An IR LED must be connected to Arduino PWM pin 3.
 IRsend irsend;
 int softpotPin = A0; //analog pin 0
@@ -36,13 +42,17 @@ volatile int XBeePacketCounter;
 volatile int selectedXBee;
 volatile int initSelectedXBee;
 volatile int previousSelected;
-
 unsigned long start_time;
 unsigned long last_release_time;
+
+int gState = 0;
+int gResolution = 500;
+unsigned long gStart_time;
+bool gTimerStart = false;
+
 bool released;
 bool pressed;
 unsigned long end_time;
-
 
 int readXBeeString (char *strArray) {
   int i = 0;
@@ -71,18 +81,99 @@ void setup()
   last_release_time = 0;
 }
 
+// should I abstract out the click event and then implement advanced ones?
+// well, so the question now is how you detect tap when you have fingers on the slider?
+// this is different from click, double click
+
+
+gesture_t sliderEvent(int *delta, int counts) {
+  // all related events are detected here
+  gesture_t returnV = gNONE; 
+  softpotReading = analogRead(softpotPin);
+  DEBUG_PRINT("   gStart_time: ");
+  DEBUG_PRINT(gStart_time);
+  DEBUG_PRINT("   clicks: ");
+  DEBUG_PRINT(clicks);
+  DEBUG_PRINT("   gState: ");
+  DEBUG_PRINT(gState);
+  DEBUG_PRINT("   Softpot Reading: ");
+  DEBUG_PRINTLN(softpotReading);
+
+  if (clicks > 0 && (millis() - gStart_time) > gResolution) {
+    gState = gIDLE;
+    gStart_time = 0;
+    if (softpotReading < SOFTPOT_THREASHOLD) {
+      if (clicks == 1) {
+	returnV = gTAP;
+      }
+      else if (clicks == 2) {
+	returnV = gD_TAP;
+      }
+    }
+    else
+      returnV = gCLICK;
+    clicks = 0;
+    return returnV;
+  }
+  
+  switch(gState) {
+  case gIDLE:
+    clicks = 0;
+    if (softpotReading < SOFTPOT_THREASHOLD) {
+      gState = gPRESS;
+      softpotInitV = softpotReading;
+      return gHOVER;
+    }
+    break;
+  case gPRESS:
+    if (clicks == 0) {
+      gStart_time = millis();
+    }
+    if (softpotReading < SOFTPOT_THREASHOLD) {
+      delta_threshold = SOFTPOT_DELTA_THREASHOLD;
+      *delta = 0;
+      if (counts > 5) {
+	// this happens really rare
+	// you will only have 800 of the whole slider to use
+	// then each step is 800/counts
+	delta_threshold = 800/counts;
+      }
+      *delta = (softpotReading - softpotInitV) / delta_threshold;
+    }
+    else {
+      gState = gRELEASE;
+      clicks++;
+    }
+    break;
+  case gRELEASE:
+    if (softpotReading < SOFTPOT_THREASHOLD) {
+      gState = gPRESS;
+    }
+    break;
+  default:
+    break;
+  }
+  return gNONE;
+}
+
 void loop() {
+  // monitor the user input all the time
+  // so everytime when loop executes, or at least in some states
+  // we will see the results
+  if (state == IDLE) {
+    g = sliderEvent(&changes, 0);
+    if (g!= 0)
+      DEBUG_PRINTLN(g);
+    return;
+  }
+  
   switch(state) {
   case IDLE:
-    softpotReading = analogRead(softpotPin);
-    DEBUG_PRINT("Softpot Reading: ");
-    DEBUG_PRINTLN(softpotReading);
     delay(20);
-    if (softpotReading < SOFTPOT_THREASHOLD) {
+    if (false) { // g == gPRESSED) {
       DEBUG_PRINTLN("[INIT] Entering");      
-      state = INIT;
-      softpotInitV = softpotReading;
-      pressed = true;
+      // state = INIT;
+      g = gNONE;
     }
     selectedXBee = -1;
     break;

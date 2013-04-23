@@ -140,4 +140,15 @@ void digitalToggle(int pin){
   digitalWrite(pin, 1 ^ digitalRead(pin));  
 }
 
+
+
+
+typedef enum {
+  gNONE,
+  gHOVER,
+  gTAP,
+  gD_TAP,
+  gCLICK,
+} gesture_t;
+
 #endif
