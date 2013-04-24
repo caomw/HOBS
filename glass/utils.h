@@ -125,7 +125,7 @@ struct XBeePacket readXBeePacket (SoftwareSerial *XBee) {
   Serial.print(", and packet: ");
   Serial.print(strArray);
   
-  if (i == 10) {
+  if (i == 10 || i == 9) {
     string_copy(p.id, strArray, 0, 1);
     string_copy(p.type, strArray, 2, 2);
     string_copy(p.data, strArray, 3, 6);

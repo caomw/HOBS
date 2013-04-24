@@ -50,6 +50,7 @@ void setup()
   Serial.begin(9600);
   pinMode(ledStatePin, OUTPUT);
   pinMode(ledSignalPin, OUTPUT); 
+  pinMode(controlledPin, OUTPUT); 
   DEBUG_PRINTLN("system begins!");
   // set the data rate for the SoftwareSerial port
   XBee.begin(9600);
@@ -138,16 +139,20 @@ void loop()
       DEBUG_PRINTLN("[WAIT] Reading Packet");
       struct XBeePacket p = readXBeePacket(&XBee);
       printXBeePacket(p);
+
+      DEBUG_PRINT("ID1:");
+      DEBUG_PRINT(atoi(p.id));
+      DEBUG_PRINT("  ID2:");
+      DEBUG_PRINTLN(atoi(deviceId));
+	
       // packet not error
       if (p.type[0] != 'e') {
 	start_time = millis();
       }
-
-
+      
       if (atoi(p.id) == atoi(deviceId) && p.type[0] == 'c') {
       	// have been confirmed
       	DEBUG_PRINTLN("[CONNECTED] entering state");
-
       	state = CONNECTED;
       }
       // verifying this selection
@@ -177,8 +182,7 @@ void loop()
     // temporarily for debugging 
     // turn on the ligth to indicate
     digitalWrite(ledStatePin, HIGH);
-
-
+    
     // listen to commands and take actions
 
     if(XBee.available()) {
@@ -187,11 +191,12 @@ void loop()
       DEBUG_PRINTLN("[WAIT] Reading Packet");
       struct XBeePacket p = readXBeePacket(&XBee);
       printXBeePacket(p);
+
       // packet not error
       if (p.type[0] != 'e') {
 	start_time = millis();
       }
-
+      
       if (atoi(p.id) == atoi(deviceId) && p.type[0] == 'i') {
       	// all sorts of instructions
       	DEBUG_PRINTLN("[CONNECTED] command issued");
@@ -203,7 +208,6 @@ void loop()
 	  digitalWrite(controlledPin, LOW);
 	  Serial.print("p");
 	}
-      	state = IDLE;
       }
       if (atoi(p.id) == atoi(deviceId) && p.type[0] == 'd') {
       	// disconnected message
@@ -211,9 +215,6 @@ void loop()
       	state = IDLE;
       }
     }
-
-    delay(10000);
-    state = IDLE;
     break;
 
   default:

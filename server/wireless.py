@@ -1,4 +1,4 @@
-import serial, glob, argparse
+import serial, glob, argparse, time
 
 parser = argparse.ArgumentParser(description='Pyserial for XBee')
 parser.add_argument('--debug', default=False, action='store_true', help='Print More Errors and Launch interactive console on exception or forced exit')
@@ -39,9 +39,38 @@ try:
 	ser = serial.Serial(selected, baud, timeout=timeout)
 except Exception as e:
   print "failed to connect the serial port", e
-	
+
+print "All available commands:"
+print "  1, print -- print all id(s)"
+print "  2, on id -- turn on according to id"
+print "  3, off id -- turn off according to id"
+
+
 while True:
-	text = raw_input("text message to send:")
-	ser.write(text)
-	print ser.readline()
+  text = raw_input("input commands: print, on id, off id?\n>> ")
+  cmd = text.split(' ')
+  if cmd[0] == "print":
+    # print all
+    ser.write("FFFF")
+    time.sleep(1)
+    print ser.readline()
+  elif cmd[0] == "on" or cmd[0] == "off":
+    node_id = cmd[1]
+    # handshake first
+    print "turning on"
+    ser.write("FFFF")
+    time.sleep(0.5)
+    # then confirm
+    print node_id + "cFFFF0"
+    ser.write(node_id+"cFFFF0\n")
+    time.sleep(1)
+    # then send commands
+    instructions = (cmd[0] == "on") and "0001" or "0002"
+    print node_id + "i" + instructions + "0"
+    ser.write(node_id + "i" + instructions + "0\n")
+    time.sleep(5)
+    # disconnected
+    print node_id + "dFFFF0"
+    ser.write(node_id+"dFFFF0\n")
+  # print ser.readline()
 	
