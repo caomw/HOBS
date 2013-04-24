@@ -66,6 +66,13 @@ void setup()
 
 void loop()
 {
+
+  //testing purpose
+  if(Serial.available()) {
+    Serial.write(Serial.read());
+    //XBee.println("msg from serial");
+  }
+
   if(XBee.available()) {
     digitalWrite(ledSignalPin, HIGH);
     signal_time = millis();
