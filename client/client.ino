@@ -1,5 +1,6 @@
 #include <SoftwareSerial.h>
 #include <IRremote.h>
+#include <string.h>
 
 #define DEBUG
 #include "utils.h"
@@ -15,6 +16,8 @@
 SoftwareSerial XBee(2, 3); // RX, TX
 int ledStatePin = 13;
 int ledSignalPin = 11;
+int controlledPin = 12;
+
 int RECV_PIN = 8;
 IRrecv irrecv(RECV_PIN);
 decode_results results;
@@ -140,7 +143,7 @@ void loop()
 
       	state = CONNECTED;
       }
-            // verifying this selection
+      // verifying this selection
       else if (atoi(p.id) == atoi(deviceId) && p.type[0] == 'v') {
       	// have been confirmed
       	DEBUG_PRINTLN("[WAIT] being verified");
@@ -182,6 +185,19 @@ void loop()
 	start_time = millis();
       }
 
+      if (atoi(p.id) == atoi(deviceId) && p.type[0] == 'i') {
+      	// all sorts of instructions
+      	DEBUG_PRINTLN("[CONNECTED] command issued");
+	if (strcmp(p.data, "0001") == 0) {
+	  digitalWrite(controlledPin, HIGH);
+	  Serial.print("p");
+	}
+	if (strcmp(p.data, "0002") == 0) {
+	  digitalWrite(controlledPin, LOW);
+	  Serial.print("p");
+	}
+      	state = IDLE;
+      }
       if (atoi(p.id) == atoi(deviceId) && p.type[0] == 'd') {
       	// disconnected message
       	DEBUG_PRINTLN("[IDLE] entering state");

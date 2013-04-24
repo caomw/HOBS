@@ -32,6 +32,8 @@ struct XBeePacket {
 // v: verified
 // c: confirm
 // a: acknowledge
+// e: error
+// i: instructions
 
 //////////////////////////////////////////////////////////////
 // notice, '\0' is not appended
