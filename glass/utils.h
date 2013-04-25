@@ -55,13 +55,13 @@ void string_concat(char *dst, const char *src, int pos) {
 
 // print packet
 void printXBeePacket (struct XBeePacket p) {
-  Serial.print("[PACKET] id:");
-  Serial.print(p.id);
-  Serial.print("  type:");
-  Serial.print(p.type);
-  Serial.print("  data:");
-  Serial.print(p.data);
-  Serial.print("  cksum:");
+  DEBUG_PRINT("[PACKET] id:");
+  DEBUG_PRINT(p.id);
+  DEBUG_PRINT("  type:");
+  DEBUG_PRINT(p.type);
+  DEBUG_PRINT("  data:");
+  DEBUG_PRINT(p.data);
+  DEBUG_PRINT("  cksum:");
   DEBUG_PRINTLN(p.cksum);
 }
 
@@ -78,7 +78,7 @@ int sendXBeePacketFromRaw (SoftwareSerial *XBee,
   string_concat(str, data, 3);
   string_concat(str, "", 7);
   str[8] = '\0';
-  Serial.print("(in sendXBeePacketFromRaw) packet being sent: ");
+  DEBUG_PRINT("(in sendXBeePacketFromRaw) packet being sent: ");
   DEBUG_PRINTLN(str);
   (*XBee).println(str);
   return 1;
@@ -95,7 +95,7 @@ int sendXBeePacket (SoftwareSerial *XBee, struct XBeePacket p) {
   string_concat(str, p.data, 3);
   string_concat(str, p.cksum, 7);
   str[8] = '\0';
-  Serial.print("(in sendXBeePacket) packet being sent: ");
+  DEBUG_PRINT("(in sendXBeePacket) packet being sent: ");
   DEBUG_PRINTLN(str);
   (*XBee).println(str);
   return 1;
