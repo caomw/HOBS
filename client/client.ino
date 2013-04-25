@@ -51,7 +51,7 @@ void setup()
   pinMode(ledStatePin, OUTPUT);
   pinMode(ledSignalPin, OUTPUT); 
   pinMode(controlledPin, OUTPUT); 
-  DEBUG_PRINTLN("system begins!");
+  Serial.println("system begins!");
   // set the data rate for the SoftwareSerial port
   XBee.begin(9600);
   irrecv.enableIRIn(); // Start the receiver
@@ -70,9 +70,11 @@ void loop()
 
   //testing purpose
   if(Serial.available()) {
-    Serial.write(Serial.read());
+    //DEBUG_PRINT(Serial.read());
     //XBee.println("msg from serial");
   }
+
+
 
   if(XBee.available()) {
     digitalWrite(ledSignalPin, HIGH);
@@ -86,6 +88,7 @@ void loop()
     // purely listening and then react by response
     // for now test use random
     // if(irrecv.decode(&results)) {
+
 
     digitalWrite(ledStatePin, LOW);
     
@@ -115,7 +118,26 @@ void loop()
 
       DEBUG_PRINTLN("[PENDING] entering PENDING state");
       state = PENDING;
-    }
+    } else if(irrecv.decode(&results)) {
+      delay(5);
+      
+      
+      DEBUG_PRINT("\nIR received: ");
+      DEBUG_PRINTLN(results.value);
+      
+      randomDelay = random(1000);
+      delay(randomDelay);
+
+      // send back acknowledge packet
+      
+      sendXBeePacketFromRaw(&XBee, deviceId, "a", "0000");
+      start_time = millis();
+
+      DEBUG_PRINTLN("[PENDING] entering PENDING state");
+      state = PENDING;
+
+      irrecv.resume();
+    } 
 
     break;
   case PENDING:
@@ -131,6 +153,7 @@ void loop()
       DEBUG_PRINTLN("[PENDING] Timer expires, back to IDLE");
       // timeout, return to IDLE
       state = IDLE;
+      irrecv.resume();
     }
     
     if(XBee.available()) {
@@ -174,6 +197,7 @@ void loop()
       else {
       	DEBUG_PRINTLN("[IDLE] id not equal");
       	state = IDLE;
+        irrecv.resume();
       }
     }
     break;
@@ -213,6 +237,7 @@ void loop()
       	// disconnected message
       	DEBUG_PRINTLN("[IDLE] entering state");
       	state = IDLE;
+        irrecv.resume();
       }
     }
     break;
@@ -289,6 +314,6 @@ void readXBeeDeviceId() {
     itoa(id, deviceId, 10);  
   }
   
-  DEBUG_PRINT("my devide ID: ");
-  DEBUG_PRINTLN(deviceId);  
+  Serial.print("my devide ID: ");
+  Serial.println(deviceId);  
 }

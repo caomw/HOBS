@@ -76,7 +76,7 @@ int sendXBeePacketFromRaw (SoftwareSerial *XBee,
   string_concat(str, id, 0);
   string_concat(str, type, 2);
   string_concat(str, data, 3);
-  string_concat(str, "", 7);
+  string_concat(str, "0", 7);
   str[8] = '\0';
   DEBUG_PRINT("(in sendXBeePacketFromRaw) packet being sent: ");
   DEBUG_PRINTLN(str);
