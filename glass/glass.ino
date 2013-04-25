@@ -71,6 +71,7 @@ void setup()
 {
   Serial.begin(9600);
   state = IDLE;
+  Serial.println('System Begins!');
   digitalWrite(softpotPin, HIGH); //enable pullup resistor
   randomSeed(analogRead(5));
   digitalWrite(ledPin, LOW);
@@ -90,14 +91,14 @@ gesture_t sliderEvent(int *delta, int counts) {
   // all related events are detected here
   gesture_t returnV = gNONE; 
   softpotReading = analogRead(softpotPin);
-  DEBUG_PRINT("   gStart_time: ");
-  DEBUG_PRINT(gStart_time);
-  DEBUG_PRINT("   clicks: ");
-  DEBUG_PRINT(clicks);
-  DEBUG_PRINT("   gState: ");
-  DEBUG_PRINT(gState);
-  DEBUG_PRINT("   Softpot Reading: ");
-  DEBUG_PRINTLN(softpotReading);
+  /* DEBUG_PRINT("   gStart_time: "); */
+  /* DEBUG_PRINT(gStart_time); */
+  /* DEBUG_PRINT("   clicks: "); */
+  /* DEBUG_PRINT(clicks); */
+  /* DEBUG_PRINT("   gState: "); */
+  /* DEBUG_PRINT(gState); */
+  /* DEBUG_PRINT("   Softpot Reading: "); */
+  /* DEBUG_PRINTLN(softpotReading); */
 
   if (clicks > 0 && (millis() - gStart_time) > gResolution) {
     gState = gIDLE;
@@ -164,24 +165,24 @@ void loop() {
     g = sliderEvent(&changes, 0);
     if (g!= 0)
       DEBUG_PRINTLN(g);
-    return;
   }
   
   switch(state) {
   case IDLE:
     delay(20);
-    if (false) { // g == gPRESSED) {
+    if (g == gPRESS) {
       DEBUG_PRINTLN("[INIT] Entering");      
-      // state = INIT;
+      state = INIT;
       g = gNONE;
     }
     selectedXBee = -1;
     break;
   case INIT:
-    DEBUG_PRINTLN("[INIT] Sending IR");
     session_id = random(0xFFFF);
-    // irsend.sendSony(session_id, 16);
-    XBee.print(session_id, HEX);  
+    DEBUG_PRINT("[INIT] Sending IR: ");
+    DEBUG_PRINTLN(session_id);
+    irsend.sendSony(session_id, 16);
+    // XBee.print(session_id, HEX);  
 
     // at the same time listening to any response
     state = WAIT;
@@ -220,6 +221,7 @@ void loop() {
 	initSelectedXBee = selectedXBee;
 	previousSelected = 0;
 	released = false;
+	pressed = true;
 	state = VERIFY;
       }
     }
@@ -253,10 +255,14 @@ void loop() {
   case VERIFY:
     // when there are multiple targets who have responded
     // one of the LED should be on at this case
-    Serial.print("[VERIFY] now trying ");
-    Serial.print(selectedXBee);
-    Serial.print(", id=");
-    DEBUG_PRINTLN(XBeePacketArr[selectedXBee].id);
+    DEBUG_PRINT("[VERIFY] now trying ");
+    DEBUG_PRINT(selectedXBee);
+    DEBUG_PRINT(", id=");
+    DEBUG_PRINT(XBeePacketArr[selectedXBee].id);
+    DEBUG_PRINT(", pressed=");
+    DEBUG_PRINT(pressed);
+    DEBUG_PRINT(", released=");
+    DEBUG_PRINTLN(released);
     if (selectedXBee != previousSelected) {
       sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "v", XBeePacketArr[selectedXBee].data);
       previousSelected = selectedXBee;
@@ -304,7 +310,6 @@ void loop() {
 	state = IDLE;
       }      
     }     
-
 	
     if (pressed == true) {      
       changes = (softpotReading - softpotInitV) / delta_threshold;      
