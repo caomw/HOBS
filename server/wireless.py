@@ -52,8 +52,8 @@ while True:
   if cmd[0] == "print":
     # print all
     ser.write("FFFF")
-    time.sleep(1)
-    print ser.readline()
+    time.sleep(2)
+    print ser.readlines()
   elif cmd[0] == "on" or cmd[0] == "off":
     node_id = cmd[1]
     # handshake first

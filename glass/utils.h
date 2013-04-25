@@ -62,7 +62,7 @@ void printXBeePacket (struct XBeePacket p) {
   Serial.print("  data:");
   Serial.print(p.data);
   Serial.print("  cksum:");
-  Serial.println(p.cksum);
+  DEBUG_PRINTLN(p.cksum);
 }
 
 // define this as a function so that we can flexible change the way we parse packet
@@ -79,7 +79,7 @@ int sendXBeePacketFromRaw (SoftwareSerial *XBee,
   string_concat(str, "", 7);
   str[8] = '\0';
   Serial.print("(in sendXBeePacketFromRaw) packet being sent: ");
-  Serial.println(str);
+  DEBUG_PRINTLN(str);
   (*XBee).println(str);
   return 1;
 }
@@ -96,7 +96,7 @@ int sendXBeePacket (SoftwareSerial *XBee, struct XBeePacket p) {
   string_concat(str, p.cksum, 7);
   str[8] = '\0';
   Serial.print("(in sendXBeePacket) packet being sent: ");
-  Serial.println(str);
+  DEBUG_PRINTLN(str);
   (*XBee).println(str);
   return 1;
 }
@@ -120,10 +120,10 @@ struct XBeePacket readXBeePacket (SoftwareSerial *XBee) {
   }
   strArray[i] = '\0';
   // we appended an '\0', plus an '\n' since it was XBee.println
-  Serial.print("got packet, now i=");
-  Serial.print(i);
-  Serial.print(", and packet: ");
-  Serial.print(strArray);
+  DEBUG_PRINT("got packet, now i=");
+  DEBUG_PRINT(i);
+  DEBUG_PRINT(", and packet: ");
+  DEBUG_PRINT(strArray);
   
   if (i == 10 || i == 9) {
     string_copy(p.id, strArray, 0, 1);
