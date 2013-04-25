@@ -57,7 +57,7 @@ while True:
   elif cmd[0] == "on" or cmd[0] == "off":
     node_id = cmd[1]
     # handshake first
-    print "turning on"
+    print "turning", cmd[0]
     ser.write("FFFF")
     time.sleep(0.5)
     # then confirm
