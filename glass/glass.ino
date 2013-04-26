@@ -4,7 +4,6 @@
 #define DEBUG
 #include "utils.h"
 
-
 SoftwareSerial XBee(2, 4); // RX, TX
 
 // define all the states here
@@ -24,7 +23,7 @@ SoftwareSerial XBee(2, 4); // RX, TX
 #define gRELEASE 2
 
 
-unsigned long session_id = 0xA90;
+unsigned long session_id;// = 0xA90;
 int clicks;
 gesture_t g = gNONE;
 // An IR LED must be connected to Arduino PWM pin 3.
@@ -54,6 +53,22 @@ bool released;
 bool pressed;
 unsigned long end_time;
 
+void setup()
+{
+  Serial.begin(9600);
+  state = IDLE;
+  digitalWrite(softpotPin, HIGH); //enable pullup resistor
+  randomSeed(analogRead(5));
+  digitalWrite(ledPin, LOW);
+  XBee.begin(9600);
+  XBeePacketCounter = 0;
+  pressed = false;
+  released = false;
+  last_release_time = 0;
+  delay(300);
+  Serial.print("system begins");
+}
+
 int readXBeeString (char *strArray) {
   int i = 0;
   if(!XBee.available()) {
@@ -67,44 +82,31 @@ int readXBeeString (char *strArray) {
   return i;
 }
 
-void setup()
-{
-  Serial.begin(9600);
-  state = IDLE;
-  Serial.println('System Begins!');
-  digitalWrite(softpotPin, HIGH); //enable pullup resistor
-  randomSeed(analogRead(5));
-  digitalWrite(ledPin, LOW);
-  XBee.begin(9600);
-  XBeePacketCounter = 0;
-  pressed = false;
-  released = false;
-  last_release_time = 0;
-}
-
 // should I abstract out the click event and then implement advanced ones?
 // well, so the question now is how you detect tap when you have fingers on the slider?
 // this is different from click, double click
-
 
 gesture_t sliderEvent(int *delta, int counts) {
   // all related events are detected here
   gesture_t returnV = gNONE; 
   softpotReading = analogRead(softpotPin);
-  /* DEBUG_PRINT("   gStart_time: "); */
-  /* DEBUG_PRINT(gStart_time); */
-  /* DEBUG_PRINT("   clicks: "); */
-  /* DEBUG_PRINT(clicks); */
-  /* DEBUG_PRINT("   gState: "); */
-  /* DEBUG_PRINT(gState); */
-  /* DEBUG_PRINT("   Softpot Reading: "); */
-  /* DEBUG_PRINTLN(softpotReading); */
+  DEBUG_PRINT("   gStart_time: ");
+  DEBUG_PRINT(gStart_time);
+  DEBUG_PRINT("   clicks: ");
+  DEBUG_PRINT(clicks);
+  DEBUG_PRINT("   gState: ");
+  DEBUG_PRINT(gState);
+  DEBUG_PRINT("   Softpot Reading: ");
+  DEBUG_PRINTLN(softpotReading);
 
-  if (clicks > 0 && (millis() - gStart_time) > gResolution) {
+  if (gStart_time != 0 && (millis() - gStart_time) > gResolution) {
     gState = gIDLE;
     gStart_time = 0;
     if (softpotReading < SOFTPOT_THREASHOLD) {
-      if (clicks == 1) {
+      if (clicks == 0) {
+	returnV = gHOVER;
+      }
+      else if (clicks == 1) {
 	returnV = gTAP;
       }
       else if (clicks == 2) {
@@ -122,14 +124,12 @@ gesture_t sliderEvent(int *delta, int counts) {
     clicks = 0;
     if (softpotReading < SOFTPOT_THREASHOLD) {
       gState = gPRESS;
+      gStart_time = millis();
       softpotInitV = softpotReading;
       return gHOVER;
     }
     break;
   case gPRESS:
-    if (clicks == 0) {
-      gStart_time = millis();
-    }
     if (softpotReading < SOFTPOT_THREASHOLD) {
       delta_threshold = SOFTPOT_DELTA_THREASHOLD;
       *delta = 0;
@@ -161,11 +161,13 @@ void loop() {
   // monitor the user input all the time
   // so everytime when loop executes, or at least in some states
   // we will see the results
-  if (state == IDLE) {
+  if (state == IDLE || state == CONNECTED) {
     g = sliderEvent(&changes, 0);
     if (g!= 0)
       DEBUG_PRINTLN(g);
   }
+  delay(10);
+  return;
   
   switch(state) {
   case IDLE:
@@ -324,17 +326,19 @@ void loop() {
     
     break;
   case CONNECTED:
-
     // based on gesture, define actions
-
-    // temporarily for debugging 
-    delay(10000);
-
-    // disconnected
-    sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "d", XBeePacketArr[selectedXBee].data);
-    
-    state = IDLE;
-    
+    if (g == gCLICK) {
+      sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "i", "0001");
+      DEBUG_PRINTLN("[CONNECTED] commands 0001");
+      g = gNONE;
+    }
+    else if (g == gD_TAP) {
+      // disconnected
+      sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "d", XBeePacketArr[selectedXBee].data);
+      DEBUG_PRINTLN("[DISCONNECTED] entering IDLE");
+      state = IDLE;
+      g = gNONE;
+    }    
     break;
   default:
     break;
