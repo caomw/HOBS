@@ -99,9 +99,13 @@ gesture_t sliderEvent(int *delta, int counts) {
   DEBUG_PRINT("   Softpot Reading: ");
   DEBUG_PRINTLN(softpotReading);
 
+  // gStart_time != 0  => user has pressed, and the detection has started
+  // (millis() - gStart_time) > gResolution)  => current time has exceeded the gResolution time from when user pressed, I saw example online which set the gResolution be 300ms, though I use 500 to capture double tap
   if (gStart_time != 0 && (millis() - gStart_time) > gResolution) {
     gState = gIDLE;
     gStart_time = 0;
+    // if now user still holds
+    // determine based on click numbers => 0: HOVER; 1:TAP; 2:D_TAP
     if (softpotReading < SOFTPOT_THREASHOLD) {
       if (clicks == 0) {
 	returnV = gHOVER;
@@ -114,6 +118,8 @@ gesture_t sliderEvent(int *delta, int counts) {
       }
     }
     else
+      // if the user has removed the touch, then probably CLICK event
+      // might also be D_TAP... bug here
       returnV = gCLICK;
     clicks = 0;
     return returnV;
@@ -142,6 +148,7 @@ gesture_t sliderEvent(int *delta, int counts) {
       *delta = (softpotReading - softpotInitV) / delta_threshold;
     }
     else {
+      // only add to click when state goes from PRESS to RELEASE
       gState = gRELEASE;
       clicks++;
     }
