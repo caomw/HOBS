@@ -100,7 +100,7 @@ void loop() {
   // monitor the user input all the time
   // so everytime when loop executes, or at least in some states
   // we will see the results
-  if (state == IDLE || state == CONNECTED) {
+  if (state == IDLE || state == CONNECTED || state == VERIFY) {
     g = sliderEvent(&sliderDelta, &sliderVal);
     if (g!= 0) {
       printGesture(g, &sliderDelta, &sliderVal);
