@@ -174,7 +174,7 @@ void loop() {
       DEBUG_PRINTLN(g);
   }
   delay(10);
-  return;
+  return; //*** for debuggin purpose?
   
   switch(state) {
   case IDLE:
