@@ -15,7 +15,8 @@ SoftwareSerial XBee(2, 4); // RX, TX
 #define VERIFY 4
 #define CONNECTED 5
 
-#define SOFTPOT_DELTA_THREASHOLD 80
+// #define SOFTPOT_DELTA_THREASHOLD 80
+#define TARGET_DELTA_THRESHOLD 80
 #define DELAY_IN_WAIT 1000000
 
 unsigned long session_id;// = 0xA90;
@@ -29,6 +30,8 @@ int state = 0;
 
 int softpotInitV = 0;
 // int delta_threshold = 0; //moved to .h
+int target_slider_threshold = 0;
+int target_changes = 0;
 
 struct XBeePacket XBeePacketArr[20];
 volatile int XBeePacketCounter;
@@ -47,7 +50,7 @@ volatile int previousSelected;
 bool released;
 bool pressed;
 unsigned long end_time;
-int changes = 0;
+
 
 
 //new slider vars
@@ -105,19 +108,22 @@ void loop() {
   }
   delay(10);
 
-  return; //*** for debuggin purpose?
+  // return; //*** for debuggin purpose?
   
   switch(state) {
-  case IDLE:
+    case IDLE:
+    softpotInitV = 0;
     delay(20);
     if (g == gPRESS) {
-      DEBUG_PRINTLN("[INIT] Entering");      
+      DEBUG_PRINTLN("[INIT] Entering");  
+      softpotInitV = sliderVal;
       state = INIT;
       g = gNONE;
-    }
+    } 
+
     selectedXBee = -1;
     break;
-  case INIT:
+    case INIT:
     session_id = random(0xFFFF);
     DEBUG_PRINT("[INIT] Sending IR: ");
     DEBUG_PRINTLN(session_id);
@@ -130,7 +136,7 @@ void loop() {
     XBeePacketCounter = 0;
     start_time = millis();
     break;
-  case WAIT:
+    case WAIT:
     // When entering this state, wait for 1 sec to determine how many signals have been received
     end_time = millis();
     // soft timer expires
@@ -139,30 +145,30 @@ void loop() {
       DEBUG_PRINTLN(XBeePacketCounter);
 
       if (XBeePacketCounter == 0) {
-	DEBUG_PRINTLN("No Msg received");
-	state = IDLE;
+        DEBUG_PRINTLN("No Msg received");
+        state = IDLE;
       }
       else if (XBeePacketCounter == 1) {
-	selectedXBee = XBeePacketCounter - 1;
-      	Serial.print("[CONFIRM] entering with selected: ");
-	Serial.print(selectedXBee);
-	Serial.print(" deviceId:");
-	DEBUG_PRINTLN(XBeePacketArr[selectedXBee].id);
-	// send out the selected message
-	sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "c", XBeePacketArr[selectedXBee].data);
-	state = CONFIRM;
+        selectedXBee = XBeePacketCounter - 1;
+        Serial.print("[CONFIRM] entering with selected: ");
+        Serial.print(selectedXBee);
+        Serial.print(" deviceId:");
+        DEBUG_PRINTLN(XBeePacketArr[selectedXBee].id);
+        // send out the selected message
+        sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "c", XBeePacketArr[selectedXBee].data);
+        state = CONFIRM;
       }
       else {
-	// there are multiple repliers, need to adjust
-	// sort the received Id or actually no need if we have TDMA
+        // there are multiple repliers, need to adjust
+        // sort the received Id or actually no need if we have TDMA
 
-	// complex part to implement, take a coffee and then start
-	selectedXBee = XBeePacketCounter / 2;
-	initSelectedXBee = selectedXBee;
-	previousSelected = 0;
-	released = false;
-	pressed = true;
-	state = VERIFY;
+        // complex part to implement, take a coffee and then start
+        selectedXBee = XBeePacketCounter / 2;
+        initSelectedXBee = selectedXBee;
+        previousSelected = 0;
+        released = false;
+        pressed = true;
+        state = VERIFY;
       }
     }
     if(XBee.available()) {
@@ -175,24 +181,24 @@ void loop() {
 
       // now add this packet to packet array if id is new
       for (i = 0; i < XBeePacketCounter; i++) {
-	if ( atoi(p.id) == atoi(XBeePacketArr[i].id) ) {
-	  break;
-	}
+        if ( atoi(p.id) == atoi(XBeePacketArr[i].id) ) {
+          break;
+        }
       }
       if (i == XBeePacketCounter) {
-	// not found, add to the array
-	XBeePacketArr[i] =  p;
-	XBeePacketCounter++;
+        // not found, add to the array
+        XBeePacketArr[i] =  p;
+        XBeePacketCounter++;
       }
     }
     break;
-  case CONFIRM:
+    case CONFIRM:
     // send out the signal to THE selected XBee
     // WAIT for the confirmation message to arrive
     // now confirm is almost nothing...
     state = CONNECTED;    
     break;
-  case VERIFY:
+    case VERIFY:
     // when there are multiple targets who have responded
     // one of the LED should be on at this case
     DEBUG_PRINT("[VERIFY] now trying ");
@@ -209,79 +215,83 @@ void loop() {
     }
 
     // configure the slider dynamically    
-    delta_threshold = SOFTPOT_DELTA_THREASHOLD;
-    changes = 0;
+    target_slider_threshold = TARGET_DELTA_THRESHOLD;
+    target_changes = 0;
     if (XBeePacketCounter > 5) {
       // this happens really rare
       // you will only have 800 of the whole slider to use
       // then each step is 800/XBeePacketCounter
-      delta_threshold = 800/XBeePacketCounter;
+      target_slider_threshold = 800/XBeePacketCounter;
     }
     
-    softpotReading = analogRead(softpotPin);
-    if (pressed == true && softpotReading < SOFTPOT_THREASHOLD){
-      // still in hold
-      pressed = true;    
-    }
-     
-    // should detect double click here:
-    if (pressed == true && softpotReading > SOFTPOT_THREASHOLD) {
-      // hand left, expected to have a tap
-      last_release_time = millis();
-      pressed = false;
-      released = true;
-      DEBUG_PRINTLN("released");
-    }
-    if (released == true && softpotReading < SOFTPOT_THREASHOLD) {
-      // detect if tapped again in a timely fashion
-      unsigned long new_release_time = millis();
-      if (new_release_time - last_release_time < 400) {
-	DEBUG_PRINTLN("tap event detected");
-	sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "c", XBeePacketArr[selectedXBee].data);
-	state = CONNECTED;
-      }      
-    }
-    if (released == true && softpotReading > SOFTPOT_THREASHOLD) {
-      // timeout happens?      
-      unsigned long new_release_time = millis();
-      if (new_release_time - last_release_time > 1000) {
-	// definitely timeout
-	DEBUG_PRINTLN("release timeout");
-	state = IDLE;
-      }      
-    }     
-	
-    if (pressed == true) {      
-      changes = (softpotReading - softpotInitV) / delta_threshold;      
-      selectedXBee = initSelectedXBee + changes;
+    if(g == gRELEASE) {
+      sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "c", XBeePacketArr[selectedXBee].data);
+      state = CONNECTED;
+    } else if(g == gHOVER || g == gHOVERCHANGE) {
+
+      target_changes = (sliderVal - softpotInitV) / target_slider_threshold;      
+      selectedXBee = initSelectedXBee + target_changes;
       if (selectedXBee < 0) {
-	selectedXBee = 0;
+        selectedXBee = 0;
       }
       if (selectedXBee >= XBeePacketCounter) {
-	selectedXBee = XBeePacketCounter-1;
-      }      
+        selectedXBee = XBeePacketCounter-1;
+      }    
     }
     
+
+
+    // if (released == true && softpotReading < SOFTPOT_THREASHOLD) {
+    //   // detect if tapped again in a timely fashion
+    //   unsigned long new_release_time = millis();
+    //   if (new_release_time - last_release_time < 400) {
+    //     DEBUG_PRINTLN("tap event detected");
+    //     sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "c", XBeePacketArr[selectedXBee].data);
+    //     state = CONNECTED;
+    //   }      
+    // }
+
+    // if (released == true && softpotReading > SOFTPOT_THREASHOLD) {
+    //   // timeout happens?      
+    //   unsigned long new_release_time = millis();
+    //   if (new_release_time - last_release_time > 1000) {
+    //     // definitely timeout
+    //     DEBUG_PRINTLN("release timeout");
+    //     state = IDLE;
+    //   }      
+    // }     
+
+    // if (pressed == true) {      
+    //   target_changes = (softpotReading - softpotInitV) / delta_threshold;      
+    //   selectedXBee = initSelectedXBee + target_changes;
+    //   if (selectedXBee < 0) {
+    //     selectedXBee = 0;
+    //   }
+    //   if (selectedXBee >= XBeePacketCounter) {
+    //     selectedXBee = XBeePacketCounter-1;
+    //   }      
+    // }
+    
     break;
-  case CONNECTED:
+    case CONNECTED:
     // based on gesture, define actions
     // if (g == gCLICK) { //*** modify to tap?
-    if(g == gTAP) { 
-      sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "i", "0001");
-      DEBUG_PRINTLN("[CONNECTED] commands 0001");
-      g = gNONE;
+      if(g == gTAP) { 
+        sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "i", "0001");
+        DEBUG_PRINTLN("[CONNECTED] commands 0001");
+        // g = gNONE;
+      }
+      else if (g == gD_TAP) {
+        // disconnected
+        sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "d", XBeePacketArr[selectedXBee].data);
+        DEBUG_PRINTLN("[DISCONNECTED] entering IDLE");
+        state = IDLE;
+        // g = gNONE;
+      }    
+      break;
+      default:
+      break;
     }
-    else if (g == gD_TAP) {
-      // disconnected
-      sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "d", XBeePacketArr[selectedXBee].data);
-      DEBUG_PRINTLN("[DISCONNECTED] entering IDLE");
-      state = IDLE;
-      g = gNONE;
-    }    
-    break;
-  default:
-    break;
   }
-}
 
 

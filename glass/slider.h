@@ -6,13 +6,14 @@
 #define gsRELEASE 2
 
 #define SOFTPOT_THREASHOLD 950
+#define SOFTPOT_DELTA_THRESHOLD 20
 
 unsigned long start_time = 0;
 unsigned long release_time = 0;
 unsigned long last_release_time = 0;
 int duration_threshold = 300;
 int dtap_duration_threshold = 600;
-int delta_threshold = 20;
+
 int sliderState = gsIDLE;
 
 int softpotReading = 0;
@@ -89,7 +90,7 @@ gesture_t sliderEvent(int* sDelta, int* sVal) {
     if(sliderState == gsPRESS) {
       // continuously pressing
       *sDelta = softpotReading - *sVal;
-      if(abs(*sDelta) > delta_threshold){ //avoid noise
+      if(abs(*sDelta) > SOFTPOT_DELTA_THRESHOLD){ //avoid noise
         *sVal = softpotReading;
         
         return gHOVERCHANGE;
