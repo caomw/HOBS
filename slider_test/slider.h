@@ -24,6 +24,7 @@ typedef enum {
   gHOVER,
   gTAP,
   gD_TAP,
+  gRelease
 } gesture_t;
 
 #endif

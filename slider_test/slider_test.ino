@@ -17,18 +17,22 @@ bool pressed;
 unsigned long start_time;
 unsigned long release_time;
 unsigned long last_release_time;
-int duration_threshold = 1000;
-
+int duration_threshold = 300;
+int dtap_duration_threshold = 600;
+int delta_threshold = 10;
 gesture_t g = gNONE;
-int changes = 0;
-unsigned long gStart_time;
-bool gTimerStart = false;
-int gResolution = 300;
-int gState = 0;
-int clicks = 0;
-int delta_threshold = 0;
 
+int sliderDelta = 0;
 int sliderState = 0;
+
+// unsigned long gStart_time;
+// bool gTimerStart = false;
+// int gResolution = 300;
+// int gState = 0;
+// int clicks = 0;
+
+
+
 
 
 void setup()
@@ -53,8 +57,10 @@ void loop() {
   
   // g = sliderEvent(&changes, 0);
   g = sliderEvent2();
-  if (g!= 0)
-  Serial.println(g);
+  if (g!= 0) {
+    printGesture(g);
+  }
+  // Serial.println(g);
   
   delay(10);
 }
@@ -62,29 +68,40 @@ void loop() {
 gesture_t sliderEvent2() {
   softpotReading = analogRead(softpotPin);
 
-
-  DEBUG_PRINT("   gStart_time: ");
-  DEBUG_PRINT(gStart_time);
-  DEBUG_PRINT("   clicks: ");
-  DEBUG_PRINT(clicks);
-  DEBUG_PRINT("   gState: ");
-  DEBUG_PRINT(gState);
-  DEBUG_PRINT("   Softpot Reading: ");
-  DEBUG_PRINTLN(softpotReading);
-
   if(softpotReading > SOFTPOT_THREASHOLD ) { // currently not pressed
     if(sliderState == gsPRESS) {
       // previously pressed -> look at duration
       sliderState = gsRELEASE;
       release_time = millis();
+      DEBUG_PRINT("pressed duration: ");
+      DEBUG_PRINT(release_time - start_time);
+      
+      DEBUG_PRINTLN();
       if(release_time - start_time < duration_threshold) {
-        //a tap
-        last_release_time = release_time;
+        //a tap -> check for double tap
+        DEBUG_PRINT("dbl tap duration: ");
+        DEBUG_PRINT(release_time - last_release_time);
+        DEBUG_PRINTLN();
+        if(release_time - last_release_time < dtap_duration_threshold) {
+
+          last_release_time = 0;
+          start_time = 0;
+          release_time = 0;
+          return gD_TAP;
+        } else {
+          last_release_time = release_time;
+          start_time = 0;
+          release_time = 0;
+          return gTAP;
+        }
+
+        
+      } else {
+        //relase from hover 
+        last_release_time = 0;
         start_time = 0;
         release_time = 0;
-        return gTAP;
-      } else {
-        //relase from hover  
+        return gRelease;
       }
 
       
@@ -109,8 +126,29 @@ gesture_t sliderEvent2() {
   }
 }
 
+void printGesture(int g){
+  DEBUG_PRINT("---");
+  switch(g){
+    case 0:
+      DEBUG_PRINTLN("none");
+      break;
+    case 1:
+      DEBUG_PRINTLN("hover");
+      break;
+    case 2:
+      DEBUG_PRINTLN("tap");
+      break;
+    case 3:
+      DEBUG_PRINTLN("dbl tap");
+      break;
+    case 4:
+      DEBUG_PRINTLN("release");
+      break;
 
+  }
+}
 
+/*
 gesture_t sliderEvent(int *delta, int counts) {
   // all related events are detected here
   gesture_t returnV = gNONE; 
@@ -200,3 +238,4 @@ gesture_t sliderEvent(int *delta, int counts) {
   
   return gNONE;
 }
+*/
