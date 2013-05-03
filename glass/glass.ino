@@ -3,6 +3,7 @@
 
 #define DEBUG
 #include "utils.h"
+#include "slider.h"
 
 SoftwareSerial XBee(2, 4); // RX, TX
 
@@ -14,44 +15,48 @@ SoftwareSerial XBee(2, 4); // RX, TX
 #define VERIFY 4
 #define CONNECTED 5
 
-#define SOFTPOT_THREASHOLD 950
 #define SOFTPOT_DELTA_THREASHOLD 80
 #define DELAY_IN_WAIT 1000000
 
-#define gIDLE 0
-#define gPRESS 1
-#define gRELEASE 2
-
-
 unsigned long session_id;// = 0xA90;
-int clicks;
-gesture_t g = gNONE;
+// int clicks;
+
 // An IR LED must be connected to Arduino PWM pin 3.
 IRsend irsend;
-int softpotPin = A0; //analog pin 0
 int sendState = 0;
 int ledPin = 8;
 int state = 0;
-int softpotReading = 0;
+
 int softpotInitV = 0;
-int delta_threshold = 0;
-int changes = 0;
+// int delta_threshold = 0; //moved to .h
+
 struct XBeePacket XBeePacketArr[20];
 volatile int XBeePacketCounter;
 volatile int selectedXBee;
 volatile int initSelectedXBee;
 volatile int previousSelected;
-unsigned long start_time;
-unsigned long last_release_time;
+// unsigned long start_time;
+// unsigned long last_release_time;
 
-int gState = 0;
-int gResolution = 500;
-unsigned long gStart_time;
-bool gTimerStart = false;
+// int gState = 0;
+// int gResolution = 500;
+// unsigned long gStart_time;
+// bool gTimerStart = false;
 
+// *** should they be removed?
 bool released;
 bool pressed;
 unsigned long end_time;
+int changes = 0;
+
+
+//new slider vars
+gesture_t g = gNONE;
+// int softpotPin = A0; //analog pin 0
+// int softpotReading = 0;
+
+int sliderVal = 0;
+int sliderDelta = 0;
 
 void setup()
 {
@@ -62,9 +67,9 @@ void setup()
   digitalWrite(ledPin, LOW);
   XBee.begin(9600);
   XBeePacketCounter = 0;
-  pressed = false;
-  released = false;
-  last_release_time = 0;
+  // pressed = false;
+  // released = false;
+  // last_release_time = 0;
   delay(300);
   Serial.print("system begins");
 }
@@ -86,94 +91,20 @@ int readXBeeString (char *strArray) {
 // well, so the question now is how you detect tap when you have fingers on the slider?
 // this is different from click, double click
 
-gesture_t sliderEvent(int *delta, int counts) {
-  // all related events are detected here
-  gesture_t returnV = gNONE; 
-  softpotReading = analogRead(softpotPin);
-  DEBUG_PRINT("   gStart_time: ");
-  DEBUG_PRINT(gStart_time);
-  DEBUG_PRINT("   clicks: ");
-  DEBUG_PRINT(clicks);
-  DEBUG_PRINT("   gState: ");
-  DEBUG_PRINT(gState);
-  DEBUG_PRINT("   Softpot Reading: ");
-  DEBUG_PRINTLN(softpotReading);
 
-  // gStart_time != 0  => user has pressed, and the detection has started
-  // (millis() - gStart_time) > gResolution)  => current time has exceeded the gResolution time from when user pressed, I saw example online which set the gResolution be 300ms, though I use 500 to capture double tap
-  if (gStart_time != 0 && (millis() - gStart_time) > gResolution) {
-    gState = gIDLE;
-    gStart_time = 0;
-    // if now user still holds
-    // determine based on click numbers => 0: HOVER; 1:TAP; 2:D_TAP
-    if (softpotReading < SOFTPOT_THREASHOLD) {
-      if (clicks == 0) {
-	returnV = gHOVER;
-      }
-      else if (clicks == 1) {
-	returnV = gTAP;
-      }
-      else if (clicks == 2) {
-	returnV = gD_TAP;
-      }
-    }
-    else
-      // if the user has removed the touch, then probably CLICK event
-      // might also be D_TAP... bug here
-      returnV = gCLICK;
-    clicks = 0;
-    return returnV;
-  }
-  
-  switch(gState) {
-  case gIDLE:
-    clicks = 0;
-    if (softpotReading < SOFTPOT_THREASHOLD) {
-      gState = gPRESS;
-      gStart_time = millis();
-      softpotInitV = softpotReading;
-      return gHOVER;
-    }
-    break;
-  case gPRESS:
-    if (softpotReading < SOFTPOT_THREASHOLD) {
-      delta_threshold = SOFTPOT_DELTA_THREASHOLD;
-      *delta = 0;
-      if (counts > 5) {
-	// this happens really rare
-	// you will only have 800 of the whole slider to use
-	// then each step is 800/counts
-	delta_threshold = 800/counts;
-      }
-      *delta = (softpotReading - softpotInitV) / delta_threshold;
-    }
-    else {
-      // only add to click when state goes from PRESS to RELEASE
-      gState = gRELEASE;
-      clicks++;
-    }
-    break;
-  case gRELEASE:
-    if (softpotReading < SOFTPOT_THREASHOLD) {
-      gState = gPRESS;
-    }
-    break;
-  default:
-    break;
-  }
-  return gNONE;
-}
 
 void loop() {
   // monitor the user input all the time
   // so everytime when loop executes, or at least in some states
   // we will see the results
   if (state == IDLE || state == CONNECTED) {
-    g = sliderEvent(&changes, 0);
-    if (g!= 0)
-      DEBUG_PRINTLN(g);
+    g = sliderEvent(&sliderDelta, &sliderVal);
+    if (g!= 0) {
+      printGesture(g, &sliderDelta, &sliderVal);
+    }
   }
   delay(10);
+
   return; //*** for debuggin purpose?
   
   switch(state) {
@@ -334,7 +265,8 @@ void loop() {
     break;
   case CONNECTED:
     // based on gesture, define actions
-    if (g == gCLICK) {
+    // if (g == gCLICK) { //*** modify to tap?
+    if(g == gTAP) { 
       sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "i", "0001");
       DEBUG_PRINTLN("[CONNECTED] commands 0001");
       g = gNONE;

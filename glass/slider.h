@@ -1,16 +1,11 @@
-
-#define DEBUG
-#include "slider.h"
+#ifndef slider_h
+#define slider_h
 
 #define gsIDLE 0
 #define gsPRESS 1
 #define gsRELEASE 2
 
-int softpotReading = 0;
-int softpotInitV = 0;
-int softpotPin = A0; //analog pin 0
-int ledPin = 13;
-
+#define SOFTPOT_THREASHOLD 950
 
 unsigned long start_time = 0;
 unsigned long release_time = 0;
@@ -18,40 +13,26 @@ unsigned long last_release_time = 0;
 int duration_threshold = 300;
 int dtap_duration_threshold = 600;
 int delta_threshold = 20;
-gesture_t g = gNONE;
 int sliderState = gsIDLE;
 
-int sliderVal = 0;
-int sliderDelta = 0;
+int softpotReading = 0;
+int softpotPin = A0; //analog pin 0
 
+typedef enum {
+  gNONE,
+  gHOVER,
+  gTAP,
+  gD_TAP,
+  gRELEASE,
+  gHOVERCHANGE,
+  gPRESS
+} gesture_t;
 
-
-void setup()
-{
-  Serial.begin(9600);
-  digitalWrite(softpotPin, HIGH); //enable pullup resistor
-  randomSeed(analogRead(5));
-  digitalWrite(ledPin, LOW);
-  // XBee.begin(9600);
-  // XBeePacketCounter = 0;
-
-  
-  delay(300);
-  Serial.println("system begins");
-}
-
-void loop() {
-  
-  g = sliderEvent(&sliderDelta, &sliderVal);
-  if (g!= 0) {
-    printGesture(g);
-  }
-  
-  delay(10);
-}
+// gesture_t g = gNONE;
 
 gesture_t sliderEvent(int* sDelta, int* sVal) {
   softpotReading = analogRead(softpotPin);
+  // int softpotReading = *pot;
   // DEBUG_PRINTLN(softpotReading);
   if(softpotReading > SOFTPOT_THREASHOLD ) { // currently not pressed
     if(sliderState == gsPRESS) {
@@ -130,7 +111,7 @@ gesture_t sliderEvent(int* sDelta, int* sVal) {
   }
 }
 
-void printGesture(int g){
+void printGesture(int g, int *delta, int *val){
   // DEBUG_PRINT("---");
   switch(g){
     case 0:
@@ -151,13 +132,13 @@ void printGesture(int g){
       break;
     case 5:
       DEBUG_PRINT("HOVER CHANGE: ");
-      DEBUG_PRINT(sliderDelta);
+      DEBUG_PRINT(*delta);
       DEBUG_PRINT(" -> ");
-      DEBUG_PRINTLN(sliderVal);
+      DEBUG_PRINTLN(*val);
       break;
     case 6:
       DEBUG_PRINT("PRESS: ");
-      DEBUG_PRINTLN(sliderVal);
+      DEBUG_PRINTLN(*val);
       break;
     default:
       DEBUG_PRINTLN("ERR");
@@ -165,3 +146,4 @@ void printGesture(int g){
   }
 }
 
+#endif

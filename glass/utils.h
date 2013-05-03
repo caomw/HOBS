@@ -145,12 +145,4 @@ void digitalToggle(int pin){
 
 
 
-typedef enum {
-  gNONE,
-  gHOVER,
-  gTAP,
-  gD_TAP,
-  gCLICK,
-} gesture_t;
-
 #endif
