@@ -19,9 +19,10 @@ unsigned long release_time;
 unsigned long last_release_time;
 int duration_threshold = 300;
 int dtap_duration_threshold = 600;
-int delta_threshold = 10;
+int delta_threshold = 20;
 gesture_t g = gNONE;
 
+int sliderVal = 0;
 int sliderDelta = 0;
 int sliderState = 0;
 
@@ -47,7 +48,7 @@ void setup()
   released = false;
   last_release_time = 0;
   delay(300);
-  Serial.print("system begins");
+  Serial.println("system begins");
 }
 
 void loop() {
@@ -56,7 +57,7 @@ void loop() {
   // we will see the results
   
   // g = sliderEvent(&changes, 0);
-  g = sliderEvent2();
+  g = sliderEvent2(&sliderDelta, &sliderVal);
   if (g!= 0) {
     printGesture(g);
   }
@@ -65,9 +66,9 @@ void loop() {
   delay(10);
 }
 
-gesture_t sliderEvent2() {
+gesture_t sliderEvent2(int* sDelta, int* sVal) {
   softpotReading = analogRead(softpotPin);
-
+  // DEBUG_PRINTLN(softpotReading);
   if(softpotReading > SOFTPOT_THREASHOLD ) { // currently not pressed
     if(sliderState == gsPRESS) {
       // previously pressed -> look at duration
@@ -79,7 +80,7 @@ gesture_t sliderEvent2() {
       DEBUG_PRINTLN();
       if(release_time - start_time < duration_threshold) {
         //a tap -> check for double tap
-        DEBUG_PRINT("dbl tap duration: ");
+        DEBUG_PRINT("previous release duration: ");
         DEBUG_PRINT(release_time - last_release_time);
         DEBUG_PRINTLN();
         if(release_time - last_release_time < dtap_duration_threshold) {
@@ -87,11 +88,15 @@ gesture_t sliderEvent2() {
           last_release_time = 0;
           start_time = 0;
           release_time = 0;
+          *sVal = 0;
+          *sDelta = 0;
           return gD_TAP;
         } else {
           last_release_time = release_time;
           start_time = 0;
           release_time = 0;
+          *sVal = 0;
+          *sDelta = 0;
           return gTAP;
         }
 
@@ -101,7 +106,9 @@ gesture_t sliderEvent2() {
         last_release_time = 0;
         start_time = 0;
         release_time = 0;
-        return gRelease;
+        *sVal = 0;
+        *sDelta = 0;
+        return gRELEASE;
       }
 
       
@@ -113,38 +120,64 @@ gesture_t sliderEvent2() {
     }
   } 
   else {  // slider is being pressed
+    
     if(sliderState == gsPRESS) {
       // continuously pressing
-      return gHOVER;
+      *sDelta = softpotReading - *sVal;
+      if(abs(*sDelta) > delta_threshold){ //avoid noise
+        *sVal = softpotReading;
+        
+        return gHOVERCHANGE;
+      } else {
+        
+        return gHOVER;    
+      }
+      
     } 
     else {
       // first time pressed
+      
       sliderState = gsPRESS;
       start_time = millis();
-      return gHOVER;
+      *sVal = softpotReading;
+      *sDelta = 0;
+      return gPRESS;
     }
   }
 }
 
 void printGesture(int g){
-  DEBUG_PRINT("---");
+  // DEBUG_PRINT("---");
   switch(g){
     case 0:
-      DEBUG_PRINTLN("none");
+      DEBUG_PRINTLN("*none");
       break;
     case 1:
-      DEBUG_PRINTLN("hover");
+      // DEBUG_PRINT("HOVER: ");
+      // DEBUG_PRINTLN(sliderVal);
       break;
     case 2:
-      DEBUG_PRINTLN("tap");
+      DEBUG_PRINTLN("TAP");
       break;
     case 3:
-      DEBUG_PRINTLN("dbl tap");
+      DEBUG_PRINTLN("DUBBLE TAP");
       break;
     case 4:
-      DEBUG_PRINTLN("release");
+      DEBUG_PRINTLN("RELEASE");
       break;
-
+    case 5:
+      DEBUG_PRINT("HOVER CHANGE: ");
+      DEBUG_PRINT(sliderDelta);
+      DEBUG_PRINT(" -> ");
+      DEBUG_PRINTLN(sliderVal);
+      break;
+    case 6:
+      DEBUG_PRINT("PRESS: ");
+      DEBUG_PRINTLN(sliderVal);
+      break;
+    default:
+      DEBUG_PRINTLN("ERR");
+      break;
   }
 }
 
