@@ -59,7 +59,6 @@ void setup()
   randomSeed(analogRead(5));
 
   readXBeeDeviceId();
-  
   toggle_time = millis();
   signal_time = millis();
 
@@ -148,8 +147,8 @@ void loop()
       toggle_time = millis();
     }
 
-    // soft timer expires, this should be long enough, 20 seconds
-    if (end_time - start_time > DELAY_IN_WAIT/50) {
+    // soft timer expires, this should be long enough, 5 seconds
+    if (end_time - start_time > DELAY_IN_WAIT/200) {
       DEBUG_PRINTLN("[PENDING] Timer expires, back to IDLE");
       // timeout, return to IDLE
       state = IDLE;
@@ -157,6 +156,7 @@ void loop()
     }
     
     if(XBee.available()) {
+      start_time = millis();
       // delay for the complete of transmission
       delay(10);
       DEBUG_PRINTLN("[WAIT] Reading Packet");
@@ -167,7 +167,7 @@ void loop()
       DEBUG_PRINT(atoi(p.id));
       DEBUG_PRINT("  ID2:");
       DEBUG_PRINTLN(atoi(deviceId));
-	
+      
       // packet not error
       if (p.type[0] != 'e') {
 	start_time = millis();
@@ -175,28 +175,34 @@ void loop()
       
       if (atoi(p.id) == atoi(deviceId) && p.type[0] == 'c') {
       	// have been confirmed
-      	DEBUG_PRINTLN("[CONNECTED] entering state");
-      	state = CONNECTED;
+        DEBUG_PRINTLN("[CONNECTED] entering state");
+        state = CONNECTED;
       }
       // verifying this selection
       else if (atoi(p.id) == atoi(deviceId) && p.type[0] == 'v') {
-      	// have been confirmed
-      	DEBUG_PRINTLN("[WAIT] being verified");
+        // have been confirmed
+        DEBUG_PRINTLN("[WAIT] being verified");
 
-      	// may flash the light to indicate this
-      	ledStateInterval = 200;
-      	state = PENDING;
-      }      
+        // may flash the light to indicate this
+        ledStateInterval = 100;
+        state = PENDING;
+      }
       // verifying this selection
       else if (atoi(p.id) != atoi(deviceId) && p.type[0] == 'v') {
-      	// have been confirmed
-      	DEBUG_PRINTLN("[WAIT] verifying others");
-	ledStateInterval = 500;
-      	state = PENDING;
-      }      
+        // have been confirmed
+        DEBUG_PRINTLN("[WAIT] verifying others");
+	ledStateInterval = 600;
+        state = PENDING;
+      }
+      // verifying this selection
+      else if (atoi(p.id) != atoi(deviceId) && p.type[0] == 'c') {
+        // have been confirmed
+        DEBUG_PRINTLN("[IDLE] connected with others");
+        state = IDLE;
+      }
       else {
-      	DEBUG_PRINTLN("[IDLE] id not equal");
-      	state = IDLE;
+        DEBUG_PRINTLN("[IDLE] id not equal");
+        state = IDLE;
         irrecv.resume();
       }
     }
@@ -222,8 +228,8 @@ void loop()
       }
       
       if (atoi(p.id) == atoi(deviceId) && p.type[0] == 'i') {
-      	// all sorts of instructions
-      	DEBUG_PRINTLN("[CONNECTED] command issued");
+        // all sorts of instructions
+        DEBUG_PRINTLN("[CONNECTED] command issued");
 	if (strcmp(p.data, "0001") == 0) {
 	  digitalWrite(controlledPin, HIGH);
 	  Serial.print("p");
@@ -234,9 +240,9 @@ void loop()
 	}
       }
       if (atoi(p.id) == atoi(deviceId) && p.type[0] == 'd') {
-      	// disconnected message
-      	DEBUG_PRINTLN("[IDLE] entering state");
-      	state = IDLE;
+        // disconnected message
+        DEBUG_PRINTLN("[IDLE] entering state");
+        state = IDLE;
         irrecv.resume();
       }
     }
