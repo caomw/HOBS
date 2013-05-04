@@ -16,7 +16,7 @@ SoftwareSerial XBee(2, 4); // RX, TX
 #define CONNECTED 5
 
 // #define SOFTPOT_DELTA_THREASHOLD 80
-#define TARGET_DELTA_THRESHOLD 80
+#define TARGET_DELTA_THRESHOLD 60
 #define DELAY_IN_WAIT 1000000
 
 unsigned long session_id;// = 0xA90;
@@ -108,7 +108,7 @@ void loop() {
   }
   delay(10);
 
-  // return; //*** for debuggin purpose?
+  return; //*** for debuggin purpose?
   
   switch(state) {
     case IDLE:
@@ -205,10 +205,9 @@ void loop() {
     DEBUG_PRINT(selectedXBee);
     DEBUG_PRINT(", id=");
     DEBUG_PRINT(XBeePacketArr[selectedXBee].id);
-    DEBUG_PRINT(", pressed=");
-    DEBUG_PRINT(pressed);
-    DEBUG_PRINT(", released=");
-    DEBUG_PRINTLN(released);
+    DEBUG_PRINT(", gesture=");
+    DEBUG_PRINT(g);
+
     if (selectedXBee != previousSelected) {
       sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "v", XBeePacketArr[selectedXBee].data);
       previousSelected = selectedXBee;
@@ -231,6 +230,10 @@ void loop() {
 
       target_changes = (sliderVal - softpotInitV) / target_slider_threshold;      
       selectedXBee = initSelectedXBee + target_changes;
+      DEBUG_PRINT(", target_changes=");
+      DEBUG_PRINTLN(target_changes);
+      
+      // *** add loop here  for targets
       if (selectedXBee < 0) {
         selectedXBee = 0;
       }
