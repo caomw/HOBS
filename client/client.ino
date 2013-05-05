@@ -172,13 +172,20 @@ void loop()
       if (p.type[0] != 'e') {
 	start_time = millis();
       }
+
+      if (p.type[0] == 'r') {
+        // reset
+        DEBUG_PRINTLN("[IDLE] reset to default state");
+        state = IDLE;
+        irrecv.resume();
+      }
       
       if (atoi(p.id) == atoi(deviceId) && p.type[0] == 'c') {
       	// have been confirmed
         DEBUG_PRINTLN("[CONNECTED] entering state");
         state = CONNECTED;
       }
-      // verifying this selection
+      // verifying this selection, speed up led toggling
       else if (atoi(p.id) == atoi(deviceId) && p.type[0] == 'v') {
         // have been confirmed
         DEBUG_PRINTLN("[WAIT] being verified");
@@ -187,19 +194,21 @@ void loop()
         ledStateInterval = 100;
         state = PENDING;
       }
-      // verifying this selection
+      // verifying others... still in pending, slower down led
       else if (atoi(p.id) != atoi(deviceId) && p.type[0] == 'v') {
         // have been confirmed
         DEBUG_PRINTLN("[WAIT] verifying others");
 	ledStateInterval = 600;
         state = PENDING;
       }
-      // verifying this selection
+      // connect others, go back to idle
       else if (atoi(p.id) != atoi(deviceId) && p.type[0] == 'c') {
         // have been confirmed
         DEBUG_PRINTLN("[IDLE] connected with others");
         state = IDLE;
+        irrecv.resume();
       }
+      // actually reset everything else to IDLE for simplicity
       else {
         DEBUG_PRINTLN("[IDLE] id not equal");
         state = IDLE;
@@ -207,7 +216,6 @@ void loop()
       }
     }
     break;
-
   case CONNECTED:
     // temporarily for debugging 
     // turn on the ligth to indicate
@@ -234,10 +242,17 @@ void loop()
 	  digitalWrite(controlledPin, HIGH);
 	  Serial.print("p");
 	}
-	if (strcmp(p.data, "0002") == 0) {
+	else if (strcmp(p.data, "0002") == 0) {
 	  digitalWrite(controlledPin, LOW);
 	  Serial.print("p");
 	}
+      }
+      
+      // reset     
+      if (p.type[0] == 'r') {
+        DEBUG_PRINTLN("[IDLE] reset to default state");
+        state = IDLE;
+        irrecv.resume();
       }
       if (atoi(p.id) == atoi(deviceId) && p.type[0] == 'd') {
         // disconnected message
@@ -247,7 +262,6 @@ void loop()
       }
     }
     break;
-
   default:
     break;
   }
