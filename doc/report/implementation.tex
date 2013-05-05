@@ -2,7 +2,7 @@
 \section{Implementation}
 \label{sec:implementation}
 
-In this section, we details our implementation on Arduino \cite{Arduino} platform. The whole system is comprised of a glass module, numbers of clients, and a gateway. We will start by the clients, for which we only implement the simpliest functionalities. We push the burden of coordination to the glass.
+In this section, we details our implementation on Arduino \cite{Arduino} platform. The whole system is comprised of a glass module, numbers of clients, and a gateway. We will start by the clients, which responds to different message sent by others. The complexity of coordination is pushed to the glass, and only minimal function are provided in the gateway.
 
 \subsection{Clients}
 The clients are comprised of a main Arduino board, an IR receiver, an XBee radio, and various actuators. In our current system, we have a relay which can control the AC power plug, and we have a USB connected computer to control video playing. 
@@ -21,16 +21,23 @@ Within {\it CONNECTED} state, the clients' behaviors are different from each oth
 \subsection{Glass}
 \label{sec:glass}
 
-The Glass is complicated in two folds. First, we move the complexity of coordinating all clients to the Glass. Second, we have to handle user gesture on Glass. 
+The Glass is complicated in two folds. First, we move the complexity of coordinating all clients to the Glass. Second, we have to handle user gesture on Glass. For a clean design, we separate the gesture detection and XBee transmission into two customized library, and only expose interesting information to the main program.
 
-% add graphs and FSM for Glass
+The whole work flow is as follows. When the user hasn't shown any interest of interaction, the system lives in {\it IDLE} state. When ``tap'' is detected, the Glass will broadcast IR signal to inform the devices which is in front of the user (the one that can receive IR signal). Then the Glass waits for a specific period of time for acknowledge message sent by clients. The timer in {\it WAIT} state now is set to 1 second. When timer expires, Glass will go to {\it IDLE} if no client has responded, or {\it CONFIRM} if it receives just one message. However, the complicated case is when there are multiple clients that have received IR signal and responded. Though we expect such scenario is rare, there is still chance that the physical devices are put together and it is necessary to differentiate them. In this case, the system goes to {\it VERIFY} state, and send out corresponding verifying message based on user's gesture. Once the user confirmed the selection, it goes to {\it CONNECTED} state where it's ready to send out commands. Again, to illustrate the flows, we have the FSM in Fig.\,\ref{fig:glassFSM}.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{../figs/glassFSM.pdf}
+  \caption{FSM model for Glass. For each transition, ``e'' stands for event, and ``a'' stands for action}
+  \label{fig:glassFSM}
+\end{figure}
 
 \subsection{Gateway}
 \label{sec:gateway}
 
 The gateway provides access to the personal area network for computers, and presumably this can be further open to the Internet. Since there have already been many products \cite{NinjaBlocks, Lockitron} that essentially function in this way, we do not spend much time on this aspect in our project. 
 
-
+Just for completeness, we wrote a python script that controls a USB XBee adaptor, so that we can remotely control those devices without the Glass and IR initiation.
 
 %%% Local Variables: 
 %%% mode: latex
