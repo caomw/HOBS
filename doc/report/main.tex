@@ -1,4 +1,4 @@
-\documentclass{sig-alternate}
+\documentclass{sigchi}
 
 \usepackage{times}
 \usepackage{graphics}
@@ -9,15 +9,9 @@
 \usepackage{tabularx}
 \usepackage{color}
 \usepackage{xspace}
-\usepackage{hyperref}    % Creates hyperlinks from ref/cite
-\hypersetup{pdfstartview=FitH}
+
 \usepackage{graphicx}    % For importing graphics
 \usepackage{url}         %
-
-\hypersetup{%
-pdftitle={Project Glass 2.0}, pdfauthor={Ben Zhang, Sean Chen}, pdfkeywords={HCI}, bookmarksnumbered, pdfstartview={FitH}, colorlinks,
-citecolor=black, filecolor=black, linkcolor=black, urlcolor=black,
-breaklinks=true,}
 
 \renewcommand{\arraystretch}{1.2} % Space out rows in tables
 
@@ -35,19 +29,32 @@ breaklinks=true,}
     \end{oldthebibliography}%
   }
 
-%\pagenumbering{arabic}  % Arabic page numbers for submission.  Remove this line to eliminate page numbers for the camera ready copy
+\pagenumbering{arabic}  % Arabic page numbers for submission.  Remove this line to eliminate page numbers for the camera ready copy
 
-\begin{document}
+% Use this command to override the default ACM copyright statement (e.g. for preprints). 
+% Consult the conference website for the camera-ready copyright statement.
+\toappear{
+Permission to make digital or hard copies of all or part of this
+work for personal or classroom use is granted without fee provided that 
+copies are not made or distributed for profit or commercial advantage and
+that copies bear this notice and the full citation on the first page. To
+copy otherwise, or republish, to post on servers or to redistribute to 
+lists, requires prior specific permission and/or a fee.\\
+Copyright 20XX ACM X-XXXXX-XX-X/XX/XX ...\$10.00.
+}
 
-% use this command to override the default ACM copyright statement
-% (e.g. for preprints). Remove for camera ready copy.
-%\toappear{Submitted for review to IPSN 2012.}
-% \conferenceinfo{ConfName} {Date, Location}
-% \CopyrightYear{Year} 
-% \crdata{978-1-4503-1227-1/12/04} 
-% \clubpenalty=10000 
-% \widowpenalty = 10000
+% Load basic packages
+\usepackage{balance}  % to better equalize the last page
+\usepackage{graphics} % for EPS, load graphicx instead
+\usepackage{times}    % comment if you want LaTeX's default font
+\usepackage{url}      % llt: nicely formatted URLs
 
+% llt: Define a global style for URLs, rather that the default one
+\makeatletter
+\def\url@leostyle{%
+  \@ifundefined{selectfont}{\def\UrlFont{\sf}}{\def\UrlFont{\small\bf\ttfamily}}}
+\makeatother
+\urlstyle{leo}
 
 % to make various LaTeX processors do the right thing with page size
 \special{papersize=8.5in,11in}
@@ -56,8 +63,34 @@ breaklinks=true,}
 \setlength{\pdfpageheight}{\paperheight}
 \setlength{\pdfpagewidth}{\paperwidth}
 
+% Make sure hyperref comes last of your loaded packages, 
+% to give it a fighting chance of not being over-written, 
+% since its job is to redefine many LaTeX commands.
+\usepackage[pdftex]{hyperref}
+\hypersetup{
+pdftitle={Project Glass 2.0}, 
+pdfauthor={Ben Zhang, Sean Chen},
+pdfkeywords={HCI},
+bookmarksnumbered,
+pdfstartview={FitH},
+colorlinks,
+citecolor=black,
+filecolor=black,
+linkcolor=black,
+urlcolor=black,
+breaklinks=true,
+}
+
+
+% create a shortcut to typeset table headings
+\newcommand\tabhead[1]{\small\textbf{#1}}
+
+% End of preamble. Here it comes the document.
+\begin{document}
+
 \title{Project Glass 2.0 -- Interaction with Physical Devices through Attention}
 
+\numberofauthors{2}
 \author{
 {Ben Zhang, Sean Chen}\\
 \affaddr{University of California, Berkeley}\\
