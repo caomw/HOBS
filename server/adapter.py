@@ -47,6 +47,7 @@ except Exception as e:
 def change_volume(sa, amount):
   current_settings = sa.get_volume_settings()
   original = -1
+  # hacky way of finding out current volume
   for key in current_settings:
     if str(key) == 'k.output_volume':
       original = current_settings[key]
