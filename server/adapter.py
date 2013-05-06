@@ -14,49 +14,57 @@ availables = glob.glob('/dev/tty.usb*')
 
 arguments = parser.parse_args()
 try:
-	baud = arguments.baud
-	timeout = arguments.timeout
-	print "  baud rate:", baud
-	print "  serial timeout:", timeout
+  baud = arguments.baud
+  timeout = arguments.timeout
+  print "  baud rate:", baud
+  print "  serial timeout:", timeout
 except Exception as e:
-	print e
-	exit(1)
+  print e
+  exit(1)
 
 print "All available ports:" 
 
 index = 1
 for port in availables:
-	print '  ', index, port
-	index += 1
+  print '  ', index, port
+  index += 1
 
 try:
-	num = int(raw_input('Enter the number:'))
-	if num > 0 and num <= len(availables):
-		selected = availables[num-1]
+  num = int(raw_input('Enter the number:'))
+  if num > 0 and num <= len(availables):
+    selected = availables[num-1]
 except Exception as e:
-	print "invalid input!"
-	exit(1)
+  print "invalid input!"
+  exit(1)
 
 
 try:
-	ser = serial.Serial(selected, baud, timeout=timeout)
+  ser = serial.Serial(selected, baud, timeout=timeout)
 except Exception as e:
   print "failed to connect the serial port", e
 
-# not complete yet
-# sa.get_volume_settings() will return the current volumn settings
-while True:
-	char = ser.read()
-	# debugging print out
-	if char != '':
-		print "char read: ", char
 
-	if char == 'u':
-		sa = OSAX()
-		sa.set_volume(sa.get_volume_settings()+5)
-	if char == 'd':
-		sa = OSAX()
-		sa.set_volume(sa.get_volume_settings()-5)
-	elif char == 'p':
-		app('System Events').keystroke(' ')
-	
+def change_volume(sa, amount):
+  current_settings = sa.get_volume_settings()
+  original = -1
+  for key in current_settings:
+    if str(key) == 'k.output_volume':
+      original = current_settings[key]
+  if original == -1:
+    raise Exception('Problem in parsing get_volume_settings output')
+  sa.set_volume(original+amount)
+  
+sa = OSAX()
+
+while True:
+  char = ser.read()
+  # debugging print out
+  if char != '':
+    print "char read: ", char
+  if char == 'u':
+    change_volumne(sa, 5)
+  if char == 'd':
+    change_volumne(sa, -5)
+  elif char == 'p':
+    app('System Events').keystroke(' ')
+  
