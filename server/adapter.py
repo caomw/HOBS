@@ -53,10 +53,10 @@ while True:
 
 	if char == 'u':
 		sa = OSAX()
-		sa.set_volume(100)
+		sa.set_volume(sa.get_volume_settings()+5)
 	if char == 'd':
 		sa = OSAX()
-		sa.set_volume(100)
+		sa.set_volume(sa.get_volume_settings()-5)
 	elif char == 'p':
 		app('System Events').keystroke(' ')
 	

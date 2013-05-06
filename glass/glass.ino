@@ -278,7 +278,7 @@ void loop() {
     break;
     case CONNECTED:
     // based on gesture, define actions
-    // if (g == gCLICK) { //*** modify to tap?
+    
       if(g == gTAP) { 
         sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "i", "0001");
         DEBUG_PRINTLN("[CONNECTED] commands 0001");
@@ -290,7 +290,14 @@ void loop() {
         DEBUG_PRINTLN("[DISCONNECTED] entering IDLE");
         state = IDLE;
         // g = gNONE;
-      }    
+      } else if(g == gHOVERCHANGE) {
+        // send vol up/down to laptop
+        if(sliderDelta > 0) {
+          sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "u", "0001");
+        } else {
+          sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "d", "0001");
+        }
+      }
       break;
       default:
       break;
