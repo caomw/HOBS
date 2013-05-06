@@ -10,7 +10,7 @@
 #define SOFTPOT_DELTA_THRESHOLD 20
 
 #define HOLD_THRESHOLD 300   //determine tap vs hold
-#define DTAP_THRESHOLD 600  //two taps within this duration -> dtap
+#define DTAP_THRESHOLD 300  //two taps within this duration -> dtap
 #define ACCIDENT_THRESHOLD 300
 
 unsigned long start_time = 0;
@@ -76,6 +76,25 @@ gesture_t sliderEvent(int* sDelta, int* sVal) {
     
   }
 
+  if(checkDTap) {
+    //if a tap is sensed, wait till a duration
+    //if no press sensed within threshold -> declare tap
+    //if second release sensed before timeout -> declare dtap
+    if(millis() - release_time > DTAP_THRESHOLD ) {
+      //checkDTap haven't been canceled -> single tap
+      start_time = 0;
+      release_time = 0;
+      *sVal = 0;
+      *sDelta = 0;
+      // sliderState = gsRELEASE;
+      checkDTap = false;
+      return gTAP;
+    } else {
+      //before timeout expire
+      //
+    }
+  }
+
 
   if(softpotReading > SOFTPOT_THREASHOLD ) { // currently not pressed
     if(sliderState == gsPRESS) {
@@ -99,15 +118,23 @@ gesture_t sliderEvent(int* sDelta, int* sVal) {
           *sVal = 0;
           *sDelta = 0;
           sliderState = gsRELEASE;
+          checkDTap = false;
           return gD_TAP;
         } else {
+
+          //wait to see if it's a D_TAP
           last_release_time = release_time;
-          start_time = 0;
-          release_time = 0;
-          *sVal = 0;
-          *sDelta = 0;
           sliderState = gsRELEASE;
-          return gTAP;
+          checkDTap = true;
+          return gHOVER;
+
+          // last_release_time = release_time;
+          // start_time = 0;
+          // release_time = 0;
+          // *sVal = 0;
+          // *sDelta = 0;
+          // sliderState = gsRELEASE;
+          // return gTAP;
         }
 
         
