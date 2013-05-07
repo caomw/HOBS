@@ -7,7 +7,7 @@
 #define gsPENDING 3
 
 #define SOFTPOT_THREASHOLD 950
-#define SOFTPOT_DELTA_THRESHOLD 20
+#define SOFTPOT_DELTA_THRESHOLD 40
 
 #define HOLD_THRESHOLD 300   //determine tap vs hold
 #define DTAP_THRESHOLD 300  //two taps within this duration -> dtap
