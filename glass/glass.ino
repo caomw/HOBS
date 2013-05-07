@@ -16,7 +16,7 @@ SoftwareSerial XBee(2, 4); // RX, TX
 #define CONNECTED 5
 
 // #define SOFTPOT_DELTA_THREASHOLD 80
-#define TARGET_DELTA_THRESHOLD 60
+#define TARGET_DELTA_THRESHOLD 80
 #define DELAY_IN_WAIT 1000000
 
 unsigned long session_id;// = 0xA90;
@@ -228,18 +228,28 @@ void loop() {
       state = CONNECTED;
     } else if(g == gHOVER || g == gHOVERCHANGE) {
 
-      target_changes = (sliderVal - softpotInitV) / target_slider_threshold;      
-      selectedXBee = initSelectedXBee + target_changes;
+      target_changes = (sliderVal - softpotInitV) / target_slider_threshold;
       DEBUG_PRINT(", target_changes=");
       DEBUG_PRINTLN(target_changes);
+      if(target_changes > 0) {
+        selectedXBee ++;
+        softpotInitV = sliderVal;
+      } else if(target_changes < 0){
+        selectedXBee --;
+        softpotInitV = sliderVal;
+      }
+      // selectedXBee = initSelectedXBee + target_changes;
+
+      
       
       // *** add loop here  for targets
       if (selectedXBee < 0) {
-        selectedXBee = 0;
+        selectedXBee = XBeePacketCounter-1;
       }
       if (selectedXBee >= XBeePacketCounter) {
-        selectedXBee = XBeePacketCounter-1;
+        selectedXBee = 0;
       }    
+      
     }
     
 
