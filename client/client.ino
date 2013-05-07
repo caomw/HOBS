@@ -2,7 +2,7 @@
 #include <IRremote.h>
 #include <string.h>
 
-#define DEBUG
+// #define DEBUG
 #include "utils.h"
 
 // Trying to elucidate the way communication works first
