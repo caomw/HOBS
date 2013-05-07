@@ -108,7 +108,7 @@ void loop() {
   }
   delay(10);
 
-  return; //*** for debuggin purpose?
+  // return; //*** for debugging purpose
   
   switch(state) {
     case IDLE:
@@ -293,9 +293,9 @@ void loop() {
       } else if(g == gHOVERCHANGE) {
         // send vol up/down to laptop
         if(sliderDelta > 0) {
-          sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "u", "0001");
+          sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "i", "v_up");
         } else {
-          sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "d", "0001");
+          sendXBeePacketFromRaw(&XBee, XBeePacketArr[selectedXBee].id, "i", "v_dn");
         }
       }
       break;

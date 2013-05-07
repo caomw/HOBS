@@ -78,32 +78,32 @@ void loop()
   if(XBee.available()) {
     digitalWrite(ledSignalPin, HIGH);
     signal_time = millis();
-  } else if(millis() - signal_time > 200) {
-    digitalWrite(ledSignalPin, LOW);
-  }
+    } else if(millis() - signal_time > 200) {
+      digitalWrite(ledSignalPin, LOW);
+    }
 
-  switch(state) {
-  case IDLE:
+    switch(state) {
+      case IDLE:
     // purely listening and then react by response
     // for now test use random
     // if(irrecv.decode(&results)) {
 
 
-    digitalWrite(ledStatePin, LOW);
-    
-    if(XBee.available()) {
+      digitalWrite(ledStatePin, LOW);
 
-      delay(5);
-      char packet[50];
-      int len = readXBeeString(packet);
-      
-      DEBUG_PRINT("\nPacket received: ");
-      DEBUG_PRINT(packet);
-      DEBUG_PRINT("  Packet len: ");
-      DEBUG_PRINTLN(len);
+      if(XBee.available()) {
 
-      randomDelay = random(1000);
-      delay(randomDelay);
+        delay(5);
+        char packet[50];
+        int len = readXBeeString(packet);
+
+        DEBUG_PRINT("\nPacket received: ");
+        DEBUG_PRINT(packet);
+        DEBUG_PRINT("  Packet len: ");
+        DEBUG_PRINTLN(len);
+
+        randomDelay = random(1000);
+        delay(randomDelay);
 
       // send back acknowledge packet
       struct XBeePacket p;
@@ -117,15 +117,15 @@ void loop()
 
       DEBUG_PRINTLN("[PENDING] entering PENDING state");
       state = PENDING;
-    } else if(irrecv.decode(&results)) {
-      delay(5);
-      
-      
-      DEBUG_PRINT("\nIR received: ");
-      DEBUG_PRINTLN(results.value);
-      
-      randomDelay = random(1000);
-      delay(randomDelay);
+      } else if(irrecv.decode(&results)) {
+        delay(5);
+
+
+        DEBUG_PRINT("\nIR received: ");
+        DEBUG_PRINTLN(results.value);
+
+        randomDelay = random(1000);
+        delay(randomDelay);
 
       // send back acknowledge packet
       
@@ -139,7 +139,7 @@ void loop()
     } 
 
     break;
-  case PENDING:
+    case PENDING:
     end_time = millis();
 
     if(end_time - toggle_time > ledStateInterval) {
@@ -170,7 +170,7 @@ void loop()
       
       // packet not error
       if (p.type[0] != 'e') {
-	start_time = millis();
+        start_time = millis();
       }
 
       if (p.type[0] == 'r') {
@@ -181,7 +181,7 @@ void loop()
       }
       
       if (atoi(p.id) == atoi(deviceId) && p.type[0] == 'c') {
-      	// have been confirmed
+        // have been confirmed
         DEBUG_PRINTLN("[CONNECTED] entering state");
         state = CONNECTED;
       }
@@ -198,7 +198,7 @@ void loop()
       else if (atoi(p.id) != atoi(deviceId) && p.type[0] == 'v') {
         // have been confirmed
         DEBUG_PRINTLN("[WAIT] verifying others");
-	ledStateInterval = 600;
+        ledStateInterval = 600;
         state = PENDING;
       }
       // connect others, go back to idle
@@ -216,7 +216,7 @@ void loop()
       }
     }
     break;
-  case CONNECTED:
+    case CONNECTED:
     // temporarily for debugging 
     // turn on the ligth to indicate
     digitalWrite(ledStatePin, HIGH);
@@ -232,20 +232,28 @@ void loop()
 
       // packet not error
       if (p.type[0] != 'e') {
-	start_time = millis();
+        start_time = millis();
       }
       
       if (atoi(p.id) == atoi(deviceId) && p.type[0] == 'i') {
         // all sorts of instructions
         DEBUG_PRINTLN("[CONNECTED] command issued");
-	if (strcmp(p.data, "0001") == 0) {
-	  digitalWrite(controlledPin, HIGH);
-	  Serial.print("p");
-	}
-	else if (strcmp(p.data, "0002") == 0) {
-	  digitalWrite(controlledPin, LOW);
-	  Serial.print("p");
-	}
+        if (strcmp(p.data, "0001") == 0) {
+          digitalWrite(controlledPin, HIGH);
+          Serial.print("p");
+        }
+        else if (strcmp(p.data, "0002") == 0) {
+          digitalWrite(controlledPin, LOW);
+          Serial.print("p");
+        }
+        else if (strcmp(p.data, "v_up") == 0) {
+          // digitalWrite(controlledPin, LOW);
+          Serial.print("u");
+        }
+        else if (strcmp(p.data, "v_dn") == 0) {
+          // digitalWrite(controlledPin, LOW);
+          Serial.print("d");
+        }
       }
       
       // reset     
@@ -262,7 +270,7 @@ void loop()
       }
     }
     break;
-  default:
+    default:
     break;
   }
   
@@ -330,10 +338,10 @@ void readXBeeDeviceId() {
     char a[2];
     itoa(id, a, 10);
     deviceId[1] = a[0];
-  } else {
-    itoa(id, deviceId, 10);  
+    } else {
+      itoa(id, deviceId, 10);  
+    }
+
+    Serial.print("my devide ID: ");
+    Serial.println(deviceId);  
   }
-  
-  Serial.print("my devide ID: ");
-  Serial.println(deviceId);  
-}
