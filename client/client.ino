@@ -227,8 +227,8 @@ void loop()
 
     if(XBee.available()) {
       // delay for the complete of transmission
-      delay(10);
-      DEBUG_PRINTLN("[WAIT] Reading Packet");
+      delay(3);
+      DEBUG_PRINTLN("[CONNECTED] Reading Packet");
       struct XBeePacket p = readXBeePacket(&XBee);
       printXBeePacket(p);
 
