@@ -116,10 +116,16 @@ struct XBeePacket readXBeePacket (SoftwareSerial *XBee) {
   /* } */
   while ((*XBee).available()) {
     strArray[i] = (*XBee).read();
+    DEBUG_PRINT(strArray[i]);
     i++;
+    if(i>20) {
+      //abandon the packet
+      return p;
+    }
   }
   strArray[i] = '\0';
   // we appended an '\0', plus an '\n' since it was XBee.println
+  DEBUG_PRINTLN();
   DEBUG_PRINT("got packet, now i=");
   DEBUG_PRINT(i);
   DEBUG_PRINT(", and packet: ");
