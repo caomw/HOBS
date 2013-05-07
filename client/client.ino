@@ -2,7 +2,7 @@
 #include <IRremote.h>
 #include <string.h>
 
-#define DEBUG
+// #define DEBUG
 #include "utils.h"
 
 // Trying to elucidate the way communication works first
@@ -241,7 +241,7 @@ void loop()
         // all sorts of instructions
         DEBUG_PRINTLN("[CONNECTED] command issued");
         if (strcmp(p.data, "0001") == 0) {
-          digitalWrite(controlledPin, HIGH);
+          digitalToggle(controlledPin);
           Serial.print("p");
         }
         else if (strcmp(p.data, "0002") == 0) {
