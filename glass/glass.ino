@@ -16,7 +16,7 @@ SoftwareSerial XBee(2, 4); // RX, TX
 #define CONNECTED 5
 
 // #define SOFTPOT_DELTA_THREASHOLD 80
-#define TARGET_DELTA_THRESHOLD 80
+#define TARGET_DELTA_THRESHOLD 120
 #define DELAY_IN_WAIT 1000000
 
 unsigned long session_id;// = 0xA90;
