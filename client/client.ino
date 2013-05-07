@@ -2,7 +2,7 @@
 #include <IRremote.h>
 #include <string.h>
 
-// #define DEBUG
+#define DEBUG
 #include "utils.h"
 
 // Trying to elucidate the way communication works first
@@ -239,8 +239,11 @@ void loop()
       
       if (atoi(p.id) == atoi(deviceId) && p.type[0] == 'i') {
         // all sorts of instructions
+        char cmd[4+1];
+        string_copy(cmd, p.data, 0, 3);
+        cmd[4] = '\0';
         DEBUG_PRINTLN("[CONNECTED] command issued");
-        if (strcmp(p.data, "0001") == 0) {
+        if (strcmp(cmd, "0001") == 0) {
           digitalToggle(controlledPin);
           Serial.print("p");
         }
@@ -248,11 +251,11 @@ void loop()
           digitalWrite(controlledPin, LOW);
           Serial.print("p");
         }
-        else if (strcmp(p.data, "v_up") == 0) {
+        else if (strcmp(cmd, "v_up") == 0) {
           // digitalWrite(controlledPin, LOW);
           Serial.print("u");
         }
-        else if (strcmp(p.data, "v_dn") == 0) {
+        else if (strcmp(cmd, "v_dn") == 0) {
           // digitalWrite(controlledPin, LOW);
           Serial.print("d");
         }
