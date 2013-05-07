@@ -42,8 +42,9 @@ except Exception as e:
 
 print "All available commands:"
 print "  1, print -- print all id(s)"
-print "  2, on id -- turn on according to id"
-print "  3, off id -- turn off according to id"
+print "  2, reset -- reset all from any state"
+print "  3, on id -- turn on according to id"
+print "  4, off id -- turn off according to id"
 
 
 while True:
@@ -52,6 +53,11 @@ while True:
   if cmd[0] == "print":
     # print all
     ser.write("FFFF")
+    time.sleep(2)
+    print ser.readlines()
+  elif cmd[0] == "reset":
+    # print all
+    ser.write("FFrFFFF0\n")
     time.sleep(2)
     print ser.readlines()
   elif cmd[0] == "on" or cmd[0] == "off":

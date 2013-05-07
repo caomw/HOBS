@@ -53,7 +53,10 @@ def change_volume(sa, amount):
       original = current_settings[key]
   if original == -1:
     raise Exception('Problem in parsing get_volume_settings output')
-  sa.set_volume(original+amount)
+  print original, amount
+  # a number between 0 to 7
+  # original + amount is 0 to 100
+  sa.set_volume((original+amount) / 100.0 * 7)
   
 sa = OSAX()
 
@@ -63,9 +66,9 @@ while True:
   if char != '':
     print "char read: ", char
   if char == 'u':
-    change_volumne(sa, 5)
+    change_volume(sa, 5)
   if char == 'd':
-    change_volumne(sa, -5)
+    change_volume(sa, -5)
   elif char == 'p':
     app('System Events').keystroke(' ')
   
