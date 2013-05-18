@@ -14,12 +14,7 @@ The clients are comprised of a main Arduino board, an IR receiver, an XBee radio
   \label{fig:client}
 \end{figure}
 
-<<<<<<< HEAD
-The main function of the client is to respond IR signal, and communicate with the Glass to receive corresponding commands. Normally, the client lives in {\it IDLE} mode. When they receive IR signals, indicating the user is expressing interest in interacting with it, the client responds with an XBee acknowledgement and goes into {\it PENDING} state. In this case, since the client doesn't know how many other clients have also responded to the glass, it will wait until a connection signal. If there are multiple clients waiting to be verified by the Glass, the coordination is done at the Glass through sending the right verifying message. To provide visual feedback to the user, the active client that is being verified will blink faster. When it receives the connecting message, it goes to {\it CONNECTED} state and is now ready to take commands. To summarize the clients' behavior, we have a state machine in Fig.\,\ref{fig:clientFSM} for illustration.
-=======
-
 The main function of the client is to respond IR signal and communicate with the Glass to receive commands from the user. Normally, the client stays in {\it IDLE} mode. When it receives an IR signal, suggesting that the user could be interested in interacting with it, the client responds with an XBee acknowledgement and goes into {\it PENDING} state. The glass, after seding the IR, will wait for a certain amoount of time. If there is only one client responding during the wait, the Glass will directly send a connecting message to the only client. When there are multiple clients responding, the Glass will broadcast a verify message with a client ID. The client with a matching ID is called the active client and its LED will blink faster then the others as a visual feedback to the user. After the user decide which one to connect with, the Glass will send out a connecting message. Client turned into {\it CONNECTED} state will be ready to take commands. To summarize the clients' behavior, we have a state machine in Fig.\,\ref{fig:clientFSM} for illustration.
->>>>>>> update implementation
 
 \begin{figure}
   \centering
@@ -38,11 +33,7 @@ The Glass is complicated in two folds. First, we move the complexity of coordina
 {\color{red} add glass photos here}
 \begin{figure}
   \centering
-<<<<<<< HEAD
   \includegraphics[width=0.85\linewidth]{../figs/glass.png}
-=======
-  \includegraphics[width=\linewidth]{../figs/glass.png}
->>>>>>> update implementation
   \caption{Prototype of the Glass}
   \label{fig:glass}
 \end{figure}
