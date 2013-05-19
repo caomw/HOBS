@@ -6,7 +6,6 @@ In this section, we detail our implementation on Arduino \cite{Arduino} platform
 \subsection{Clients}
 The clients are comprised of a main Arduino board, an IR receiver, an XBee radio, and various actuators. We used Arduino Uno, which has an ATmega328 microcontroller and suffice our purpose in this project. We use off-the-shell IR receivers ({\color{red} confirm it is PNA4602}), which outputs 0V (low) on detection of 38 KHz carrier or 5V (high) otherwise. The XBee radio, accompanied with an XBee modems, takes charge of the communication with the Glass. LEDs are added as an indicator of the state of clients and visual feedback for users. Additional components are subject to the device being attached to. In our current system, we have a relay ({\color{red} need to know relay model}) which can control the AC power plug, and we have a USB connected computer to control video playing. The prototype is shown in Fig.\,\ref{fig:client}.
 
-{\color{red} add clients photos here}
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{../figs/client.png}
@@ -30,7 +29,6 @@ Within {\it CONNECTED} state, the clients will react differently according to th
 
 The Glass is complicated in two folds. First, we move the complexity of coordinating all clients to the Glass. Second, we have to handle user gesture on Glass. From an engineer perspective, we separate the gesture detection and XBee transmission into two customized library files in Arduino. And only relevant information is sent to the main program. We use the same Arduino Uno and XBee module as the client. An IR emitter is placed within a black tube in order to make the signal a straight beam of light. Then the the tube is attached to the Glass and adjusted in a proper direction. In addition, we have a membrane potentiometer (100 mm long) as the slider to take user's input. After we've put the components onto the Glass, we have the prototype shown in Fig.\,\ref{fig:glass}.
 
-{\color{red} add glass photos here}
 \begin{figure}
   \centering
   \includegraphics[width=0.85\linewidth]{../figs/glass.png}
