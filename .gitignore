@@ -34,3 +34,7 @@
 *.tdo
 auto
 tmp
+
+*.pyc
+
+doc/report/main.pdf
