@@ -1,5 +1,8 @@
-import serial, glob, argparse
-import sys
+# note, select is not guaranteed to be readily used in Windows
+# it's Linux functionality
+
+import serial, glob, argparse, Queue
+import sys, select
 
 parser = argparse.ArgumentParser(description='Pyserial for XBee')
 parser.add_argument('--debug', default=False, action='store_true', help='Print More Errors and Launch interactive console on exception or forced exit')
@@ -8,7 +11,7 @@ parser.add_argument('--timeout', type=float, action='store', default=1, help='Ti
 
 # we know for mac it will show as /dev/usb.tty*, so list all of them and ask user to choose
 
-availables = glob.glob('/dev/tty.usb*')
+availables = glob.glob('/dev/tty.*')
 
 arguments = parser.parse_args()
 try:
@@ -42,5 +45,13 @@ except Exception as e:
   print "failed to connect the serial port", e
 
 while True:
-	sys.stdout.write(ser.read())
-	
+
+  # read line without blocking
+  while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
+    line = sys.stdin.readline()
+    print '[Console]: ', line,
+    ser.write(line)
+
+  while ser.inWaiting() > 0:
+    print '[Serial]: ',
+    sys.stdout.write(ser.readline())
