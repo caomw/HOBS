@@ -10,7 +10,7 @@ parser.add_argument('--timeout', type=float, action='store', default=1, help='Ti
 
 # we know for mac it will show as /dev/usb.tty*, so list all of them and ask user to choose
 
-availables = glob.glob('/dev/tty.usb*')
+availables = glob.glob('/dev/tty.*')
 
 arguments = parser.parse_args()
 try:
