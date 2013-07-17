@@ -1,3 +1,19 @@
+/*
+  client.ino
+
+  This is a general framework to fit in any clients that can be remotely controlled with XBee. Each clients will add additional function of parsing certain commands, while the major application takes charge of external communication.
+
+  Examples of clients include, for now, lamps and laptops.
+
+  Lamps are simple, dump clients that only support on/off.
+  Laptops now are viewed as video players, thus supporting play/pause, volume adjustment, and brightness adjustment, etc.
+
+
+  Created 07/17/2013
+  By benzh@eecs.berkeley.edu
+
+*/
+
 #include <SoftwareSerial.h>
 #include <IRremote.h>
 #include <string.h>
