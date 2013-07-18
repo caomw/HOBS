@@ -101,24 +101,6 @@ void sendBackDeviceID() {
   sendXBeePacketFromRaw(&XBee, deviceId, "a", "0000");
 }
 
-void lampClient(char *msg) {
-  // for lamp, it provides functions as turning on and off
-  // so what it does regarding the 
-   
-  digitalWrite(ledStatePin, HIGH);
-  char data[4];
-  string_copy(data, msg, 3, 6);
-
-  data[4] = '\0';
-  DEBUG_PRINTLN("[CONNECTED] command issued");
-  if (strcmp(data, "0001") == 0) {
-    digitalWrite(controlledPin, HIGH);
-  }
-  else if (strcmp(data, "0002") == 0) {
-    digitalWrite(controlledPin, LOW);
-  }
-}
-
 int readXBeeString (char *strArray) {
   DEBUG_PRINT("start read XBee: ");
   int i = 0;
@@ -169,4 +151,26 @@ void readXBeeDeviceId() {
 
   Serial.print("my devide ID: ");
   Serial.println(deviceId);  
+}
+
+
+void lampClient(char *msg) {
+  char data[5];
+  string_copy(data, msg, 3, 6);
+  data[4] = '\0';
+  DEBUG_PRINTLN("[CONNECTED] command issued");
+  if (strcmp(data, "0001") == 0) {
+    digitalWrite(controlledPin, HIGH);
+  }
+  else if (strcmp(data, "0002") == 0) {
+    digitalWrite(controlledPin, LOW);
+  }
+}
+
+void laptopBridging(char *msg) {
+  char data[5];
+  string_copy(data, msg, 3, 6);
+  data[4] = '\0';
+  DEBUG_PRINTLN("[CONNECTED] command issued");
+  Serial.println(data);
 }
