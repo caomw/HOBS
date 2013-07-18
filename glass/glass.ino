@@ -1,71 +1,33 @@
+/*
+  glass.ino
+
+  This code is running on the glass, taking control of IR tranmission, XBee communication, and BT communication.
+
+  XBee messages from client are routed to Google Glass for display purpose.
+  BT messages from Google Glass either trigger IR transmission, or are being delivered to clients. As before, we are using XBee broadcast mechanism.
+
+  Created 07/17/2013
+  By benzh@eecs.berkeley.edu
+
+*/
+
 #include <SoftwareSerial.h>
 #include <IRremote.h>
 
 #define DEBUG
 #include "utils.h"
-#include "slider.h"
 
 SoftwareSerial XBee(2, 4); // RX, TX
 
-// define all the states here
-#define IDLE 0
-#define INIT 1
-#define WAIT 2
-#define CONFIRM 3
-#define VERIFY 4
-#define CONNECTED 5
-
-// #define SOFTPOT_DELTA_THREASHOLD 80
-#define TARGET_DELTA_THRESHOLD 120
-#define DELAY_IN_WAIT 1000000
-
-unsigned long session_id;// = 0xA90;
-// int clicks;
-
 // An IR LED must be connected to Arduino PWM pin 3.
 IRsend irsend;
-int sendState = 0;
 int ledPin = 8;
-int state = 0;
-
-int softpotInitV = 0;
-// int delta_threshold = 0; //moved to .h
-int target_slider_threshold = 0;
-int target_changes = 0;
 
 struct XBeePacket XBeePacketArr[20];
-volatile int XBeePacketCounter;
-volatile int selectedXBee;
-volatile int initSelectedXBee;
-volatile int previousSelected;
-// unsigned long start_time;
-// unsigned long last_release_time;
-
-// int gState = 0;
-// int gResolution = 500;
-// unsigned long gStart_time;
-// bool gTimerStart = false;
-
-// *** should they be removed?
-bool released;
-bool pressed;
-unsigned long end_time;
-
-
-
-//new slider vars
-gesture_t g = gNONE;
-// int softpotPin = A0; //analog pin 0
-// int softpotReading = 0;
-
-int sliderVal = 0;
-int sliderDelta = 0;
 
 void setup()
 {
   Serial.begin(9600);
-  state = IDLE;
-  digitalWrite(softpotPin, HIGH); //enable pullup resistor
   randomSeed(analogRead(5));
   digitalWrite(ledPin, LOW);
   XBee.begin(9600);
