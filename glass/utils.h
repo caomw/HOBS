@@ -148,7 +148,18 @@ void digitalToggle(int pin){
   digitalWrite(pin, 1 ^ digitalRead(pin));  
 }
 
-
-
+int readStringfromSerial (SoftwareSerial *SS, char *strArray) {
+  int i = 0;
+  while ((*SS).available()) {
+    strArray[i] = (*SS).read();
+    i++;
+  }
+  strArray[i] = '\0';
+  DEBUG_PRINT("read message: ");
+  DEBUG_PRINT(strArray);
+  DEBUG_PRINT("  count: ");
+  DEBUG_PRINTLN(i);
+  return i;
+}
 
 #endif

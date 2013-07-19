@@ -17,9 +17,10 @@
 #include <SoftwareSerial.h>
 #include <IRremote.h>
 #include <string.h>
+#define DEBUG 1
+
 #include "utils.h"
 
-// #define DEBUG
 
 // In this simplified design, there is no need to save states on client for feedback
 // so I have deleted all state variables like IDLE, PENDING, CONNECTED, etc.
@@ -75,20 +76,15 @@ void loop()
   }
   else if (XBee.available()) {
     delay(5);
-    readXBeeString(XBeeInString);
-
-    if (XBeeInString[0] == '\\') {      // escape sign indicating commands
+    struct XBeePacket p = readXBeePacket(&XBee);
+    printXBeePacket(p);
+    if ( strcmp(p.type, "L") == 0 && strcmp(p.id, "FF") == 0) {
+      // broadcast message
       sendBackDeviceID();
-      // We will need to send back the device status also, here
     }
-    else {
-      // filter only the commands that is targeting at this client
-      char id[2];
-      string_copy(id, XBeeInString, 0, 1);
-      if (atoi(id) == atoi(deviceId)) {
+    else if (atoi(p.id) == atoi(deviceId)) {
         // pass this message to the function of client
-        lampClient(XBeeInString);
-      }      
+        lampClient(p);
     }
   }
 }
@@ -99,32 +95,18 @@ void sendBackDeviceID() {
   delay(randomDelay);
   // send back acknowledge packet
   sendXBeePacketFromRaw(&XBee, deviceId, "a", "0000");
-}
-
-int readXBeeString (char *strArray) {
-  DEBUG_PRINT("start read XBee: ");
-  int i = 0;
-  while (XBee.available()) {
-    strArray[i] = XBee.read();
-    i++;
-  }
-  strArray[i] = '\0';
-  DEBUG_PRINT("read XBee: ");
-  DEBUG_PRINT(strArray);
-  DEBUG_PRINT(" length: ");
-  DEBUG_PRINTLN(i);
-  return i;
+  delay(2000);
 }
 
 void readXBeeDeviceId() {
-  delay(1000);
+  delay(500);
 
   memset(XBeeInString, 0, 50);
   DEBUG_PRINTLN("sending +++");
   XBee.print("+++");
   delay(3000);
   // DEBUG_PRINTLN("reading...");
-  readXBeeString(XBeeInString);
+  readStringfromSerial(&XBee, XBeeInString);
   // DEBUG_PRINTLN(XBeeInString);
   
   delay(1000);
@@ -133,7 +115,7 @@ void readXBeeDeviceId() {
   DEBUG_PRINTLN("sending ATMY");
   XBee.print("ATMY\r");
   delay(3000);
-  readXBeeString(XBeeInString);
+  readStringfromSerial(&XBee, XBeeInString);
 
   // deviceId = XBeeInString[];
   int id = atoi(XBeeInString);
@@ -149,28 +131,22 @@ void readXBeeDeviceId() {
     itoa(id, deviceId, 10);  
   }
 
-  Serial.print("my devide ID: ");
+  Serial.print("my device ID: ");
   Serial.println(deviceId);  
 }
 
 
-void lampClient(char *msg) {
-  char data[5];
-  string_copy(data, msg, 3, 6);
-  data[4] = '\0';
-  DEBUG_PRINTLN("[CONNECTED] command issued");
-  if (strcmp(data, "0001") == 0) {
+void lampClient(struct XBeePacket p) {
+  DEBUG_PRINTLN("command issued");
+  if (strcmp(p.data, "  ON") == 0) {
     digitalWrite(controlledPin, HIGH);
   }
-  else if (strcmp(data, "0002") == 0) {
+  else if (strcmp(p.data, " OFF") == 0) {
     digitalWrite(controlledPin, LOW);
   }
 }
 
-void laptopBridging(char *msg) {
-  char data[5];
-  string_copy(data, msg, 3, 6);
-  data[4] = '\0';
+void laptopBridging(struct XBeePacket p) {
   DEBUG_PRINTLN("[CONNECTED] command issued");
-  Serial.println(data);
+  Serial.println(p.data);
 }
