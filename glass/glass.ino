@@ -26,12 +26,17 @@ IRsend irsend;
 int ledPin = 8;
 
 struct XBeePacket XBeePacketArr[20];
+char XBeeReturnIDs[20];
+int XBeeReturnCount;
+
 char message[50];
 enum mode {
   BTMode,
-  XBeeMode
+  XBeeMode,
+  WaitMode
 };
 mode m;
+unsigned long start_time;
 
 void setup()
 {
@@ -41,6 +46,7 @@ void setup()
   BT.begin(57600);
   delay(300);
   m = BTMode;
+  XBeeReturnCount = 0;
   Serial.print("system begins");
 }
 
@@ -58,11 +64,10 @@ void loop() {
         DEBUG_PRINT("[INIT] Sending IR: ");
         DEBUG_PRINTLN(session_id);
         irsend.sendSony(session_id, 16);
-        m = XBeeMode;
+        XBeeReturnCount = 0;
+        start_time = millis();
+        m = WaitMode;
         XBee.begin(9600);
-        // TODO
-        // better wait for a while before ending XBee session
-        //
       }
       else {
         XBee.begin(9600);
@@ -81,5 +86,29 @@ void loop() {
       m = BTMode;
     }
   }
+  else if (m == WaitMode) {
+    if (XBee.available()) {
+      if (XBeeReturnCount >= 1) {
+        XBeeReturnIDs[XBeeReturnCount*3-2] = ':';
+      }
+      readStringfromSerial(&XBee, message);
+      XBeeReturnIDs[XBeeReturnCount*3] = message[0];
+      XBeeReturnIDs[XBeeReturnCount*3+1] = message[1];
+      XBeeReturnCount++;
+    }
+    if (millis() - start_time > 1000) {
+      if (XBeeReturnCount > 0)
+        XBeeReturnIDs[XBeeReturnCount*3-1] = '\0';
+      else
+        XBeeReturnIDs[0] = '\0';
+      DEBUG_PRINT("IDs list:");
+      DEBUG_PRINTLN(XBeeReturnIDs);
+      DEBUG_PRINT("IDs counts:");
+      DEBUG_PRINTLN(XBeeReturnCount);
+      BT.print(XBeeReturnIDs);
+      m = BTMode;
+      BT.begin(57600);
+    }
+  }  
   delay(10);
 }
