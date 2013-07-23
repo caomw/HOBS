@@ -50,22 +50,24 @@ void loop() {
       // when receive message from Bluetooth, only trigger IR if
       // message is FFL_____, otherwise, use XBee to relay the message
       readStringfromSerial(&BT, message);
-      char cmd[3+1];
-      string_copy(cmd, message, 0, 2);
+      char cmd[2+1];
+      string_copy(cmd, message, 0, 1);
       // if it's LIST command, then list all available devices by sending IR
-      if (strcmp(cmd, "FFL") == 0) {
+      if (strcmp(cmd, "FF") == 0) {
         unsigned int session_id = random(0xFFFF);
         DEBUG_PRINT("[INIT] Sending IR: ");
         DEBUG_PRINTLN(session_id);
         irsend.sendSony(session_id, 16);
         m = XBeeMode;
         XBee.begin(9600);
+        // TODO
+        // better wait for a while before ending XBee session
+        //
       }
-      // if it's LIST command, then list all available devices by sending IR
       else {
         XBee.begin(9600);
+        m = XBeeMode;
         XBee.print(message);
-        BT.begin(57600);
       }
     }
   }

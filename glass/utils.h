@@ -23,17 +23,16 @@
 // deviceId   msg     data   checksum
 struct XBeePacket {
   char id[2+1];
-  char data[4+1];
-  char type[1+1];
-  char cksum[1+1];
+  char func[1+1];
+  char var[3+1];
+  char data[3+1];
 };
 
-// type:
-// v: verified
-// c: confirm
-// a: acknowledge
-// e: error
-// i: instructions
+// func:
+// C: control
+// S: set
+// R: read
+// A: ack
 
 //////////////////////////////////////////////////////////////
 // notice, '\0' is not appended
@@ -42,7 +41,7 @@ void string_copy(char *dst, const char *src, int start, int end) {
   while (i <= end) {
     dst[i-start] = src[i++];
   }
-  dst[i] = '\0';
+  dst[i-start] = '\0';
 }
 
 // to guarantee, dst should be longer than end-start+1
@@ -57,27 +56,28 @@ void string_concat(char *dst, const char *src, int pos) {
 void printXBeePacket (struct XBeePacket p) {
   DEBUG_PRINT("[PACKET] id:");
   DEBUG_PRINT(p.id);
-  DEBUG_PRINT("  type:");
-  DEBUG_PRINT(p.type);
+  DEBUG_PRINT("  function:");
+  DEBUG_PRINT(p.func);
+  DEBUG_PRINT("  variable:");
+  DEBUG_PRINT(p.var);
   DEBUG_PRINT("  data:");
-  DEBUG_PRINT(p.data);
-  DEBUG_PRINT("  cksum:");
-  DEBUG_PRINTLN(p.cksum);
+  DEBUG_PRINTLN(p.data);
 }
 
 // define this as a function so that we can flexible change the way we parse packet
 // read from the serial port and return the packet
 int sendXBeePacketFromRaw (SoftwareSerial *XBee,
 			   const char *id,
-			   const char *type,
-			   const char *data) {
+			   const char *func,
+			   const char *var,
+                           const char *data) {
   char str[20];
   str[0] = '\0';
   string_concat(str, id, 0);
-  string_concat(str, type, 2);
-  string_concat(str, data, 3);
-  string_concat(str, "0", 7);
-  str[8] = '\0';
+  string_concat(str, func, 2);
+  string_concat(str, var, 3);
+  string_concat(str, data, 6);
+  str[9] = '\0';
   DEBUG_PRINT("(in sendXBeePacketFromRaw) packet being sent: ");
   DEBUG_PRINTLN(str);
   (*XBee).println(str);
@@ -91,10 +91,10 @@ int sendXBeePacket (SoftwareSerial *XBee, struct XBeePacket p) {
   char str[20];
   str[0] = '\0';
   string_concat(str, p.id, 0);
-  string_concat(str, p.type, 2);
-  string_concat(str, p.data, 3);
-  string_concat(str, p.cksum, 7);
-  str[8] = '\0';
+  string_concat(str, p.func, 2);
+  string_concat(str, p.var, 3);
+  string_concat(str, p.data, 6);
+  str[9] = '\0';
   DEBUG_PRINT("(in sendXBeePacket) packet being sent: ");
   DEBUG_PRINTLN(str);
   (*XBee).println(str);
@@ -108,9 +108,6 @@ struct XBeePacket readXBeePacket (SoftwareSerial *XBee) {
   char strArray[20];
   int i = 0;
 
-  // 'e' indicates error
-  string_copy(p.type, "e", 0, 0);
-  
   /* if(!XBee.available()) { */
   /*   return p; */
   /* } */
@@ -133,9 +130,9 @@ struct XBeePacket readXBeePacket (SoftwareSerial *XBee) {
   
   if (i == 10 || i == 9) {
     string_copy(p.id, strArray, 0, 1);
-    string_copy(p.type, strArray, 2, 2);
-    string_copy(p.data, strArray, 3, 6);
-    string_copy(p.cksum, strArray, 7, 7);
+    string_copy(p.func, strArray, 2, 2);
+    string_copy(p.var, strArray, 3, 5);
+    string_copy(p.data, strArray, 6, 8);
   }
   else {
     // something wrong with the received packet....

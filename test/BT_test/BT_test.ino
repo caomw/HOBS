@@ -1,6 +1,5 @@
 #include <SoftwareSerial.h>
 
-#include "bt.h"
 SoftwareSerial BT(10, 11); // RX, TX
 
 int i = 0;

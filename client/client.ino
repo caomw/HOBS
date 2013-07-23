@@ -78,7 +78,7 @@ void loop()
     delay(5);
     struct XBeePacket p = readXBeePacket(&XBee);
     printXBeePacket(p);
-    if ( strcmp(p.type, "L") == 0 && strcmp(p.id, "FF") == 0) {
+    if ( strcmp(p.id, "FF") == 0 ) {
       // broadcast message
       sendBackDeviceID();
     }
@@ -94,7 +94,7 @@ void sendBackDeviceID() {
   // avoid conflicts
   delay(randomDelay);
   // send back acknowledge packet
-  sendXBeePacketFromRaw(&XBee, deviceId, "a", "0000");
+  sendXBeePacketFromRaw(&XBee, deviceId, "A", " ID", "XXX");
   delay(2000);
 }
 
@@ -135,14 +135,30 @@ void readXBeeDeviceId() {
   Serial.println(deviceId);  
 }
 
-
 void lampClient(struct XBeePacket p) {
   DEBUG_PRINTLN("command issued");
-  if (strcmp(p.data, "  ON") == 0) {
-    digitalWrite(controlledPin, HIGH);
+  if (strcmp(p.func, "R") == 0 && strcmp(p.var, "BRI") == 0 ) {
+    // read the current status and reply
+    int status = digitalRead(controlledPin);
+    if (status == 0) {
+      sendXBeePacketFromRaw(&XBee, deviceId, "A", "BRI", "OFF");
+    } else {
+      sendXBeePacketFromRaw(&XBee, deviceId, "A", "BRI", " ON");
+    }
   }
-  else if (strcmp(p.data, " OFF") == 0) {
+  if (strcmp(p.func, "C") == 0 && strcmp(p.var, "BRI") == 0 && strcmp(p.data, " ON") == 0) {
+    DEBUG_PRINTLN("turned on");
+    digitalWrite(controlledPin, HIGH);
+    sendXBeePacketFromRaw(&XBee, deviceId, "A", "BRI", " ON");
+  }
+  else if (strcmp(p.func, "C") == 0 && strcmp(p.var, "BRI") == 0 && strcmp(p.data, "OFF") == 0) {
+    DEBUG_PRINTLN("turned off");
     digitalWrite(controlledPin, LOW);
+    sendXBeePacketFromRaw(&XBee, deviceId, "A", "BRI", "OFF");
+  }
+  else {
+    // error message
+    sendXBeePacketFromRaw(&XBee, deviceId, "E", "XXX", "XXX");
   }
 }
 
