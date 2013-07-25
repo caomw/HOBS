@@ -130,11 +130,15 @@ last_brightness = get_brightness()
   
 while True:
   char = ser.readline()
-  print char, len(char), validate(char)
+  if len(char) > 0:
+    print len(char), validate(char), " || ", char.strip()
+    
   # packet format + CR LF
   if len(char) == 10 or len(char) == 11 and validate(char):
       cmd = command(char)
       print cmd.func, cmd.var, cmd.data
+
+
       if cmd.func == 'R':
         if cmd.var == 'BRI':
           cmd.data = "%3.0f" % (100 * get_brightness())
@@ -144,10 +148,15 @@ while True:
         else:
           raise NotImplementedError
       elif cmd.func == 'S':
+        try:
+          val = float(cmd.data)
+        except:
+          continue
+
         if cmd.var == 'BRI':
-          set_brightness(float(cmd.data) / 100.0);
+          set_brightness( val / 100.0);
         elif cmd.var == 'VOL':
-          sa.set_volume( int(cmd.data) / 100.0 * 7.14)
+          sa.set_volume( val / 100.0 * 7.14)
         else:
           raise NotImplementedError
         
@@ -174,6 +183,7 @@ while True:
         else:
           raise NotImplementedError
       cmd.func = 'A'
+      print "from python to XBee:", cmd.to_string()
       ser.write(cmd.to_string())        
   else:
     pass  

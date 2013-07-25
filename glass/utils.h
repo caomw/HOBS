@@ -113,7 +113,6 @@ struct XBeePacket readXBeePacket (SoftwareSerial *XBee) {
   /* } */
   while ((*XBee).available()) {
     strArray[i] = (*XBee).read();
-    DEBUG_PRINT(strArray[i]);
     i++;
     if(i>20) {
       //abandon the packet
@@ -152,6 +151,10 @@ int readStringfromSerial (SoftwareSerial *SS, char *strArray) {
     i++;
   }
   strArray[i] = '\0';
+
+  if (strArray[i-1] == '\n') {
+    strArray[i-1] = '\0';
+  }
   DEBUG_PRINT("read message: ");
   DEBUG_PRINT(strArray);
   DEBUG_PRINT("  count: ");

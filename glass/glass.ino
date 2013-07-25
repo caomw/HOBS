@@ -6,139 +6,145 @@
   XBee messages from client are routed to Google Glass for display purpose.
   BT messages from Google Glass either trigger IR transmission, or are being delivered to clients. As before, we are using XBee broadcast mechanism.
 
+  Now we've switched to Arduino Mega, no need for software serial. For old code, using git log to find it... 
+
   Created 07/17/2013
+  Modified 07/25/2013
   By benzh@eecs.berkeley.edu
 
 */
 
-#include <SoftwareSerial.h>
 #include <IRremote.h>
 
 #define DEBUG
-#include "utils.h"
 
-SoftwareSerial BT(10, 11); // RX, TX
-SoftwareSerial XBee(2, 4); // RX, TX
+#ifdef DEBUG
+  #define DEBUG_PRINT(x)  Serial.print(x)
+  #define DEBUG_PRINTLN(x)  Serial.println(x)
+#else
+  #define DEBUG_PRINT(x)
+  #define DEBUG_PRINTLN(x)
+#endif
 
+
+#define BT Serial1
+#define XBee Serial2
 
 // An IR LED must be connected to Arduino PWM pin 3.
 IRsend irsend;
 int ledPin = 8;
 
-struct XBeePacket XBeePacketArr[20];
+char message[50];
+
+unsigned long start_time;
+boolean isWaitingReply;
 char XBeeReturnIDs[20];
 int XBeeReturnCount;
-
-char message[50];
-enum mode {
-  BTMode,
-  XBeeMode,
-  WaitMode
-};
-mode m;
-unsigned long start_time;
 
 void setup()
 {
   Serial.begin(9600);
   randomSeed(analogRead(5));
   digitalWrite(ledPin, LOW);
+  XBee.begin(9600);
   BT.begin(57600);
-  delay(300);
-  m = BTMode;
-  XBeeReturnCount = 0;
-  Serial.print("system begins");
+  isWaitingReply = false;
+  delay(100);
+  Serial.print("system begins!");
 }
 
 void loop() {
-  if (m == BTMode) {
-    if (BT.available()) {
-      
-      // when receive message from Bluetooth, only trigger IR if
-      // message is FFL_____, otherwise, use XBee to relay the message
-      readStringfromSerial(&BT, message);
-      char cmd[2+1];
-      string_copy(cmd, message, 0, 1);
-      // if it's LIST command, then list all available devices by sending IR
-      if (strcmp(cmd, "FF") == 0) {
-        unsigned int session_id = random(0xFFFF);
-        DEBUG_PRINT("[INIT] Sending IR: ");
-        DEBUG_PRINTLN(session_id);
-        irsend.sendSony(session_id, 16);
-        XBeeReturnCount = 0;
-        memset(XBeeReturnIDs, '\0', 20);
-        start_time = millis();
-        DEBUG_PRINTLN("entering wait mode");
-        m = WaitMode;
-        XBee.begin(9600);
-      }
-      else if (true == isPacketValid(message)) {
-        XBee.begin(9600);
-        DEBUG_PRINTLN("entering XBee mode");
-        start_time = millis();
-        m = XBeeMode;
-        XBee.print(message);
-      }
-    }
-  }
-  else if (m == XBeeMode) {
-    delay(30);
-    // too long time no response
-    if (millis() - start_time > 3000) {
-      BT.begin(57600);
-      DEBUG_PRINTLN("timeout, entering BT mode");
-      m = BTMode;
-    }
-    if (XBee.available()) {
-      DEBUG_PRINTLN("reading message from XBee");
-      readStringfromSerial(&XBee, message);
-      Serial.print(message);
-      BT.begin(57600);
-      BT.print(message);
-      DEBUG_PRINTLN("entering BT mode");
-      m = BTMode;
-    }
-    
-  }
-  else if (m == WaitMode) {
+  if (isWaitingReply) {
     if (XBee.available()) {
       if (XBeeReturnCount >= 1) {
         XBeeReturnIDs[XBeeReturnCount*3-2] = ':';
-        DEBUG_PRINT("appending :");
-        DEBUG_PRINTLN(XBeeReturnCount);
       }
+      delay(10);
       readStringfromSerial(&XBee, message);
-      XBeeReturnIDs[XBeeReturnCount*3] = message[0];
-      XBeeReturnIDs[XBeeReturnCount*3+1] = message[1];
-      XBeeReturnCount++;
+      if (true == isPacketValid(message)) {
+        XBeeReturnIDs[XBeeReturnCount*3] = message[0];
+        XBeeReturnIDs[XBeeReturnCount*3+1] = message[1];
+        XBeeReturnCount++;
+      }
     }
+       
     if (millis() - start_time > 1000) {
       if (XBeeReturnCount > 0)
         XBeeReturnIDs[XBeeReturnCount*3-1] = '\0';
       else
         XBeeReturnIDs[0] = '\0';
-
-b      DEBUG_PRINT("IDs list:");
+      DEBUG_PRINT("IDs list:");
       DEBUG_PRINTLN(XBeeReturnIDs);
       DEBUG_PRINT("IDs counts:");
       DEBUG_PRINTLN(XBeeReturnCount);
-      BT.print(XBeeReturnIDs);
-      m = BTMode;
-      DEBUG_PRINTLN("entering BT mode");
-
-      BT.begin(57600);
+      BT.println(XBeeReturnIDs);
+      isWaitingReply = false;      
     }
-  }  
+  }
+      
+  if (BT.available()) {
+    // when receive message from Bluetooth, only trigger IR if
+    // message is FFL_____, otherwise, use XBee to relay the message
+    delay(10);
+    DEBUG_PRINT("[BT]: ");
+    readStringfromSerial(&BT, message);
+    // if it's LIST command, then list all available devices by sending IR
+    if ( message[0] == 'F' && message[1] == 'F') {
+      unsigned int session_id = random(0xFFFF);
+      DEBUG_PRINT("[INIT] Sending IR: ");
+      DEBUG_PRINTLN(session_id);
+      irsend.sendSony(session_id, 16);
+      start_time = millis();
+      memset(XBeeReturnIDs, 0, 20);
+      XBeeReturnCount = 0;
+      isWaitingReply = true;
+    }
+    else if (true == isPacketValid(message)) {
+      XBee.print(message);
+    }
+  }
+
+  if (XBee.available()) {
+    delay(10);
+    DEBUG_PRINT("[XBee]: ");
+    readStringfromSerial(&XBee, message);
+    DEBUG_PRINT("[BT]: send ");
+    DEBUG_PRINTLN(message);    
+    BT.println(message);
+  }
   delay(10);
 }
 
 boolean isPacketValid(char *message) {
   // check message format
   // IDXVARVAL
-  if (strlen(message) >= 9 &&
-      (message[2] == 'R' || message[2] == 'S' || message[2] == 'C') && 
+  if (strlen(message) >= 9 && isFuncValid(message) && 
       (message[1] <= '9' && message[1] >= '0') &&
       (message[1] <= '9' && message[1] >= '0'))
     return true;
   return false;
+}
+
+boolean isFuncValid(char *message) {
+  if (message[2] == 'R' || message[2] == 'A' ||
+      message[2] == 'C' || message[2] == 'S')
+    return true;
+  return false;
+}
+
+int readStringfromSerial (HardwareSerial *SS, char *strArray) {
+  int i = 0;
+  while ((*SS).available()) {
+    strArray[i] = (*SS).read();
+    i++;
+  }
+  strArray[i] = '\0';
+  if (strArray[i-1] == '\n') {
+    strArray[i-1] = '\0';
+  }
+  DEBUG_PRINT("read message: ");
+  DEBUG_PRINT(strArray);
+  DEBUG_PRINT("  count: ");
+  DEBUG_PRINTLN(i);
+  return i;
 }
