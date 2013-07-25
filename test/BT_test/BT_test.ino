@@ -1,57 +1,39 @@
-#include <SoftwareSerial.h>
+/*
+  BT test on Mega
 
-SoftwareSerial BT(10, 11); // RX, TX
+  For old code that works with Aruidno Uno, see git log and pull it from the repo
 
-int i = 0;
-
-void setup(){
-  Serial.begin(9600);
-  // state = IDLE;
-  // digitalWrite(softpotPin, HIGH); //enable pullup resistor
-  // randomSeed(analogRead(5));
-  // digitalWrite(ledPin, LOW);
-  BT.begin(57600);
-  // XBeePacketCounter = 0;
-  // pressed = false;
-  // released = false;
-  // last_release_time = 0;
+  Modified upon "Mega multple serial test"
   
-  delay(300);
-  Serial.print("system begins");
+  Receives from the main serial port, sends to the others. 
+  Receives from serial port 2 (BT), sends to the main serial (Serial 0).
+ 
+  This example works only on the Arduino Mega
+ 
+  created 07/25/2013
+  by Ben Zhang <benzh@eecs.berkeley.edu>
+ 
+ */
+
+#define BT Serial1
+
+void setup() {
+  // initialize both serial ports:
+  Serial.begin(9600);
+  BT.begin(57600);
 }
 
-char str[50];
-
-int readBTLine(char *strArray) {
-  int i=0, count;
-  char c;
-  while (BT.available() && (c = BT.read()) != '\n') {
-    strArray[i] = c;
-    i++;
+void loop() {
+  // read from port 1, send to port 0:
+  if (BT.available()) {
+    int inByte = BT.read();
+    Serial.write(inByte); 
   }
-  strArray[i] = '\0';
-
-  Serial.print("Read characters from BT, count:");
-  Serial.println(i);
-  count = i;
-  return count;
-}
-
-void loop(){
-  if(BT.available()){
-    Serial.print("msg receive:");
-    int msgLen = readBTLine(str);
-    Serial.print(msgLen);
-    Serial.print(" ");
-    Serial.println(str);
+  
+  // read from port 0, send to port 1:
+  if (Serial.available()) {
+    int inByte = Serial.read();
+    BT.write(inByte);
+    BT.write('\n');
   }
-  if (i == 100000) {
-    BT.write("send to BT\n");
-    i = 0;
-  }
-  i++;
-
-  // Serial.println("send to Serial");
-  delay(500);
-
 }

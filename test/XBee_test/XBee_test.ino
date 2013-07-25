@@ -1,119 +1,39 @@
-#include <SoftwareSerial.h>
-#include <IRremote.h>
+/*
+  XBee test on Mega
 
-SoftwareSerial XBee(2, 3); // RX, TX
-int ledPin = 13;
-int RECV_PIN = 8;
-IRrecv irrecv(RECV_PIN);
-decode_results results;
-int deviceStatus = 0;
-int pendingTimer;
-int deviceId = 1;
+  For old code that works with Aruidno Uno, see git log and pull it from the repo
 
-char XBeeInString[50];
+  Modified upon "Mega multple serial test"
+  
+  Receives from the main serial port, sends to the others. 
+  Receives from serial port 2 (XBee), sends to the main serial (Serial 0).
+ 
+  This example works only on the Arduino Mega
+ 
+  created 07/25/2013
+  by Ben Zhang <benzh@eecs.berkeley.edu>
+ 
+ */
 
-#define statusOff 0
-#define statusPending 1
-#define statusOn 2
+#define XBee Serial2
 
-
-// const unsigned long signalInit = 0xA90;
-const unsigned long signalInit = 0xC1AA09F6;
-const unsigned long signalVerify = 0xAF0;
-const unsigned long signalConfirm = 0xA70;
-
-void setup()  
-{
-  // Open serial communications and wait for port to open:
+void setup() {
+  // initialize both serial ports:
   Serial.begin(9600);
-  pinMode(ledPin, OUTPUT);   
-  Serial.println("system begins!");
-
-  // set the data rate for the SoftwareSerial port
   XBee.begin(9600);
-  irrecv.enableIRIn(); // Start the receiver
 }
 
-void loop() // run over and over
-{
-  memset(XBeeInString, 0, 50);
-  
-
-  readXBeeString(XBeeInString);
-  char c = XBeeInString[0];
-  if(c != '\0') {
-    sendMsg(XBeeInString);  
+void loop() {
+  // read from port 1, send to port 0:
+  if (XBee.available()) {
+    int inByte = XBee.read();
+    Serial.write(inByte); 
   }
   
-  
-  if(Serial.available()) {
-    Serial.write(Serial.read());
-    XBee.println("msg from serial");
+  // read from port 0, send to port 1:
+  if (Serial.available()) {
+    int inByte = Serial.read();
+    XBee.write(inByte);
+    XBee.write('\n');
   }
-  
-  if(irrecv.decode(&results)) {
-    
-    //todo: filter redundant FFFFFFFF
-
-    Serial.println(results.value, HEX);
-    // Serial.println(results.decode_type);
-    
-    XBee.print(deviceId);
-    XBee.print(": ");
-    XBee.println(results.value, HEX);
-
-    // switch(results.value) {
-    //   case signalInit:
-    //     // Serial.println("singalInit");
-    //     // XBee.println("singalInit");
-    //     sendMsg("signalInit");
-
-    //     break;
-      
-    //   case signalVerify:
-    //     sendMsg("signalVerify");
-    //     break;
-
-    //   case signalConfirm:
-    //     sendMsg("signalConfirm");
-    //     break;
-
-    // }
-
-    irrecv.resume(); // Receive the next value
-
-  }
-  
-  if(deviceStatus == statusPending) {
-    //todo: start blinking
-    ;
-  }
-    
-}
-
-void sendMsg(String msg) {
-  Serial.print(deviceId);
-  Serial.print(": ");
-  Serial.print(msg);
-  Serial.println();
-
-  XBee.print(deviceId);
-  XBee.print(": ");
-  XBee.print(msg);
-  XBee.println();
-
-}
-
-void readXBeeString (char *strArray) {
-  int i = 0;
-  if(!XBee.available()) {
-    return;
-  }
-  while (XBee.available()) {
-    strArray[i] = XBee.read();
-    i++;
-  }
-  Serial.print("read XBee: ");
-  Serial.println(strArray);
-  // sendMsg(XBeeInString);
 }
