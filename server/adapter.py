@@ -1,9 +1,11 @@
 import serial, glob, argparse
 import sys
+import re
 from osax import OSAX
 from appscript import app, k
+import applescript 
 
-parser = argparse.ArgumentParser(description='Pyserial for XBee')
+parser = argparse.ArgumentParser(description='Adapter that controls laptop through USB')
 parser.add_argument('--debug', default=False, action='store_true', help='Print More Errors and Launch interactive console on exception or forced exit')
 parser.add_argument('--baud', type=int, action='store', default=9600, help='Specify the baud rate')
 parser.add_argument('--timeout', type=float, action='store', default=1, help='Timeout parameter for serial connection')
@@ -37,12 +39,10 @@ except Exception as e:
   print "invalid input!"
   exit(1)
 
-
 try:
   ser = serial.Serial(selected, baud, timeout=timeout)
 except Exception as e:
   print "failed to connect the serial port", e
-
 
 def change_volume(sa, amount):
   current_settings = sa.get_volume_settings()
@@ -57,18 +57,124 @@ def change_volume(sa, amount):
   # a number between 0 to 7
   # original + amount is 0 to 100
   sa.set_volume((original+amount) / 100.0 * 7)
-  
-sa = OSAX()
 
-while True:
-  char = ser.read()
-  # debugging print out
-  if char != '':
-    print "char read: ", char
-  if char == 'u':
-    change_volume(sa, 5)
-  if char == 'd':
-    change_volume(sa, -5)
-  elif char == 'p':
-    app('System Events').keystroke(' ')
+def get_volume():
+  current_settings = sa.get_volume_settings()
+  original = -1
+  # hacky way of finding out current volume
+  for key in current_settings:
+    if str(key) == 'k.output_volume':
+      original = current_settings[key]
+  if original == -1:
+    raise Exception('Problem in parsing get_volume_settings output')
+  return original
   
+def set_brightness(val):
+  try:
+    scpt.call('changeBrightness', val)
+  except applescript.ScriptError:
+    pass
+      
+def get_brightness():
+  try:
+    return scpt.call('getBrightness')
+  except applescript.ScriptError:
+    return 0
+
+sa = OSAX()
+scpt = applescript.AppleScript('''
+    on changeBrightness(BrightnessValue)	
+	    tell application "System Preferences"
+		    --activate
+		    set current pane to pane "com.apple.preference.displays"
+    	end tell
+    	tell application "System Events" to tell process "System Preferences"		
+    		tell slider 1 of group 1 of tab group 1 of window 1 to set value to BrightnessValue
+    	end tell
+    	tell application "System Preferences" to quit
+    end changeBrightness
+
+    on getBrightness()
+	    tell application "System Preferences"
+		    --activate
+		    set current pane to pane "com.apple.preference.displays"
+	    end tell
+	    tell application "System Events" to tell process "System Preferences"
+		    set x to value of slider 1 of group 1 of tab group 1 of window 1
+	    end tell
+	    tell application "System Preferences" to quit
+      return x
+    end getBrightness
+''')
+
+
+class command():
+  """Used to parse and save the command"""
+  def __init__(self, str):
+    self.id = str[0:2]
+    self.func = str[2]
+    self.var = str[3:6]
+    self.data = str[6:9]
+    
+  def to_string (self):
+    str_list = [self.id, self.func, self.var, self.data]
+    return ''.join(str_list)
+    
+def validate(str):
+  if re.match(r'^\d\d(R|S|C)(BRI|VOL)...\r\n$', str) or re.match(r'^\d\d(R|S|C)(BRI|VOL)...\n$', str):
+    return True
+  
+
+last_volume = get_volume()
+last_brightness = get_brightness()
+  
+while True:
+  char = ser.readline()
+  print char, len(char), validate(char)
+  # packet format + CR LF
+  if len(char) == 10 or len(char) == 11 and validate(char):
+      cmd = command(char)
+      print cmd.func, cmd.var, cmd.data
+      if cmd.func == 'R':
+        if cmd.var == 'BRI':
+          cmd.data = "%3.0f" % (100 * get_brightness())
+          print cmd.data
+        elif cmd.var == 'VOL':
+          cmd.data = "%3.0f" % (get_volume())
+        else:
+          raise NotImplementedError
+      elif cmd.func == 'S':
+        if cmd.var == 'BRI':
+          set_brightness(float(cmd.data) / 100.0);
+        elif cmd.var == 'VOL':
+          sa.set_volume( int(cmd.data) / 100.0 * 7.14)
+        else:
+          raise NotImplementedError
+        
+      elif cmd.func == 'C':
+        if cmd.var == 'PLY':
+          app('System Events').keystroke(' ') 
+        elif cmd.var == 'VOL':
+          if cmd.data == ' ON':
+            print "controling volume on", last_volume 
+            sa.set_volume( last_volume/100.0 * 7.14 )
+          elif cmd.data == 'OFF':
+            last_volume = get_volume()
+            print "turning volume off", last_volume 
+            sa.set_volume(0.0)
+        elif cmd.var == 'BRI':
+          if cmd.data == ' ON':
+            print "brightness on", last_brightness 
+            set_brightness(last_brightness)
+          elif cmd.data == 'OFF':
+            last_brightness = get_brightness()
+            print "brightness off", last_brightness
+            set_brightness(0)
+            
+        else:
+          raise NotImplementedError
+      cmd.func = 'A'
+      ser.write(cmd.to_string())        
+  else:
+    pass  
+  # app('System Events').keystroke(' ')

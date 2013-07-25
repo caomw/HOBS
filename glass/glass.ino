@@ -53,6 +53,7 @@ void setup()
 void loop() {
   if (m == BTMode) {
     if (BT.available()) {
+      
       // when receive message from Bluetooth, only trigger IR if
       // message is FFL_____, otherwise, use XBee to relay the message
       readStringfromSerial(&BT, message);
@@ -65,31 +66,46 @@ void loop() {
         DEBUG_PRINTLN(session_id);
         irsend.sendSony(session_id, 16);
         XBeeReturnCount = 0;
+        memset(XBeeReturnIDs, '\0', 20);
         start_time = millis();
+        DEBUG_PRINTLN("entering wait mode");
         m = WaitMode;
         XBee.begin(9600);
       }
-      else {
+      else if (true == isPacketValid(message)) {
         XBee.begin(9600);
+        DEBUG_PRINTLN("entering XBee mode");
+        start_time = millis();
         m = XBeeMode;
         XBee.print(message);
       }
     }
   }
   else if (m == XBeeMode) {
+    delay(30);
+    // too long time no response
+    if (millis() - start_time > 3000) {
+      BT.begin(57600);
+      DEBUG_PRINTLN("timeout, entering BT mode");
+      m = BTMode;
+    }
     if (XBee.available()) {
       DEBUG_PRINTLN("reading message from XBee");
       readStringfromSerial(&XBee, message);
       Serial.print(message);
       BT.begin(57600);
       BT.print(message);
+      DEBUG_PRINTLN("entering BT mode");
       m = BTMode;
     }
+    
   }
   else if (m == WaitMode) {
     if (XBee.available()) {
       if (XBeeReturnCount >= 1) {
         XBeeReturnIDs[XBeeReturnCount*3-2] = ':';
+        DEBUG_PRINT("appending :");
+        DEBUG_PRINTLN(XBeeReturnCount);
       }
       readStringfromSerial(&XBee, message);
       XBeeReturnIDs[XBeeReturnCount*3] = message[0];
@@ -101,14 +117,28 @@ void loop() {
         XBeeReturnIDs[XBeeReturnCount*3-1] = '\0';
       else
         XBeeReturnIDs[0] = '\0';
-      DEBUG_PRINT("IDs list:");
+
+b      DEBUG_PRINT("IDs list:");
       DEBUG_PRINTLN(XBeeReturnIDs);
       DEBUG_PRINT("IDs counts:");
       DEBUG_PRINTLN(XBeeReturnCount);
       BT.print(XBeeReturnIDs);
       m = BTMode;
+      DEBUG_PRINTLN("entering BT mode");
+
       BT.begin(57600);
     }
   }  
   delay(10);
+}
+
+boolean isPacketValid(char *message) {
+  // check message format
+  // IDXVARVAL
+  if (strlen(message) >= 9 &&
+      (message[2] == 'R' || message[2] == 'S' || message[2] == 'C') && 
+      (message[1] <= '9' && message[1] >= '0') &&
+      (message[1] <= '9' && message[1] >= '0'))
+    return true;
+  return false;
 }

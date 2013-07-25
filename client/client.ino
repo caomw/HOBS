@@ -34,7 +34,7 @@ int RECV_PIN = 8;
 IRrecv irrecv(RECV_PIN);
 decode_results results;
 
-char deviceId[3] = "??";
+char deviceId[3] = "01";
 char XBeeInString[50];
 
 unsigned int ledStateInterval = 500;
@@ -84,7 +84,8 @@ void loop()
     }
     else if (atoi(p.id) == atoi(deviceId)) {
         // pass this message to the function of client
-        lampClient(p);
+      laptopBridging(p);
+        // lampClient(p);
     }
   }
 }
@@ -163,6 +164,26 @@ void lampClient(struct XBeePacket p) {
 }
 
 void laptopBridging(struct XBeePacket p) {
-  DEBUG_PRINTLN("[CONNECTED] command issued");
-  Serial.println(p.data);
+  // make sure you send back ack
+  DEBUG_PRINTLN("command issued");
+  char str[20];
+  string_concat(str, p.id, 0);
+  string_concat(str, p.func, 2);
+  string_concat(str, p.var, 3);
+  string_concat(str, p.data, 6);
+  str[9] = '\0';
+  Serial.println(str);
+
+
+  char strArray[20];
+  int i = 0;
+
+  delay(800);
+  // read the serial return value, and return back message
+  while (Serial.available()) {
+    strArray[i] = Serial.read();
+    i++;
+  }
+  strArray[i] = '\0';
+  XBee.println(strArray);
 }
