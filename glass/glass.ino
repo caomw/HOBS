@@ -56,8 +56,8 @@ void setup()
 void loop() {
   if (isWaitingReply) {
     if (XBee.available()) {
-      if (XBeeReturnCount >= 1) {
-        XBeeReturnIDs[XBeeReturnCount*3-2] = ':';
+      if (XBeeReturnCount > 1) {
+        XBeeReturnIDs[XBeeReturnCount*3-1] = ':';
       }
       delay(10);
       readStringfromSerial(&XBee, message);
@@ -78,7 +78,7 @@ void loop() {
       DEBUG_PRINT("IDs counts:");
       DEBUG_PRINTLN(XBeeReturnCount);
       BT.println(XBeeReturnIDs);
-      isWaitingReply = false;      
+      isWaitingReply = false;    
     }
   }
       
@@ -119,7 +119,7 @@ boolean isPacketValid(char *message) {
   // check message format
   // IDXVARVAL
   if (strlen(message) >= 9 && isFuncValid(message) && 
-      (message[1] <= '9' && message[1] >= '0') &&
+      (message[0] <= '9' && message[0] >= '0') &&
       (message[1] <= '9' && message[1] >= '0'))
     return true;
   return false;
