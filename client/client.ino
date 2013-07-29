@@ -178,12 +178,16 @@ void laptopBridging(struct XBeePacket p) {
   char strArray[20];
   int i = 0;
 
-  delay(800);
-  // read the serial return value, and return back message
-  while (Serial.available()) {
-    strArray[i] = Serial.read();
-    i++;
-  }
-  strArray[i] = '\0';
-  XBee.println(strArray);
+  if(p.func[0] == 'R') {
+    delay(800);
+    // read the serial return value, and return back message
+    while (Serial.available()) {
+      strArray[i] = Serial.read();
+      i++;
+    }
+    strArray[i] = '\0';
+    XBee.println(strArray);
+  } else {
+    sendXBeePacketFromRaw(&XBee, deviceId, "A", p.var, p.data);
+  }   
 }
