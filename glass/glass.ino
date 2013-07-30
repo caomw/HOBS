@@ -21,6 +21,7 @@
 #ifdef DEBUG
   #define DEBUG_PRINT(x)  Serial.print(x)
   #define DEBUG_PRINTLN(x)  Serial.println(x)
+  #define DEBUG_TAGGING(x, y)  Serial.print(x); Serial.println(y);
 #else
   #define DEBUG_PRINT(x)
   #define DEBUG_PRINTLN(x)
@@ -56,7 +57,7 @@ void setup()
 void loop() {
   if (isWaitingReply) {
     if (XBee.available()) {
-      if (XBeeReturnCount > 1) {
+      if (XBeeReturnCount >= 1) {
         XBeeReturnIDs[XBeeReturnCount*3-1] = ':';
       }
       delay(10);
