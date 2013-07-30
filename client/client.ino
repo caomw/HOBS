@@ -17,7 +17,8 @@
 #include <SoftwareSerial.h>
 #include <IRremote.h>
 #include <string.h>
-#define DEBUG 1
+
+#define DEBUG
 
 #include "utils.h"
 
@@ -34,7 +35,7 @@ int RECV_PIN = 8;
 IRrecv irrecv(RECV_PIN);
 decode_results results;
 
-char deviceId[3] = "01";
+char deviceId[3] = "00";
 char XBeeInString[50];
 
 unsigned int ledStateInterval = 500;
@@ -60,9 +61,6 @@ void setup()
   irrecv.enableIRIn(); // Start the receiver
   randomSeed(analogRead(5));
   readXBeeDeviceId();
-  toggle_time = millis();
-  signal_time = millis();
-
 }
 
 void loop()
@@ -83,9 +81,9 @@ void loop()
       sendBackDeviceID();
     }
     else if (atoi(p.id) == atoi(deviceId)) {
-        // pass this message to the function of client
-      laptopBridging(p);
-        // lampClient(p);
+      // pass this message to the function of client
+      // laptopBridging(p);
+      lampClient(p);
     }
   }
 }
@@ -147,7 +145,7 @@ void lampClient(struct XBeePacket p) {
       sendXBeePacketFromRaw(&XBee, deviceId, "A", "BRI", " ON");
     }
   }
-  if (strcmp(p.func, "C") == 0 && strcmp(p.var, "BRI") == 0 && strcmp(p.data, " ON") == 0) {
+  else if (strcmp(p.func, "C") == 0 && strcmp(p.var, "BRI") == 0 && strcmp(p.data, " ON") == 0) {
     DEBUG_PRINTLN("turned on");
     digitalWrite(controlledPin, HIGH);
     sendXBeePacketFromRaw(&XBee, deviceId, "A", "BRI", " ON");

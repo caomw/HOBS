@@ -100,6 +100,8 @@ void loop() {
       isWaitingReply = true;
     }
     else if (true == isPacketValid(message)) {
+      DEBUG_PRINT("[XBee]: send message: ");
+      DEBUG_PRINTLN(message);      
       XBee.print(message);
     }
   }
