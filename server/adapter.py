@@ -124,7 +124,23 @@ def validate(str):
   if re.match(r'^\d\d(R|S|C)(BRI|VOL)...\r\n$', str) or re.match(r'^\d\d(R|S|C)(BRI|VOL)...\n$', str):
     return True
   
+class bcolors:
+  HEADER = '\033[95m'
+  OKBLUE = '\033[94m'
+  OKGREEN = '\033[92m'
+  WARNING = '\033[93m'
+  FAIL = '\033[91m'
+  ENDC = '\033[0m'
 
+  def disable(self):
+    self.HEADER = ''
+    self.OKBLUE = ''
+    self.OKGREEN = ''
+    self.WARNING = ''
+    self.FAIL = ''
+    self.ENDC = ''
+
+        
 last_volume = get_volume()
 last_brightness = get_brightness()
   
@@ -136,7 +152,7 @@ while True:
   # packet format + CR LF
   if len(char) == 10 or len(char) == 11 and validate(char):
       cmd = command(char)
-      print cmd.func, cmd.var, cmd.data
+      print bcolors.WARNING + cmd.func, cmd.var, cmd.data  + bcolors.ENDC
 
 
       if cmd.func == 'R':
@@ -183,8 +199,8 @@ while True:
         else:
           raise NotImplementedError
       cmd.func = 'A'
-      print "from python to XBee:", cmd.to_string()
-      ser.write(cmd.to_string())        
+      # print "from python to XBee:", cmd.to_string()
+      # ser.write(cmd.to_string())        
   else:
     pass  
   # app('System Events').keystroke(' ')

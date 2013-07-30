@@ -18,7 +18,7 @@
 #include <IRremote.h>
 #include <string.h>
 
-#define DEBUG
+// #define DEBUG
 
 #include "utils.h"
 
@@ -90,9 +90,6 @@ void loop()
       } else if(deviceId == deviceLamp) {
         lampClient(p);
       }
-      
-      // laptopBridging(p);
-      // lampClient(p);
     }
   }
 }
@@ -195,6 +192,6 @@ void laptopBridging(struct XBeePacket p) {
     strArray[i] = '\0';
     XBee.println(strArray);
   } else {
-    sendXBeePacketFromRaw(&XBee, deviceId, "A", p.var, p.data);
+    // sendXBeePacketFromRaw(&XBee, deviceId, "A", p.var, p.data);
   }   
 }
