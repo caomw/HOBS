@@ -100,6 +100,8 @@ void loop() {
       isWaitingReply = true;
     }
     else if (true == isPacketValid(message)) {
+      DEBUG_PRINT("[XBee]: send message: ");
+      DEBUG_PRINTLN(message);      
       XBee.print(message);
     }
   }
@@ -136,6 +138,9 @@ int readStringfromSerial (HardwareSerial *SS, char *strArray) {
   int i = 0;
   while ((*SS).available()) {
     strArray[i] = (*SS).read();
+    if (strArray[i] == '\n') {
+      break;
+    }
     i++;
   }
   strArray[i] = '\0';
