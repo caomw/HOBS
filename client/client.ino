@@ -49,6 +49,9 @@ unsigned long signal_time;
 #define statusPending 1
 #define statusOn 2
 
+const char deviceLaptop[3] = "01";
+const char deviceLamp[3] = "02";
+
 void setup()  
 {
   Serial.begin(9600);
@@ -82,8 +85,14 @@ void loop()
     }
     else if (atoi(p.id) == atoi(deviceId)) {
       // pass this message to the function of client
+      if(deviceId == deviceLaptop) {
+        laptopBridging(p);
+      } else if(deviceId == deviceLamp) {
+        lampClient(p);
+      }
+      
       // laptopBridging(p);
-      lampClient(p);
+      // lampClient(p);
     }
   }
 }
