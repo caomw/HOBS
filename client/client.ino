@@ -18,7 +18,7 @@
 #include <IRremote.h>
 #include <string.h>
 
-// #define DEBUG
+#define DEBUG
 
 #include "utils.h"
 
@@ -38,7 +38,7 @@ decode_results results;
 char deviceId[3] = "00";
 char XBeeInString[50];
 
-unsigned int ledStateInterval = 500;
+unsigned int ledStateInterval = 600;
 unsigned long randomDelay = 0;
 unsigned long start_time;
 unsigned long end_time;
@@ -52,6 +52,8 @@ unsigned long signal_time;
 const char deviceLaptop[3] = "01";
 const char deviceLamp[3] = "02";
 
+boolean statePending = false;
+
 void setup()  
 {
   Serial.begin(9600);
@@ -64,10 +66,22 @@ void setup()
   irrecv.enableIRIn(); // Start the receiver
   randomSeed(analogRead(5));
   readXBeeDeviceId();
+
+  toggle_time = millis(); //for pending led purpose
 }
 
 void loop()
 {
+  //led control
+  if(statePending) {
+    end_time = millis();
+
+    if(end_time - toggle_time > ledStateInterval) {
+      digitalToggle(ledStatePin);
+      toggle_time = millis();
+    }
+  } 
+  
   if(irrecv.decode(&results)) {
     delay(5);
     DEBUG_PRINT("\nIR received: ");
@@ -84,6 +98,33 @@ void loop()
       sendBackDeviceID();
     }
     else if (atoi(p.id) == atoi(deviceId)) {
+      // if it's stage related, process in this level
+
+      if(strcmp(p.var, "STG") == 0) {
+        DEBUG_PRINTLN("stage msg received");
+        if(strcmp(p.data, " ON") == 0) {
+          //turn on the led
+          // DEBUG_PRINTLN("turning led on");
+          digitalWrite(ledStatePin, HIGH);
+          statePending = false;
+
+        } else if(strcmp(p.data, "OFF") == 0) {
+          //turn off the led
+          digitalWrite(ledStatePin, LOW);
+          statePending = false;
+
+        } else if(strcmp(p.data, "BKF") == 0) {
+          //set led blink fast
+          statePending = true;
+          ledStateInterval = 100;
+
+        } else if(strcmp(p.data, "BKS") == 0) {
+          //set led blink slow
+          statePending = true;
+          ledStateInterval = 600;
+
+        }
+      }
       // pass this message to the function of client
       if(deviceId == deviceLaptop) {
         laptopBridging(p);
