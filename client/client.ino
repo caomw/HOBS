@@ -81,7 +81,7 @@ void loop()
       toggle_time = millis();
     }
   } 
-  
+
   if(irrecv.decode(&results)) {
     delay(5);
     DEBUG_PRINT("\nIR received: ");
@@ -126,9 +126,9 @@ void loop()
         }
       }
       // pass this message to the function of client
-      if(deviceId == deviceLaptop) {
+      if(strcmp(deviceId, deviceLaptop) == 0) {
         laptopBridging(p);
-      } else if(deviceId == deviceLamp) {
+      } else if(strcmp(deviceId, deviceLamp) == 0) {
         lampClient(p);
       }
     }
