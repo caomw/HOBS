@@ -1,3 +1,6 @@
+# keystroke map
+# http://i.stack.imgur.com/z8boX.png
+
 import serial, glob, argparse
 import sys
 import re
@@ -74,7 +77,14 @@ def set_brightness(val):
     scpt.call('changeBrightness', val)
   except applescript.ScriptError:
     pass
-      
+
+  
+def key_stroke(kcode):
+  try:
+    return scpt.call('doKeyStorke', kcode)
+  except applescript.ScriptError:
+    return 0
+  
 def get_brightness():
   try:
     return scpt.call('getBrightness')
@@ -83,6 +93,9 @@ def get_brightness():
 
 sa = OSAX()
 scpt = applescript.AppleScript('''
+    on doKeyStorke(keycode)
+      tell application "System Events" to key code keycode
+    end doKeyStorke
     on changeBrightness(BrightnessValue)	
 	    tell application "System Preferences"
 		    --activate
@@ -121,7 +134,7 @@ class command():
     return ''.join(str_list)
     
 def validate(str):
-  if re.match(r'^\d\d(R|S|C)(BRI|VOL)...\r\n$', str) or re.match(r'^\d\d(R|S|C)(BRI|VOL)...\n$', str):
+  if re.match(r'^\d\d(R|S|C)(BRI|VOL|VID)...\r?\n$', str):
     return True
   
 class bcolors:
@@ -177,8 +190,13 @@ while True:
           raise NotImplementedError
         
       elif cmd.func == 'C':
-        if cmd.var == 'PLY':
-          app('System Events').keystroke(' ') 
+        if cmd.var == 'VID':
+          if cmd.data == ' ON':
+            app('System Events').keystroke(' ') 
+          elif cmd.data == 'INC':
+            key_stroke(124)
+          elif cmd.data == 'DEC':
+            key_stroke(123)                      
         elif cmd.var == 'VOL':
           if cmd.data == ' ON':
             print "controling volume on", last_volume 
@@ -195,7 +213,6 @@ while True:
             last_brightness = get_brightness()
             print "brightness off", last_brightness
             set_brightness(0)
-            
         else:
           raise NotImplementedError
       cmd.func = 'A'
