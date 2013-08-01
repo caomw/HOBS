@@ -174,8 +174,14 @@ while True:
           print cmd.data
         elif cmd.var == 'VOL':
           cmd.data = "%3.0f" % (get_volume())
+          # TODO: make the string to be 0XX if it's less than 100
+        elif cmd.var == 'VID':
+          cmd.data = '000'
         else:
           raise NotImplementedError
+        cmd.func = 'A'
+        print "from python to XBee:", cmd.to_string()
+        ser.write(cmd.to_string())
       elif cmd.func == 'S':
         try:
           val = float(cmd.data)
