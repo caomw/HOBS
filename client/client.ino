@@ -77,15 +77,8 @@ void loop()
 
   if(statePending) {
 
-    //led control
-    if(millis() - start_time > pendingThreshold) {
-      //stop blinking after a period of time
-      digitalWrite(ledStatePin, LOW);
-      statePending = false;
-      DEBUG_PRINTLN("led blinking timeout");
-      
-    }
     
+
     end_time = millis();
 
     if(end_time - toggle_time > ledStateInterval) {
@@ -103,7 +96,6 @@ void loop()
 
     //client starts blinking
     statePending = true;
-    start_time = millis();
     ledStateInterval = 600;
 
   }
@@ -115,36 +107,40 @@ void loop()
       // broadcast message
       sendBackDeviceID();
     }
-    else if (atoi(p.id) == atoi(deviceId)) {
-      // if it's stage related, process in this level
-
-      if(strcmp(p.var, "LED") == 0) {
-        DEBUG_PRINTLN("stage msg received");
-        if(strcmp(p.data, " ON") == 0) {
-          //turn on the led
-          // DEBUG_PRINTLN("turning led on");
-          digitalWrite(ledStatePin, HIGH);
-          statePending = false;
-
-        } else if(strcmp(p.data, "OFF") == 0) {
-          //turn off the led
-          digitalWrite(ledStatePin, LOW);
-          statePending = false;
-
-        } else if(strcmp(p.data, "080") == 0) {
-          //set led blink fast
-          statePending = true;
-          ledStateInterval = 100;
-          start_time = millis();
-
-        } else if(strcmp(p.data, "020") == 0) {
-          //set led blink slow
-          statePending = true;
-          ledStateInterval = 600;
-          start_time = millis();
-
+    else if(strcmp(p.var, "SEL") == 0) {
+      // if it's selection related, process in this level
+      DEBUG_PRINTLN("selection msg received");
+      if(strcmp(p.data, " ON") == 0) {
+        //one is selected => turn on led
+        //the rest => turn off led
+        if(atoi(p.id) == atoi(deviceId)) {
+          digitalWrite(ledStatePin, HIGH);  
+        } else {
+          digitalWrite(ledStatePin, LOW);  
         }
-      }
+        statePending = false;
+
+      } else if(strcmp(p.data, "OFF") == 0) {
+        //turn off all the led just in case
+
+        digitalWrite(ledStatePin, LOW);
+        statePending = false;
+
+      } else if(strcmp(p.data, "080") == 0) {
+        //the one is hovered => blink fast
+        //the rest => blink slow
+        if(atoi(p.id) == atoi(deviceId)) {
+          ledStateInterval = 100;
+        } else {
+          ledStateInterval = 500;
+        }
+        statePending = true;
+        
+
+      } 
+    }
+    else if (atoi(p.id) == atoi(deviceId)) {
+      
       // pass this message to the function of client
       if(strcmp(deviceId, deviceLaptop) == 0) {
         laptopBridging(p);
