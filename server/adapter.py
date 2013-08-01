@@ -170,10 +170,10 @@ while True:
 
       if cmd.func == 'R':
         if cmd.var == 'BRI':
-          cmd.data = "%3.0f" % (100 * get_brightness())
+          cmd.data = "%03d" % (100 * get_brightness())
           print cmd.data
         elif cmd.var == 'VOL':
-          cmd.data = "%3.0f" % (get_volume())
+          cmd.data = "%03d" % (get_volume())
           # TODO: make the string to be 0XX if it's less than 100
         elif cmd.var == 'VID':
           cmd.data = '000'
