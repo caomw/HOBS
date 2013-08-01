@@ -88,6 +88,11 @@ void loop()
     DEBUG_PRINTLN(results.value);
     sendBackDeviceID();
     irrecv.resume();
+
+    //client starts blinking
+    statePending = true;
+    ledStateInterval = 600;
+
   }
   else if (XBee.available()) {
     delay(5);
@@ -100,7 +105,7 @@ void loop()
     else if (atoi(p.id) == atoi(deviceId)) {
       // if it's stage related, process in this level
 
-      if(strcmp(p.var, "STG") == 0) {
+      if(strcmp(p.var, "LED") == 0) {
         DEBUG_PRINTLN("stage msg received");
         if(strcmp(p.data, " ON") == 0) {
           //turn on the led
@@ -113,12 +118,12 @@ void loop()
           digitalWrite(ledStatePin, LOW);
           statePending = false;
 
-        } else if(strcmp(p.data, "BKF") == 0) {
+        } else if(strcmp(p.data, "080") == 0) {
           //set led blink fast
           statePending = true;
           ledStateInterval = 100;
 
-        } else if(strcmp(p.data, "BKS") == 0) {
+        } else if(strcmp(p.data, "020") == 0) {
           //set led blink slow
           statePending = true;
           ledStateInterval = 600;
