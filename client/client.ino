@@ -73,15 +73,19 @@ void setup()
 
 void loop()
 {
-  //led control
-  if(millis() - start_time > pendingThreshold) {
-    //stop blinking after a period of time
-    digitalWrite(ledStatePin, LOW);
-    statePending = false;
-    
-  }
+
 
   if(statePending) {
+
+    //led control
+    if(millis() - start_time > pendingThreshold) {
+      //stop blinking after a period of time
+      digitalWrite(ledStatePin, LOW);
+      statePending = false;
+      DEBUG_PRINTLN("led blinking timeout");
+      
+    }
+    
     end_time = millis();
 
     if(end_time - toggle_time > ledStateInterval) {
