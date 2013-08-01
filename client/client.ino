@@ -44,6 +44,7 @@ unsigned long start_time;
 unsigned long end_time;
 unsigned long toggle_time;
 unsigned long signal_time;
+unsigned long pendingThreshold = 10000;
 
 #define statusOff 0
 #define statusPending 1
@@ -73,6 +74,13 @@ void setup()
 void loop()
 {
   //led control
+  if(mills() - start_time > pendingThreshold) {
+    //stop blinking after a period of time
+    digitalWrite(ledStatePin, LOW);
+    statePending = false;
+    
+  }
+
   if(statePending) {
     end_time = millis();
 
@@ -122,11 +130,13 @@ void loop()
           //set led blink fast
           statePending = true;
           ledStateInterval = 100;
+          start_time = millis();
 
         } else if(strcmp(p.data, "020") == 0) {
           //set led blink slow
           statePending = true;
           ledStateInterval = 600;
+          start_time = millis();
 
         }
       }
