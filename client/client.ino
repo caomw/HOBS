@@ -74,7 +74,7 @@ void setup()
 void loop()
 {
   //led control
-  if(mills() - start_time > pendingThreshold) {
+  if(millis() - start_time > pendingThreshold) {
     //stop blinking after a period of time
     digitalWrite(ledStatePin, LOW);
     statePending = false;
@@ -99,6 +99,7 @@ void loop()
 
     //client starts blinking
     statePending = true;
+    start_time = millis();
     ledStateInterval = 600;
 
   }
