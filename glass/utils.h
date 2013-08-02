@@ -7,10 +7,15 @@
 #ifdef DEBUG
   #define DEBUG_PRINT(x)  Serial.print(x)
   #define DEBUG_PRINTLN(x)  Serial.println(x)
-  #define DEBUG_TAG(x, y)  Serial.print(x); Serial.println(y)
 #else
   #define DEBUG_PRINT(x)
   #define DEBUG_PRINTLN(x)
+#endif
+
+#ifdef DEBUG_TAG
+  #define DEBUG_TAGGING(x, y)  Serial.print(x); Serial.println(y)
+#else
+  #define DEBUG_TAGGING(x, y) 
 #endif
 
 #define DELAY_IN_WAIT 1000000

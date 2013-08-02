@@ -18,7 +18,8 @@
 #include <IRremote.h>
 #include <string.h>
 
-#define DEBUG
+// #define DEBUG
+#define DEBUG_TAG
 
 #include "utils.h"
 
@@ -103,13 +104,18 @@ void loop()
     delay(5);
     struct XBeePacket p = readXBeePacket(&XBee);
     printXBeePacket(p);
+
+    DEBUG_TAGGING("id: ", p.id);
+    DEBUG_TAGGING("data: ", p.data);
+
     if ( strcmp(p.id, "FF") == 0 ) {
       // broadcast message
       sendBackDeviceID();
     }
     else if(strcmp(p.var, "SEL") == 0) {
       // if it's selection related, process in this level
-      DEBUG_PRINTLN("selection msg received");
+      DEBUG_PRINTLN("selection msg received! ");
+      
       if(strcmp(p.data, " ON") == 0) {
         //one is selected => turn on led
         //the rest => turn off led

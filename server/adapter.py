@@ -187,17 +187,17 @@ while True:
           val = float(cmd.data)
         except:
           continue
-
         if cmd.var == 'BRI':
           set_brightness( val / 100.0);
         elif cmd.var == 'VOL':
           sa.set_volume( val / 100.0 * 7.14)
+        elif cmd.var == 'VID' and val == 0.0:
+            app('System Events').keystroke('0') 
         else:
-          raise NotImplementedError
-        
+          raise NotImplementedError         
       elif cmd.func == 'C':
         if cmd.var == 'VID':
-          if cmd.data == ' ON':
+          if cmd.data == ' ON' or cmd.data == 'OFF':
             app('System Events').keystroke(' ') 
           elif cmd.data == 'INC':
             key_stroke(124)
