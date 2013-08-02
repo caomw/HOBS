@@ -96,7 +96,7 @@ void loop()
 
     //client starts blinking
     statePending = true;
-    ledStateInterval = 600;
+    ledStateInterval = 500;
 
   }
   else if (XBee.available()) {
@@ -127,14 +127,15 @@ void loop()
         statePending = false;
 
       } else if(strcmp(p.data, "080") == 0) {
-        //the one is hovered => blink fast
+        //the one is hovered => turn on
         //the rest => blink slow
         if(atoi(p.id) == atoi(deviceId)) {
-          ledStateInterval = 100;
+          statePending = false;
         } else {
           ledStateInterval = 500;
+          statePending = true;
         }
-        statePending = true;
+        
         
 
       } 
