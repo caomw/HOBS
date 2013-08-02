@@ -137,6 +137,7 @@ void loop()
         //the rest => blink slow
         if(atoi(p.id) == atoi(deviceId)) {
           statePending = false;
+          digitalWrite(ledStatePin, HIGH);  
         } else {
           ledStateInterval = 500;
           statePending = true;
