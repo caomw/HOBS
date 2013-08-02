@@ -40,15 +40,17 @@ char deviceId[3] = "00";
 char XBeeInString[50];
 
 unsigned int ledStateInterval = 500;
-unsigned int blinkFast = 500;
-unsigned int blinkSlow = 1500;
+boolean eighty_twenty = false;
+
+unsigned int blinkFast = 300;
+unsigned int blinkSlow = 300;
 unsigned long randomDelay = 0;
 unsigned long start_time;
 unsigned long end_time;
 unsigned long toggle_time;
 unsigned long signal_time;
 unsigned long pendingThreshold = 10000;
-
+int bucket = 0;
 #define statusOff 0
 #define statusPending 1
 #define statusOn 2
@@ -85,7 +87,19 @@ void loop()
     end_time = millis();
 
     if(end_time - toggle_time > ledStateInterval) {
-      digitalToggle(ledStatePin);
+      if (eighty_twenty) {
+        if (digitalRead(ledStatePin)) {
+          digitalWrite(ledStatePin, 0);
+          bucket = 0;
+        }
+        else if (bucket == 20)
+          digitalWrite(ledStatePin, 1);
+        else
+          bucket++;
+      }
+      else {
+        digitalToggle(ledStatePin);
+      }
       toggle_time = millis();
     }
   } 
@@ -140,10 +154,12 @@ void loop()
         if(atoi(p.id) == atoi(deviceId)) {
           statePending = true;
           ledStateInterval = blinkFast;
+          eighty_twenty = false;
           // digitalWrite(ledStatePin, HIGH);  
         } else {
           ledStateInterval = blinkSlow;
           statePending = true;
+          eighty_twenty = true;
         }
         
         
