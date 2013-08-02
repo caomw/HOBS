@@ -39,11 +39,12 @@ decode_results results;
 char deviceId[3] = "00";
 char XBeeInString[50];
 
-unsigned int ledStateInterval = 500;
+
 boolean eighty_twenty = false;
 
 unsigned int blinkFast = 200;
 unsigned int blinkSlow = 200;
+unsigned int ledStateInterval = blinkFast;
 unsigned long randomDelay = 0;
 unsigned long start_time;
 unsigned long end_time;
@@ -110,10 +111,7 @@ void loop()
     DEBUG_PRINTLN(results.value);
     sendBackDeviceID();
     irrecv.resume();
-
-    //client starts blinking
-    statePending = true;
-    ledStateInterval = 800;
+    
 
   }
   else if (XBee.available()) {
@@ -122,6 +120,8 @@ void loop()
     printXBeePacket(p);
 
     DEBUG_TAGGING("id: ", p.id);
+    DEBUG_TAGGING("func: ", p.func);
+    DEBUG_TAGGING("var: ", p.var);
     DEBUG_TAGGING("data: ", p.data);
 
     if ( strcmp(p.id, "FF") == 0 ) {
