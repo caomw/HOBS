@@ -39,7 +39,9 @@ decode_results results;
 char deviceId[3] = "00";
 char XBeeInString[50];
 
-unsigned int ledStateInterval = 600;
+unsigned int ledStateInterval = 500;
+unsigned int blinkFast = 500;
+unsigned int blinkSlow = 1500;
 unsigned long randomDelay = 0;
 unsigned long start_time;
 unsigned long end_time;
@@ -97,7 +99,7 @@ void loop()
 
     //client starts blinking
     statePending = true;
-    ledStateInterval = 500;
+    ledStateInterval = 800;
 
   }
   else if (XBee.available()) {
@@ -133,13 +135,14 @@ void loop()
         statePending = false;
 
       } else if(strcmp(p.data, "080") == 0) {
-        //the one is hovered => turn on
-        //the rest => blink slow
+        //the one is hovered => blink fast
+        //the rest => don't do anything
         if(atoi(p.id) == atoi(deviceId)) {
-          statePending = false;
-          digitalWrite(ledStatePin, HIGH);  
+          statePending = true;
+          ledStateInterval = blinkFast;
+          // digitalWrite(ledStatePin, HIGH);  
         } else {
-          ledStateInterval = 500;
+          ledStateInterval = blinkSlow;
           statePending = true;
         }
         
