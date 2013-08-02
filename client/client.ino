@@ -42,8 +42,8 @@ char XBeeInString[50];
 unsigned int ledStateInterval = 500;
 boolean eighty_twenty = false;
 
-unsigned int blinkFast = 300;
-unsigned int blinkSlow = 300;
+unsigned int blinkFast = 200;
+unsigned int blinkSlow = 200;
 unsigned long randomDelay = 0;
 unsigned long start_time;
 unsigned long end_time;
@@ -92,7 +92,7 @@ void loop()
           digitalWrite(ledStatePin, 0);
           bucket = 0;
         }
-        else if (bucket == 20)
+        else if (bucket == 9)
           digitalWrite(ledStatePin, 1);
         else
           bucket++;
