@@ -50,6 +50,7 @@ unsigned long start_time;
 unsigned long end_time;
 unsigned long toggle_time;
 unsigned long signal_time;
+unsigned long signal_threshold = 300;
 unsigned long pendingThreshold = 10000;
 int bucket = 0;
 #define statusOff 0
@@ -60,6 +61,7 @@ const char deviceLaptop[3] = "01";
 const char deviceLamp[3] = "02";
 
 boolean statePending = false;
+boolean signal_response = false;
 
 void setup()  
 {
@@ -75,6 +77,7 @@ void setup()
   readXBeeDeviceId();
 
   toggle_time = millis(); //for pending led purpose
+  signal_time = millis();
 }
 
 void loop()
@@ -107,14 +110,32 @@ void loop()
 
   if(irrecv.decode(&results)) {
     delay(5);
-    DEBUG_PRINT("\nIR received: ");
-    DEBUG_PRINTLN(results.value);
-    sendBackDeviceID();
-    irrecv.resume();
-    
-
+    // DEBUG_PRINT("\nIR received: ");
+    // DEBUG_PRINTLN(results.value);
+    DEBUG_TAGGING("IR: ", results.value);
+    if(results.value == 0xFFFF){
+      digitalWrite(ledSignalPin, 1);
+      signal_time = millis();
+      signal_response = true;
+    } else if(results.value < 0xFFFF){
+      
+      sendBackDeviceID();
+      
+    } else {
+      //garbage message
+    }
+    irrecv.resume();    
   }
-  else if (XBee.available()) {
+
+  if(signal_response){
+    if(millis() - signal_time > signal_threshold){
+      signal_response = false;
+      digitalWrite(ledSignalPin, 0);
+    }
+  }
+  
+
+  if (XBee.available()) {
     delay(5);
     struct XBeePacket p = readXBeePacket(&XBee);
     printXBeePacket(p);

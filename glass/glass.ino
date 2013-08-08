@@ -21,7 +21,7 @@
 #ifdef DEBUG
   #define DEBUG_PRINT(x)  Serial.print(x)
   #define DEBUG_PRINTLN(x)  Serial.println(x)
-  #define DEBUG_TAGGING(x, y)  Serial.print(x); Serial.println(y);
+  #define DEBUG_TAGGING(x, y)  Serial.print(x); Serial.println(y)
 #else
   #define DEBUG_PRINT(x)
   #define DEBUG_PRINTLN(x)
@@ -41,6 +41,9 @@ unsigned long start_time;
 boolean isWaitingReply;
 char XBeeReturnIDs[20];
 int XBeeReturnCount;
+boolean ir_response_mode = true;
+unsigned long ir_time;
+unsigned int ir_cycle = 300;
 
 void setup()
 {
@@ -52,6 +55,8 @@ void setup()
   isWaitingReply = false;
   delay(100);
   Serial.print("system begins!");
+  ir_time = millis();
+
 }
 
 void loop() {
@@ -82,6 +87,17 @@ void loop() {
       isWaitingReply = false;    
     }
   }
+
+  if(ir_response_mode){
+    //constantly sending out ir broadcast
+    if(millis() - ir_time > ir_cycle) {
+      // -1 indicates for broacast which is different than normal session id
+      // DEBUG_PRINTLN("broadcasting IR");
+      irsend.sendSony(0xFFFF,16);
+      ir_time = millis();
+    }  
+  }
+  
       
   if (BT.available()) {
     // when receive message from Bluetooth, only trigger IR if
@@ -91,7 +107,7 @@ void loop() {
     readStringfromSerial(&BT, message);
     // if it's LIST command, then list all available devices by sending IR
     if ( message[0] == 'F' && message[1] == 'F') {
-      unsigned int session_id = random(0xFFFF);
+      unsigned int session_id = random(0xFFFE);
       DEBUG_PRINT("[INIT] Sending IR: ");
       DEBUG_PRINTLN(session_id);
       irsend.sendSony(session_id, 16);
