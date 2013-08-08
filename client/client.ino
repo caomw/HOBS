@@ -110,8 +110,6 @@ void loop()
 
   if(irrecv.decode(&results)) {
     delay(5);
-    // DEBUG_PRINT("\nIR received: ");
-    // DEBUG_PRINTLN(results.value);
     DEBUG_TAGGING("IR: ", results.value);
     if(results.value == 0xFFFF){
       digitalWrite(ledSignalPin, 1);
@@ -171,13 +169,14 @@ void loop()
 
       } else if(strcmp(p.data, "080") == 0) {
         //the one is hovered => blink fast
-        //the rest => don't do anything
+        
         if(atoi(p.id) == atoi(deviceId)) {
           statePending = true;
           ledStateInterval = blinkFast;
           eighty_twenty = false;
-          // digitalWrite(ledStatePin, HIGH);  
+          
         } else {
+          //the rest => blink at low frequency
           ledStateInterval = blinkSlow;
           statePending = true;
           eighty_twenty = true;
