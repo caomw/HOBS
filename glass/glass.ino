@@ -41,9 +41,10 @@ unsigned long start_time;
 boolean isWaitingReply;
 char XBeeReturnIDs[20];
 int XBeeReturnCount;
-boolean ir_response_mode = true;
+boolean ir_cue_mode = true;
 unsigned long ir_time;
 unsigned int ir_cycle = 300;
+unsigned int 
 
 void setup()
 {
@@ -88,8 +89,8 @@ void loop() {
     }
   }
 
-  if(ir_response_mode){
-    //constantly sending out ir broadcast
+  if(ir_cue_mode){
+    //constantly sending out ir broadcast as visual cue
     if(millis() - ir_time > ir_cycle) {
       // -1 indicates for broacast which is different than normal session id
       // DEBUG_PRINTLN("broadcasting IR");
