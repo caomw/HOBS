@@ -81,9 +81,11 @@ void loop() {
         String dID = XBeeReturnIDs.substring(0,2);
         if(XBeeReturnCount > 1) {
           //get the first ID and ask to blink fast
-          sendXBeePacketFromRaw(&XBee, dID, "S", "SEL", "080");  
+          sendXBeePacketFromRaw(&XBee, dID, "S", "SEL", "1st");  
         } else {
-          sendXBeePacketFromRaw(&XBee, dID, "C", "SEL", " ON");  
+          sendXBeePacketFromRaw(&XBee, dID, "C", "SEL", "AON");  
+          //auto on means only 1 client responded and is auto selected
+          //" ON" means selected manully among multiple targets by the user
         }
         
       } else {  //no respondants

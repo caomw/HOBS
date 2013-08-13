@@ -152,9 +152,11 @@ void loop()
       // if it's selection related, process in this level
       DEBUG_PRINTLN("selection msg received! ");
       
-      if(strcmp(p.data, " ON") == 0) {
+      if(strcmp(p.data, " ON") == 0 || strcmp(p.data, "AON") == 0) {
         //one is selected => turn on led
         //the rest => turn off led
+        //" ON" means selected manually by user
+        //"AON" means only 1 client responded so auto on
         if(atoi(p.id) == atoi(deviceId)) {
           digitalWrite(ledStatePin, HIGH);  
           //turn of target led if selected correctly
@@ -170,8 +172,14 @@ void loop()
         digitalWrite(ledStatePin, LOW);
         statePending = false;
 
-      } else if(strcmp(p.data, "080") == 0) {
-        //the one is hovered => blink fast
+      } else if() {
+
+
+      } else if(strcmp(p.data, "080") == 0 || strcmp(p.data, "1st") == 0) {
+        //the one is candidate => blink fast
+        //1st means selected by system as default candidate
+        //080 means switched by user
+        //do the same thing but has different meaning in terms of logging
         
         if(atoi(p.id) == atoi(deviceId)) {
           statePending = true;
