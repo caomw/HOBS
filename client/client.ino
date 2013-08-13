@@ -31,6 +31,7 @@ SoftwareSerial XBee(2, 3); // RX, TX
 int ledStatePin = 13;
 int ledSignalPin = 11;
 int controlledPin = 12;
+int ledTargetPin = 10;
 
 int RECV_PIN = 8;
 IRrecv irrecv(RECV_PIN);
@@ -156,6 +157,8 @@ void loop()
         //the rest => turn off led
         if(atoi(p.id) == atoi(deviceId)) {
           digitalWrite(ledStatePin, HIGH);  
+          //turn of target led if selected correctly
+          digitalWrite(ledTargetPin, LOW);  
         } else {
           digitalWrite(ledStatePin, LOW);  
         }
@@ -181,10 +184,13 @@ void loop()
           statePending = true;
           eighty_twenty = true;
         }
-        
-        
+      } else if(strcmp(p.data, "TAR")) {
+        //turn on target light and return ack
+        sendXBeePacketFromRaw(&XBee, deviceId, "A", "SEL", "TAR");
+        digitalWrite(ledTargetPin, HIGH);
 
       } 
+
     }
     else if (atoi(p.id) == atoi(deviceId)) {
       
@@ -193,6 +199,7 @@ void loop()
         laptopBridging(p);
       } else if(strcmp(deviceId, deviceLamp) == 0) {
         lampClient(p);
+
       }
     }
   }
