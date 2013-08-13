@@ -44,7 +44,7 @@ int XBeeReturnCount;
 boolean ir_cue_mode = true;
 unsigned long ir_time;
 unsigned int ir_cycle = 300;
-unsigned int 
+unsigned int ir_response_threshold = 500;
 
 void setup()
 {
@@ -75,11 +75,22 @@ void loop() {
       }
     }
        
-    if (millis() - start_time > 1000) {
-      if (XBeeReturnCount > 0)
+    if (millis() - start_time > ir_response_threshold) {
+      if (XBeeReturnCount > 0) {  //has respondant(s)
         XBeeReturnIDs[XBeeReturnCount*3-1] = '\0';
-      else
+        String dID = XBeeReturnIDs.substring(0,2);
+        if(XBeeReturnCount > 1) {
+          //get the first ID and ask to blink fast
+          sendXBeePacketFromRaw(&XBee, dID, "S", "SEL", "080");  
+        } else {
+          sendXBeePacketFromRaw(&XBee, dID, "C", "SEL", " ON");  
+        }
+        
+      } else {  //no respondants
         XBeeReturnIDs[0] = '\0';
+        sendXBeePacketFromRaw(&XBee, dID, "S", "SEL", " NA");  
+      }
+        
       DEBUG_PRINT("IDs list:");
       DEBUG_PRINTLN(XBeeReturnIDs);
       DEBUG_PRINT("IDs counts:");
