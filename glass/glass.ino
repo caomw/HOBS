@@ -31,6 +31,8 @@
 #define BT Serial1
 #define XBee Serial2
 
+
+
 // An IR LED must be connected to Arduino PWM pin 3.
 IRsend irsend;
 int ledPin = 8;
@@ -78,19 +80,20 @@ void loop() {
     if (millis() - start_time > ir_response_threshold) {
       if (XBeeReturnCount > 0) {  //has respondant(s)
         XBeeReturnIDs[XBeeReturnCount*3-1] = '\0';
-        String dID = XBeeReturnIDs.substring(0,2);
+        
         if(XBeeReturnCount > 1) {
           //get the first ID and ask to blink fast
-          sendXBeePacketFromRaw(&XBee, dID, "S", "SEL", "1st");  
+          //can pass XBeeReturnIDs since it will only use the first 2 chars
+          sendXBeePacketFromRaw(&XBee, XBeeReturnIDs, "S", "SEL", "1st");  
         } else {
-          sendXBeePacketFromRaw(&XBee, dID, "C", "SEL", "AON");  
+          sendXBeePacketFromRaw(&XBee, XBeeReturnIDs, "C", "SEL", "AON");  
           //auto on means only 1 client responded and is auto selected
           //" ON" means selected manully among multiple targets by the user
         }
         
       } else {  //no respondants
         XBeeReturnIDs[0] = '\0';
-        sendXBeePacketFromRaw(&XBee, dID, "S", "SEL", " NA");  
+        sendXBeePacketFromRaw(&XBee, XBeeReturnIDs, "S", "SEL", " NA");  
       }
         
       DEBUG_PRINT("IDs list:");

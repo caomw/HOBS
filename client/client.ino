@@ -172,9 +172,6 @@ void loop()
         digitalWrite(ledStatePin, LOW);
         statePending = false;
 
-      } else if() {
-
-
       } else if(strcmp(p.data, "080") == 0 || strcmp(p.data, "1st") == 0) {
         //the one is candidate => blink fast
         //1st means selected by system as default candidate
