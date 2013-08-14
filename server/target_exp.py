@@ -15,11 +15,14 @@ parser.add_argument('--timeout', type=float, action='store', default=1, help='Ti
 
 # we know for mac it will show as /dev/usb.tty*, so list all of them and ask user to choose
 
+
+target_id = "NA"
+result_log = []
+
 def logResult(action, obj):
   ts = time.time()
   tup = (ts, action, obj)
-
-target_id = "NA"
+  result_log.append(tup)
 
 availables = glob.glob('/dev/tty.*')
 
@@ -66,6 +69,8 @@ while True:
       logResult("start", target_id)
       print 'Target msg: ', out
       ser.write(out)
+    elif line == "end":
+      print result_log
     else:
       ser.write(line)
 
