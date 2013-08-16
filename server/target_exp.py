@@ -61,13 +61,15 @@ while True:
   # read line without blocking
   while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
     line = sys.stdin.readline()
-    print '[Console]: ', line
-    if ('t' in line or 'T' in line) and len(line) == 3:
+    print '[Console]: ',line
+    print 'line length: ',len(line)
+    if ('t' in line or 'T' in line) and len(line) == 4:
       # target a client to turn on cue led
       target_id = line[1:3]
       out = target_id + "CSELTAR"
       logResult("start", target_id)
       print 'Target msg: ', out
+      print 'out length: ',len(out)
       ser.write(out)
     elif line == "end":
       print result_log
