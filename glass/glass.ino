@@ -16,6 +16,7 @@
 
 #include <IRremote.h>
 
+
 #define DEBUG
 
 #ifdef DEBUG
@@ -46,7 +47,7 @@ int XBeeReturnCount;
 boolean ir_cue_mode = true;
 unsigned long ir_time;
 unsigned int ir_cycle = 300;
-unsigned int ir_response_threshold = 500;
+unsigned int ir_response_threshold = 1000;
 
 void setup()
 {
@@ -84,16 +85,16 @@ void loop() {
         if(XBeeReturnCount > 1) {
           //get the first ID and ask to blink fast
           //can pass XBeeReturnIDs since it will only use the first 2 chars
-          sendXBeePacketFromRaw(&XBee, XBeeReturnIDs, "S", "SEL", "1st");  
+          sendXBeePacketFromRaw(XBeeReturnIDs, "S", "SEL", "1st");  
         } else {
-          sendXBeePacketFromRaw(&XBee, XBeeReturnIDs, "C", "SEL", "AON");  
+          sendXBeePacketFromRaw(XBeeReturnIDs, "C", "SEL", "AON"); 
           //auto on means only 1 client responded and is auto selected
           //" ON" means selected manully among multiple targets by the user
         }
         
       } else {  //no respondants
         XBeeReturnIDs[0] = '\0';
-        sendXBeePacketFromRaw(&XBee, XBeeReturnIDs, "S", "SEL", " NA");  
+        sendXBeePacketFromRaw(XBeeReturnIDs, "S", "SEL", " NA");  
       }
         
       DEBUG_PRINT("IDs list:");
@@ -186,4 +187,30 @@ int readStringfromSerial (HardwareSerial *SS, char *strArray) {
   DEBUG_PRINT("  count: ");
   DEBUG_PRINTLN(i);
   return i;
+}
+
+int sendXBeePacketFromRaw (
+         const char *id,
+         const char *func,
+         const char *var,
+         const char *data) {
+  char str[20];
+  str[0] = '\0';
+  string_concat(str, id, 0);
+  string_concat(str, func, 2);
+  string_concat(str, var, 3);
+  string_concat(str, data, 6);
+  str[9] = '\0';
+  DEBUG_PRINT("(in sendXBeePacketFromRaw) packet being sent: ");
+  DEBUG_PRINTLN(str);
+  XBee.println(str);
+  return 1;
+}
+
+// to guarantee, dst should be longer than end-start+1
+void string_concat(char *dst, const char *src, int pos) {
+  int i = 0;
+  while (src[i] != '\0') {
+    dst[i+pos] = src[i++];
+  }
 }
