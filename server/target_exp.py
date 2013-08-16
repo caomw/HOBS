@@ -77,31 +77,31 @@ while True:
   while ser.inWaiting() > 0:
     in_msg = ser.readline()
     print '[Serial]: ', in_msg
-    if str[0:2] == "FF":
+    if in_msg[0:2] == "FF":
       # a broadcast -> tring to trigger connection
       logResult("connect", '')
-    elif str[2:] == "ASELTAR":
+    elif in_msg[2:] == "ASELTAR":
       # is ack for target cue, record timestamp
       logResult("cue shown", '')
-    elif str[3:] == "SEL1st":
-      logResult("multiple", str[0:2])
-    elif str[3:] == "SEL NA":
+    elif in_msg[3:] == "SEL1st":
+      logResult("multiple", in_msg[0:2])
+    elif in_msg[3:] == "SEL NA":
       logResult("miss", '')
-    elif str[3:] == "SEL080":
-      logResult("switch", str[0:2])
-    elif str[3:] == "SELAON":
-      if str[0:2] == target_id:
+    elif in_msg[3:] == "SEL080":
+      logResult("switch", in_msg[0:2])
+    elif in_msg[3:] == "SELAON":
+      if in_msg[0:2] == target_id:
         logResult("correct_single", target_id)
         target_id = "NA"
       else:
-        logResult("wrong_single", str[0:2])
-    elif str[2:] == "CSEL ON":
+        logResult("wrong_single", in_msg[0:2])
+    elif in_msg[2:] == "CSEL ON":
       # a client is selected, check result
-      if str[0:2] == target_id:
+      if in_msg[0:2] == target_id:
         logResult("correct_mul", target_id)
         target_id = "NA"
       else:
-        logResult("wrong_mul", str[0:2])
+        logResult("wrong_mul", in_msg[0:2])
 
 
 
