@@ -44,7 +44,7 @@ unsigned long start_time;
 boolean isWaitingReply;
 char XBeeReturnIDs[20];
 int XBeeReturnCount;
-boolean ir_cue_mode = true;
+boolean ir_bcast_mode = true;
 unsigned long ir_time;
 unsigned int ir_cycle = 300;
 unsigned int ir_response_threshold = 1000;
@@ -95,7 +95,7 @@ void loop() {
     }
   }
 
-  if(ir_cue_mode){
+  if(ir_bcast_mode){
     //constantly sending out ir broadcast as visual cue
     if(millis() - ir_time > ir_cycle) {
       // -1 indicates for broacast which is different than normal session id
@@ -127,6 +127,17 @@ void loop() {
       DEBUG_PRINT("[XBee]: send message: ");
       DEBUG_PRINTLN(message);      
       XBee.print(message);
+      //check if led broadcast related msg
+      //turn of broadcast when a client is connected
+      //e.g. "IDCSEL ON" or "IDCSELAON"
+      //turn on when IDCSELOFF
+      if(message[8] == 'O' && message[9] == 'N') {
+        ir_bcast_mode = false;
+        DEBUG_PRINTLN("turning off IR bcast");
+      } else if(message[7] == 'O' && message[8] == 'F') {
+        ir_bcast_mode = true;
+        DEBUG_PRINTLN("turning on IR bcast");
+      }
     }
   }
 
