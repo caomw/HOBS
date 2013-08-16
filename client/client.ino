@@ -111,7 +111,7 @@ void loop()
 
   if(irrecv.decode(&results)) {
     delay(5);
-    DEBUG_TAGGING("IR: ", results.value);
+    // DEBUG_TAGGING("IR: ", results.value);
     if(results.value == 0xFFFF){
       digitalWrite(ledSignalPin, 1);
       signal_time = millis();
@@ -133,12 +133,11 @@ void loop()
     }
   }
   
-
+  
   if (XBee.available()) {
     delay(5);
     struct XBeePacket p = readXBeePacket(&XBee);
     printXBeePacket(p);
-
     DEBUG_TAGGING("id: ", p.id);
     DEBUG_TAGGING("func: ", p.func);
     DEBUG_TAGGING("var: ", p.var);
@@ -157,9 +156,10 @@ void loop()
         //the rest => turn off led
         //" ON" means selected manually by user
         //"AON" means only 1 client responded so auto on
-        if(atoi(p.id) == atoi(deviceId)) {
+        // if(atoi(p.id) == atoi(deviceId)) {
+        if(strcmp(p.id, deviceId) == 0) {
           digitalWrite(ledStatePin, HIGH);  
-          //turn of target led if selected correctly
+          //turn off target led if selected correctly
           digitalWrite(ledTargetPin, LOW);  
         } else {
           digitalWrite(ledStatePin, LOW);  
@@ -216,7 +216,7 @@ void sendBackDeviceID() {
   delay(randomDelay);
   // send back acknowledge packet
   sendXBeePacketFromRaw(&XBee, deviceId, "A", " ID", "XXX");
-  delay(2000);
+  
 }
 
 void readXBeeDeviceId() {
