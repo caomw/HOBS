@@ -4,6 +4,8 @@
 #include <SoftwareSerial.h>
 #include "Arduino.h"
 
+// #define DEBUG
+
 #ifdef DEBUG
   #define DEBUG_PRINT(x)  Serial.print(x)
   #define DEBUG_PRINTLN(x)  Serial.println(x)
@@ -126,6 +128,10 @@ struct XBeePacket readXBeePacket (SoftwareSerial *XBee) {
     }
   }
   strArray[i] = '\0';
+  if (strArray[i-1] == '\n') {
+    strArray[i-1] = '\0';
+    i--;
+  }
   // we appended an '\0', plus an '\n' since it was XBee.println
   DEBUG_PRINTLN();
   DEBUG_PRINT("got packet, now i=");
@@ -141,6 +147,7 @@ struct XBeePacket readXBeePacket (SoftwareSerial *XBee) {
   }
   else {
     // something wrong with the received packet....
+    DEBUG_PRINTLN("packet size incorrect");
   }
   return p;
 }
