@@ -189,8 +189,10 @@ void loop()
           statePending = true;
           eighty_twenty = true;
         }
-      } else if(strcmp(p.data, "TAR")) {
+      } else if(strcmp(p.data, "TAR") == 0 && strcmp(p.id, deviceId) == 0) {
         //turn on target light and return ack
+
+        DEBUG_TAGGING("Target received", "");
         sendXBeePacketFromRaw(&XBee, deviceId, "A", "SEL", "TAR");
         digitalWrite(ledTargetPin, HIGH);
 
