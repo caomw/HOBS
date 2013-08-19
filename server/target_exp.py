@@ -18,6 +18,7 @@ parser.add_argument('--timeout', type=float, action='store', default=1, help='Ti
 
 target_id = "NA"
 result_log = []
+user_id = "NA"
 
 def logResult(action, obj):
   ts = time.time()
@@ -57,6 +58,9 @@ try:
 except Exception as e:
   print "failed to connect the serial port", e
 
+print "enter ID"
+user_id = sys.stdin.readline()
+
 while True:
   # read line without blocking
   while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
@@ -72,7 +76,12 @@ while True:
       print 'out length: ',len(out)
       ser.write(out)
     elif line == "end":
-      print result_log
+      f = open("result"+user_id+".txt", 'w')
+      for t in result_log:
+        print t
+        f.write(' '.join(str(s) for s in t) + '\n') 
+      f.close()
+
     else:
       ser.write(line)
 
