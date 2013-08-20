@@ -116,8 +116,8 @@ void loop()
       digitalWrite(ledSignalPin, 1);
       signal_time = millis();
       signal_response = true;
-    } else if(results.value < 0xFFFF){
-      
+    } else if(results.value <= 0x32){
+      // limit the session ID to be a random number between 0~50
       sendBackDeviceID();
       
     } else {

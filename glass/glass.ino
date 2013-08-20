@@ -114,7 +114,7 @@ void loop() {
     readStringfromSerial(&BT, message);
     // if it's LIST command, then list all available devices by sending IR
     if ( message[0] == 'F' && message[1] == 'F') {
-      unsigned int session_id = random(0xFFFE);
+      unsigned int session_id = random(0x32);
       DEBUG_PRINT("[INIT] Sending IR: ");
       DEBUG_PRINTLN(session_id);
       irsend.sendSony(session_id, 16);
