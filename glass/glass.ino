@@ -145,9 +145,15 @@ void loop() {
     delay(10);
     DEBUG_PRINT("[XBee]: ");
     readStringfromSerial(&XBee, message);
-    DEBUG_PRINT("[BT]: send ");
-    DEBUG_PRINTLN(message);    
-    BT.println(message);
+     
+    if(message[6] == 'T' && message[7] == 'A' && message[8] == 'R') {
+      //if ends with TAR => target experiment msg, no need to send to Glass
+    } else { 
+      DEBUG_PRINT("[BT]: send ");
+      DEBUG_PRINTLN(message);  
+      BT.println(message);
+
+    }
   }
   delay(10);
 }
