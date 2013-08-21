@@ -126,18 +126,25 @@ void loop() {
     else if (true == isPacketValid(message)) {
       DEBUG_PRINT("[XBee]: send message: ");
       DEBUG_PRINTLN(message);      
+
       XBee.print(message);
+
       //check if led broadcast related msg
-      //turn of broadcast when a client is connected
+      //turn off broadcast when a client is connected
       //e.g. "IDCSEL ON" or "IDCSELAON"
-      //turn on when IDCSELOFF
-      if(message[8] == 'O' && message[9] == 'N') {
+      //also turn off when in multiple selecting mode
+      //e.g. "IDSSEL080" or "IDCSEL1st"
+      if((message[7] == 'O' && message[8] == 'N')
+        || (message[7] == '8' && message[8] == '0')
+        || (message[7] == 's' && message[8] == 't')) {
         ir_bcast_mode = false;
         DEBUG_PRINTLN("turning off IR bcast");
-      } else if(message[7] == 'O' && message[8] == 'F') {
+      } else if(message[6] == 'O' && message[7] == 'F') {
+        //turn broadcast back on when IDCSELOFF
         ir_bcast_mode = true;
         DEBUG_PRINTLN("turning on IR bcast");
       }
+      
     }
   }
 
