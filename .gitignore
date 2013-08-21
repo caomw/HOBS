@@ -38,3 +38,5 @@ tmp
 *.pyc
 
 doc/report/main.pdf
+
+server/*.txt
