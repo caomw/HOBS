@@ -71,16 +71,18 @@ while True:
       # target a client to turn on cue led
       target_id = line[1:3]
       out = target_id + "CSELTAR"
-      logResult("start", target_id)
+      logResult("target", target_id)
       print 'Target msg: ', out
       print 'out length: ',len(out)
       ser.write(out)
-    elif line == "end":
+    elif line[0:3] == "end":
+      print 'writing results'
       f = open("result"+user_id+".txt", 'w')
       for t in result_log:
         print t
         f.write(' '.join(str(s) for s in t) + '\n') 
       f.close()
+      result_log = []
 
     else:
       ser.write(line)
@@ -91,22 +93,22 @@ while True:
     if in_msg[0:2] == "FF":
       # a broadcast -> tring to trigger connection
       logResult("connect", '')
-    elif in_msg[2:] == "ASELTAR":
+    elif in_msg[2:9] == "ASELTAR":
       # is ack for target cue, record timestamp
       logResult("cue shown", '')
-    elif in_msg[3:] == "SEL1st":
+    elif in_msg[3:9] == "SEL1st":
       logResult("multiple", in_msg[0:2])
-    elif in_msg[3:] == "SEL NA":
+    elif in_msg[3:9] == "SEL NA":
       logResult("miss", '')
-    elif in_msg[3:] == "SEL080":
+    elif in_msg[3:9] == "SEL080":
       logResult("switch", in_msg[0:2])
-    elif in_msg[3:] == "SELAON":
+    elif in_msg[3:9] == "SELAON":
       if in_msg[0:2] == target_id:
         logResult("correct_single", target_id)
         target_id = "NA"
       else:
         logResult("wrong_single", in_msg[0:2])
-    elif in_msg[2:] == "CSEL ON":
+    elif in_msg[2:9] == "CSEL ON":
       # a client is selected, check result
       if in_msg[0:2] == target_id:
         logResult("correct_mul", target_id)

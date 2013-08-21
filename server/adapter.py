@@ -174,7 +174,6 @@ while True:
           print cmd.data
         elif cmd.var == 'VOL':
           cmd.data = "%03d" % (get_volume())
-          # TODO: make the string to be 0XX if it's less than 100
         elif cmd.var == 'VID':
           cmd.data = '000'
         else:
