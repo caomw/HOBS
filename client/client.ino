@@ -69,7 +69,8 @@ void setup()
   Serial.begin(9600);
   pinMode(ledStatePin, OUTPUT);
   pinMode(ledSignalPin, OUTPUT); 
-  pinMode(controlledPin, OUTPUT); 
+  pinMode(controlledPin, OUTPUT);
+  pinMode(ledTargetPin, OUTPUT); 
   Serial.println("system begins!");
   // set the data rate for the SoftwareSerial port
   XBee.begin(9600);
@@ -159,8 +160,10 @@ void loop()
         // if(atoi(p.id) == atoi(deviceId)) {
         if(strcmp(p.id, deviceId) == 0) {
           digitalWrite(ledStatePin, HIGH);  
+
           //turn off target led if selected correctly
           digitalWrite(ledTargetPin, LOW);  
+          replyStatus();
         } else {
           digitalWrite(ledStatePin, LOW);  
         }
@@ -285,6 +288,33 @@ void lampClient(struct XBeePacket p) {
   }
 }
 
+void replyStatus() {
+  DEBUG_PRINTLN("ask for client status");
+  if(strcmp(deviceId, deviceLamp) == 0) {
+    int status = digitalRead(controlledPin);
+    if (status == 0) {
+      sendXBeePacketFromRaw(&XBee, deviceId, "A", "BRI", "OFF");
+    } else {
+      sendXBeePacketFromRaw(&XBee, deviceId, "A", "BRI", " ON");
+    }
+  } else if(strcmp(deviceId, deviceLaptop) == 0) {
+    //send a read status cmd to the laptop and wait for reply
+    //curently only volume is needed
+    Serial.print(deviceId);
+    Serial.println("RVOLXXX");
+    delay(500);
+    char strArray[20];
+    int i = 0;
+    // read the serial return value, and return back message
+    while (Serial.available()) {
+      strArray[i] = Serial.read();
+      i++;
+    }
+    strArray[i] = '\0';
+    XBee.println(strArray);
+  }
+}
+
 void laptopBridging(struct XBeePacket p) {
   // make sure you send back ack
   DEBUG_PRINTLN("command issued");
@@ -297,19 +327,19 @@ void laptopBridging(struct XBeePacket p) {
   Serial.println(str);
 
 
-  char strArray[20];
-  int i = 0;
+  // char strArray[20];
+  // int i = 0;
 
-  if(p.func[0] == 'R') {
-    delay(800);
-    // read the serial return value, and return back message
-    while (Serial.available()) {
-      strArray[i] = Serial.read();
-      i++;
-    }
-    strArray[i] = '\0';
-    XBee.println(strArray);
-  } else {
-    // sendXBeePacketFromRaw(&XBee, deviceId, "A", p.var, p.data);
-  }   
+  // if(p.func[0] == 'R') {
+  //   delay(500);
+  //   // read the serial return value, and return back message
+  //   while (Serial.available()) {
+  //     strArray[i] = Serial.read();
+  //     i++;
+  //   }
+  //   strArray[i] = '\0';
+  //   XBee.println(strArray);
+  // } else {
+  //   // sendXBeePacketFromRaw(&XBee, deviceId, "A", p.var, p.data);
+  // }   
 }
