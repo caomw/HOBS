@@ -19,11 +19,17 @@ parser.add_argument('--timeout', type=float, action='store', default=1, help='Ti
 target_id = "NA"
 result_log = []
 user_id = "NA"
+start_time = time.time()
 
 def logResult(action, obj):
   ts = time.time()
-  tup = (ts, action, obj)
+  global start_time
+  if action == 'target':
+    # reset start time everytime a target is sent
+    start_time = ts
+  tup = (ts-start_time, action, obj)
   result_log.append(tup)
+  print tup
 
 availables = glob.glob('/dev/tty.*')
 
