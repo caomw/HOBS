@@ -169,7 +169,7 @@ void loop()
         }
         statePending = false;
 
-      } else if(strcmp(p.data, "OFF") == 0) {
+      } else if(strcmp(p.data, "OFF") == 0 || strcmp(p.data, "CAN") == 0 ) {
         //turn off all the led just in case
 
         digitalWrite(ledStatePin, LOW);

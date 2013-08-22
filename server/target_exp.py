@@ -108,13 +108,16 @@ while True:
         target_id = "NA"
       else:
         logResult("wrong_single", in_msg[0:2])
-    elif in_msg[2:9] == "CSEL ON":
+    elif in_msg[3:9] == "SEL ON":
       # a client is selected, check result
       if in_msg[0:2] == target_id:
         logResult("correct_mul", target_id)
         target_id = "NA"
       else:
         logResult("wrong_mul", in_msg[0:2])
+    elif in_msg[3:9] == "SELCAN":
+      logResult("cancel_mul", '')
+      
 
 
 
