@@ -134,15 +134,17 @@ void loop() {
       //e.g. "IDCSEL ON" or "IDCSELAON"
       //also turn off when in multiple selecting mode
       //e.g. "IDSSEL080" or "IDCSEL1st"
-      if((message[7] == 'O' && message[8] == 'N')
-        || (message[7] == '8' && message[8] == '0')
-        || (message[7] == 's' && message[8] == 't')) {
-        ir_bcast_mode = false;
-        DEBUG_PRINTLN("turning off IR bcast");
-      } else if(message[6] == 'O' && message[7] == 'F') {
-        //turn broadcast back on when IDCSELOFF
-        ir_bcast_mode = true;
-        DEBUG_PRINTLN("turning on IR bcast");
+
+      String msgStr = String(message);
+      if(msgStr.substring(3,6) == "SEL") {
+        if(msgStr.substring(7,9) == "ON" || msgStr.substring(6,9) == "080"
+          || msgStr.substring(6,9) == "1st") {
+          ir_bcast_mode = false;
+          DEBUG_PRINTLN("turning off IR bcast");
+        } else if(msgStr.substring(6,9) == "OFF" || msgStr.substring(6,9) == "CAN") {
+          ir_bcast_mode = true;
+          DEBUG_PRINTLN("turning on IR bcast");
+        }
       }
       
     }
