@@ -157,7 +157,7 @@ void loop() {
      
     if(message[6] == 'T' && message[7] == 'A' && message[8] == 'R') {
       //if ends with TAR => target experiment msg, no need to send to Glass
-    } else { 
+    } else if(true == isPacketValid(message)){ 
       DEBUG_PRINT("[BT]: send ");
       DEBUG_PRINTLN(message);  
       BT.println(message);
