@@ -4,7 +4,7 @@
 #include <SoftwareSerial.h>
 #include "Arduino.h"
 
-#define DEBUG
+// #define DEBUG
 
 #ifdef DEBUG
   #define DEBUG_PRINT(x)  Serial.print(x)
@@ -15,7 +15,7 @@
 #endif
 
 #ifdef DEBUG_TAG
-  #define DEBUG_TAGGING(x, y)  Serial.print(x); Serial.println(y)
+  #define DEBUG_TAGGING(x, y)  Serial.print(x); Serial.print(y)
 #else
   #define DEBUG_TAGGING(x, y) 
 #endif
@@ -133,9 +133,10 @@ struct XBeePacket readXBeePacket (SoftwareSerial *XBee) {
     i--;
   }
   // we appended an '\0', plus an '\n' since it was XBee.println
-  DEBUG_PRINT(i);
-  DEBUG_PRINT(", ");
-  DEBUG_PRINTLN(strArray);
+  // DEBUG_PRINT(i);
+  // DEBUG_PRINT(", ");
+  // DEBUG_PRINTLN(strArray);
+
   
   if (i == 10 || i == 9) {
     string_copy(p.id, strArray, 0, 1);

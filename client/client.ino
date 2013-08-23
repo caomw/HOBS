@@ -19,7 +19,7 @@
 #include <string.h>
 
 // #define DEBUG
-// #define DEBUG_TAG
+#define DEBUG_TAG
 
 #include "utils.h"
 
@@ -80,6 +80,8 @@ void setup()
 
   toggle_time = millis(); //for pending led purpose
   signal_time = millis();
+
+  Serial.println("ready!");
 }
 
 void loop()
@@ -140,9 +142,10 @@ void loop()
     struct XBeePacket p = readXBeePacket(&XBee);
     printXBeePacket(p);
     DEBUG_TAGGING("id: ", p.id);
-    DEBUG_TAGGING("func: ", p.func);
-    DEBUG_TAGGING("var: ", p.var);
-    DEBUG_TAGGING("data: ", p.data);
+    DEBUG_TAGGING(", func: ", p.func);
+    DEBUG_TAGGING(", var: ", p.var);
+    DEBUG_TAGGING(", data: ", p.data);
+    DEBUG_TAGGING("", "\n");
 
     if ( strcmp(p.id, "FF") == 0 ) {
       // broadcast message
@@ -225,6 +228,7 @@ void sendBackDeviceID() {
   randomDelay = random(1000);
   // avoid conflicts
   delay(randomDelay);
+  DEBUG_TAGGING("IR received: ", "sending back device ID");
   // send back acknowledge packet
   sendXBeePacketFromRaw(&XBee, deviceId, "A", " ID", "XXX");
   
