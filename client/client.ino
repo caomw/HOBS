@@ -19,7 +19,7 @@
 #include <string.h>
 
 // #define DEBUG
-#define DEBUG_TAG
+// #define DEBUG_TAG
 
 #include "utils.h"
 
@@ -195,9 +195,7 @@ void loop()
       } else if(strcmp(p.data, "TAR") == 0 && strcmp(p.id, deviceId) == 0) {
         //turn on target light and return ack
 
-        DEBUG_TAGGING("Target received", "");
-        sendXBeePacketFromRaw(&XBee, deviceId, "A", "SEL", "TAR");
-        digitalWrite(ledTargetPin, HIGH);
+        
 
       } 
 

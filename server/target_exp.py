@@ -83,7 +83,7 @@ while True:
       ser.write(out)
     elif line[0:3] == "end":
       print 'writing results'
-      f = open("result"+user_id+".txt", 'w')
+      f = open("result_"+user_id+".txt", 'w')
       for t in result_log:
         print t
         f.write(' '.join(str(s) for s in t) + '\n') 
@@ -123,7 +123,7 @@ while True:
         logResult("wrong_mul", in_msg[0:2])
     elif in_msg[3:9] == "SELCAN":
       logResult("cancel_mul", '')
-      
+
 
 
 
