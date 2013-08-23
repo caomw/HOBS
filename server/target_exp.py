@@ -83,7 +83,7 @@ while True:
       ser.write(out)
     elif line[0:3] == "end":
       print 'writing results'
-      f = open("result_"+user_id+".txt", 'w')
+      f = open("result_"+user_id[:-1]+".txt", 'w')
       for t in result_log:
         print t
         f.write(' '.join(str(s) for s in t) + '\n') 
