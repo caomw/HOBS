@@ -225,7 +225,7 @@ void loop()
 }
 
 void sendBackDeviceID() {
-  randomDelay = random(1000);
+  randomDelay = random(500);
   // avoid conflicts
   delay(randomDelay);
   DEBUG_TAGGING("IR received: ", "sending back device ID");
