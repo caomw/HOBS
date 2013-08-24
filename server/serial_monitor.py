@@ -16,8 +16,8 @@ availables = glob.glob('/dev/tty.*')
 
 arguments = parser.parse_args()
 try:
-	baud = arguments.baud
-	timeout = arguments.timeout
+  baud = arguments.baud
+  timeout = arguments.timeout
   serial_port = arguments.serial
   print "  baud rate:", baud
   print "  serial timeout:", timeout
