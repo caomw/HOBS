@@ -47,7 +47,7 @@ int XBeeReturnCount;
 boolean ir_bcast_mode = true;
 unsigned long ir_time;
 unsigned int ir_cycle = 300;
-unsigned int ir_response_threshold = 1000;
+unsigned int ir_response_threshold = 300;
 
 void setup()
 {

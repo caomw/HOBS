@@ -225,10 +225,11 @@ void loop()
 }
 
 void sendBackDeviceID() {
-  randomDelay = random(500);
+  // randomDelay = random(500);
   // avoid conflicts
+  randomDelay = atoi(deviceId) * 20;
   delay(randomDelay);
-  DEBUG_TAGGING("IR received: ", "sending back device ID");
+  DEBUG_TAGGING(randomDelay, " delay, sending back device ID\n" );
   // send back acknowledge packet
   sendXBeePacketFromRaw(&XBee, deviceId, "A", " ID", "XXX");
   
