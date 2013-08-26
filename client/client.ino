@@ -41,11 +41,9 @@ char deviceId[3] = "00";
 char XBeeInString[50];
 
 
-boolean eighty_twenty = false;
-
-unsigned int blinkFast = 200;
-unsigned int blinkSlow = 200;
-unsigned int ledStateInterval = blinkFast;
+boolean blinkShort = false;
+unsigned int blinkShort_ratio = 6;
+unsigned int ledStateInterval = 200;
 unsigned long randomDelay = 0;
 unsigned long start_time;
 unsigned long end_time;
@@ -95,13 +93,13 @@ void loop()
     end_time = millis();
 
     if(end_time - toggle_time > ledStateInterval) {
-      if (eighty_twenty) {
+      if (blinkShort) {
         if (digitalRead(ledStatePin)) {
-          digitalWrite(ledStatePin, 0);
+          digitalWrite(ledStatePin, LOW);
           bucket = 0;
         }
-        else if (bucket == 9)
-          digitalWrite(ledStatePin, 1);
+        else if (bucket == blinkShort_ratio)
+          digitalWrite(ledStatePin, HIGH);
         else
           bucket++;
       }
@@ -116,7 +114,7 @@ void loop()
     delay(5);
     // DEBUG_TAGGING("IR: ", results.value);
     if(results.value == 0xFFFF){
-      digitalWrite(ledSignalPin, 1);
+      digitalWrite(ledSignalPin, HIGH);
       signal_time = millis();
       signal_response = true;
     } else if(results.value <= 0x32){
@@ -132,7 +130,7 @@ void loop()
   if(signal_response){
     if(millis() - signal_time > signal_threshold){
       signal_response = false;
-      digitalWrite(ledSignalPin, 0);
+      digitalWrite(ledSignalPin, LOW);
     }
   }
   
