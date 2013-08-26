@@ -120,6 +120,9 @@ void loop()
     } else if(results.value <= 0x32){
       // limit the session ID to be a random number between 0~50
       sendBackDeviceID();
+      //setting itself to pending state and start blinking slow
+      statePending = true;
+      blinkShort = true;
       
     } else {
       //garbage message
@@ -181,17 +184,17 @@ void loop()
         //1st means selected by system as default candidate
         //080 means switched by user
         //do the same thing but has different meaning in terms of logging
-        
-        if(atoi(p.id) == atoi(deviceId)) {
-          statePending = true;
-          ledStateInterval = blinkFast;
-          eighty_twenty = false;
-          
-        } else {
-          //the rest => blink at low frequency
-          ledStateInterval = blinkSlow;
-          statePending = true;
-          eighty_twenty = true;
+        if(statePending) {  
+          //only change led if it's in pending (is one of the candidates)
+          if(atoi(p.id) == atoi(deviceId)) {
+            
+            blinkShort = false;
+            
+          } else {
+            //the rest => blink at low frequency
+            
+            blinkShort = true;
+          }
         }
       } else if(strcmp(p.data, "TAR") == 0) {
           if(strcmp(p.id, deviceId) == 0) {
