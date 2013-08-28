@@ -62,6 +62,11 @@ const char deviceLamp[3] = "02";
 boolean statePending = false;
 boolean signal_response = false;
 
+// EXPERIMENT
+const int MODE_IR = 1;
+const int MODE_LIST = 2;
+int exp_mode = MODE_IR;
+
 void setup()  
 {
   Serial.begin(9600);
@@ -152,6 +157,15 @@ void loop()
       // broadcast message
       sendBackDeviceID();
     }
+    else if(strcmp(p.var, "MOD") == 0) {
+      if(strcmp(p.data, "001") == 0) {
+        //EXP IR MODE
+        exp_mode = MODE_IR;
+      } else if(strcmp(p.data, "002") == 0) {
+        //EXP list MODE
+        exp_mode = MODE_LIST;
+      }
+    }
     else if(strcmp(p.var, "SEL") == 0) {
       // if it's selection related, process in this level
       DEBUG_PRINTLN("selection msg received! ");
@@ -184,18 +198,32 @@ void loop()
         //1st means selected by system as default candidate
         //080 means switched by user
         //do the same thing but has different meaning in terms of logging
-        if(statePending) {  
-          //only change led if it's in pending (is one of the candidates)
-          if(atoi(p.id) == atoi(deviceId)) {
-            
-            blinkShort = false;
-            
-          } else {
-            //the rest => blink at low frequency
-            
-            blinkShort = true;
+        if(exp_mode == MODE_IR) {
+          if(statePending) {  
+            //only change led if it's in pending (is one of the candidates)
+            //blink at low frequency
+            if(atoi(p.id) == atoi(deviceId)) {
+              blinkShort = false;
+            } else {
+              blinkShort = true;  
+            }  
           }
+        } else {
+            //MODE_LIST
+            //only hovered is blinking (fast), all the others doesn't blink
+            if(atoi(p.id) == atoi(deviceId)) {
+              statePending = true;
+              blinkShort = false;
+                
+            } else {
+              statePending = false;
+              blinkShort = true;
+              digitalWrite(ledStatePin, LOW);
+              //in case it happened to be on at the moment
+            }
+
         }
+        
       } else if(strcmp(p.data, "TAR") == 0) {
           if(strcmp(p.id, deviceId) == 0) {
             //turn on target light and return ack

@@ -49,6 +49,11 @@ unsigned long ir_time;
 unsigned int ir_cycle = 300;
 unsigned int ir_response_threshold = 300;
 
+// EXPERIMENT
+const int MODE_IR = 1;
+const int MODE_LIST = 2;
+int exp_mode = MODE_IR;
+
 void setup()
 {
   Serial.begin(9600);
@@ -136,14 +141,29 @@ void loop() {
       //e.g. "IDSSEL080" or "IDCSEL1st"
 
       String msgStr = String(message);
-      if(msgStr.substring(3,6) == "SEL") {
+      if(msgStr.substring(3,6) == "MOD") {
+        if(msgStr.substring(6,9) == "001") {
+          //exp list mode
+          exp_mode = MODE_IR;
+          
+        }else if(msgStr.substring(6,9) == "002") {
+          exp_mode = MODE_LIST;
+          ir_bcast_mode = false;
+        }
+      }
+      else if(msgStr.substring(3,6) == "SEL") {
         if(msgStr.substring(7,9) == "ON" || msgStr.substring(6,9) == "080"
           || msgStr.substring(6,9) == "1st") {
           ir_bcast_mode = false;
           DEBUG_PRINTLN("turning off IR bcast");
         } else if(msgStr.substring(6,9) == "OFF" || msgStr.substring(6,9) == "CAN") {
-          ir_bcast_mode = true;
-          DEBUG_PRINTLN("turning on IR bcast");
+          if(exp_mode == MODE_IR) {
+            //only switch ir bcast to true in IR mode
+            ir_bcast_mode = true;  
+            DEBUG_PRINTLN("turning on IR bcast");
+          }
+          
+          
         }
       }
       
