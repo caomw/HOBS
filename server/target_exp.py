@@ -7,6 +7,7 @@
 import serial, glob, argparse, Queue
 import sys, select
 import time
+import random
 
 parser = argparse.ArgumentParser(description='Pyserial for XBee')
 parser.add_argument('--debug', default=False, action='store_true', help='Print More Errors and Launch interactive console on exception or forced exit')
@@ -22,6 +23,18 @@ result_log = []
 user_id = "NA"
 start_time = time.time()
 
+target_list = []
+predefined_list = ['01', '02', '03']
+total_client_no = 3
+total_task_round = 10
+list_cursor = 0
+task_interval = 3000  # after selecting a correct candidate, wait for couple seconds till next target shows
+state_cue = True
+MODE_PREDEFINE = 1
+MODE_RANDOM = 2
+MODE_MANUAL = 3
+exp_mode = 0
+
 def logResult(action, obj):
   ts = time.time()
   global start_time
@@ -31,6 +44,41 @@ def logResult(action, obj):
   tup = (ts-start_time, action, obj)
   result_log.append(tup)
   print tup
+
+def populate_target(type):
+  print 'populate, type: ', type
+  result = []
+  if type == 1: # predefined
+    result = predefined_list
+  elif type == 2: # random
+    for i in range(total_task_round):
+      t = random.randint(1,total_client_no)
+      result.append("%02d" % t)
+  elif type == 3:
+    restult = []
+  print 'list: ', result
+  return result
+
+def end_exp():
+  print 'writing results'
+  global user_id, result_log
+  f = open("result_"+user_id[:-1]+".txt", 'w')
+  for t in result_log:
+    print t
+    f.write(' '.join(str(s) for s in t) + '\n') 
+  f.close()
+  result_log = []
+  exit(0)
+
+def send_cue(id):
+  out = target_id + "CSELTAR"
+  logResult("target", target_id)
+  global list_cursor
+  print 'round', list_cursor+1
+  print 'Target msg:', out
+  print 'out length:', len(out)
+  list_cursor += 1
+  return out
 
 availables = glob.glob('/dev/tty.*')
 
@@ -71,31 +119,60 @@ except Exception as e:
 print "enter ID"
 user_id = sys.stdin.readline()
 
-while True:
-  # read line without blocking
-  while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
-    line = sys.stdin.readline()
-    print '[Console]: ',line
-    print 'line length: ',len(line)
-    if ('t' in line or 'T' in line) and len(line) == 4:
-      # target a client to turn on cue led
-      target_id = line[1:3]
-      out = target_id + "CSELTAR"
-      logResult("target", target_id)
-      print 'Target msg: ', out
-      print 'out length: ',len(out)
-      ser.write(out)
-    elif line[0:3] == "end":
-      print 'writing results'
-      f = open("result_"+user_id[:-1]+".txt", 'w')
-      for t in result_log:
-        print t
-        f.write(' '.join(str(s) for s in t) + '\n') 
-      f.close()
-      result_log = []
+print "1. auto from predefined list"
+print "2. auto from random"
+print "3. manually enter (e.g. T01)"
 
-    else:
-      ser.write(line)
+try:
+  num = int(raw_input('Enter the number:'))
+  if num > 0 and num <= 3:
+    exp_mode = num
+    target_list = populate_target(exp_mode)
+  else:
+    print 'out of range'
+    exit(1)
+except Exception as e:
+  print "invalid input!"
+  exit(1)
+
+while True:
+  if state_cue == True:
+    if exp_mode == MODE_MANUAL:
+    # read line without blocking
+      # while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
+      #   line = sys.stdin.readline()
+      #   print '[Console]: ',line
+      #   print 'line length: ',len(line)
+      #   if ('t' in line or 'T' in line) and len(line) == 4:
+      #     # target a client to turn on cue led
+      #     target_id = line[1:3]
+      #     state_cue = False
+      #   elif line[0:3] == "end":
+      #     end_exp()
+      #   else:
+      #     ser.write(line)
+
+      cmd = raw_input('Enter command:')  
+      print '[Console]: ',cmd
+      # print 'line length: ',len(cmd)
+      if ('t' in cmd or 'T' in cmd) and len(cmd) == 4:
+        # target a client to turn on cue led
+        target_id = cmd[1:3]
+        state_cue = False
+      elif cmd[0:3] == "end":
+        end_exp()
+      else:
+        ser.write(cmd)
+    else: # predefined or random list
+      if list_cursor > len(target_list) - 1:
+        print 'exp done'
+        exit(0)
+      target_id = target_list[list_cursor]
+      state_cue = False
+
+    out = send_cue(target_id)
+    ser.write(out)
+    
 
   while ser.inWaiting() > 0:
     in_msg = ser.readline()
@@ -116,6 +193,7 @@ while True:
       if in_msg[0:2] == target_id:
         logResult("correct_single", target_id)
         target_id = "NA"
+        sleep(task_interval)
       else:
         logResult("wrong_single", in_msg[0:2])
     elif in_msg[3:9] == "SEL ON":
@@ -123,6 +201,7 @@ while True:
       if in_msg[0:2] == target_id:
         logResult("correct_mul", target_id)
         target_id = "NA"
+        sleep(task_interval)
       else:
         logResult("wrong_mul", in_msg[0:2])
     elif in_msg[3:9] == "SELCAN":
