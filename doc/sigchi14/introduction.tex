@@ -1,11 +1,9 @@
 \section{Introduction}
 \bjoern{What's the overall motivation for the project? What problem does it address?}
-Increasingly, devices and services in our built environment such as intelligent lighting, televisions, HVAC systems, laundry machines, blinds or kitchen appliances are networked and can be controlled remotely.
-
-The proliferation of smart, controllable devices raises the question of how to best interact with them. Prior work has introduced several approaches that use handheld mobile devices as {\em universal remote controls} to select and control appliances in the proximate environment- e.g., through pointing at such devices to select them, and through touch-screen or button interfaces to send control commands~\cite{}. Commercial universal control applications for smart phones are also available~\cite{}, though they usually do not offer spatial selection of target devices, forcing users to browse through lists of configured devices instead.
+Increasingly, devices and services in our built environment are networked and can be controlled remotely. The proliferation of smart, controllable devices such as intelligent lighting, AV equipment, HVAC systems, or kitchen appliances raises the question of how to best interact with them. Prior work has introduced several approaches that use handheld mobile devices as {\em universal remote controls} to select and control appliances in the proximate environment- e.g., through pointing at such devices to select them, and through touch-screen or button interfaces to send control commands~\cite{beigl_point_1999,patel_2-way_2003}.
 
 \bjoern{what are the drawbacks of this existing work?}
-Some drawbacks of using handheld devices are that the device first has to be retrieved (e.g., from a pocket) and aimed; that two hands may be necessary for operation (one to hold the device, one to operate the touch screen); and that the user's visual attention is split between looking down at a screen and out at the device to-be-controlled. \bjoern{these all sound kind of weak.} These general limitations have led researchers to investigate ``always-available'' physiological input modalities on one hand~\cite{saponas}, and wearable computing devices~\cite{} on the other hand.
+Some drawbacks of using handheld devices are that the device first has to be retrieved (e.g., from a pocket) and aimed; that two hands may be necessary for operation (one to hold the device, one to operate the touch screen); and that the user's visual attention is split between looking down at a screen and out at the device to-be-controlled. \bjoern{these all sound kind of weak.} These general limitations have led researchers to investigate ``always-available'' physiological input modalities for phones on one hand~\cite{morris_emerging_2011}, and wearable computing devices on the other hand.
 
 \begin{figure}[t]
 \centering
@@ -13,7 +11,6 @@ Some drawbacks of using handheld devices are that the device first has to be ret
 \caption{Teaser figure. Needs a caption.}
 \label{fig:teaser}
 \end{figure}
-
 
 In this paper, we introduce a novel method for selecting and controlling smart appliances in physical spaces though the use of a head-worn computing device with near-eye display and wireless communication. We augment Google Glass\footnote{\url{http://www.google.com/glass/start/}} with custom hardware for this purpose. Users first look in the direction of the device they wish to control to acquire it (e.g., at a lamp for controlling lighting, or at a speaker to change music playback volume). If multiple devices fall within communication range, an on-screen disambiguation dialog lets users select a single target. Once acquired, a device specific control UI enables adjustment of discrete and continuous parameters through a touchpad interface (see Figure~\ref{fig:teaser}).
 
