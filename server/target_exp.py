@@ -70,9 +70,10 @@ def end_exp():
   result_log = []
   exit(0)
 
-def send_cue(id):
-  out = target_id + "CSELTAR"
-  logResult("target", target_id)
+def send_cue(tid):
+  # print "debug:", tid
+  out = tid + "CSELTAR"
+  logResult("target", tid)
   global list_cursor
   print 'round', list_cursor+1
   print 'Target msg:', out
@@ -155,7 +156,7 @@ while True:
       cmd = raw_input('Enter command:')  
       print '[Console]: ',cmd
       # print 'line length: ',len(cmd)
-      if ('t' in cmd or 'T' in cmd) and len(cmd) == 4:
+      if ('t' in cmd or 'T' in cmd) and len(cmd) == 3:
         # target a client to turn on cue led
         target_id = cmd[1:3]
         state_cue = False
@@ -172,7 +173,20 @@ while True:
 
     out = send_cue(target_id)
     ser.write(out)
-    
+  
+  # read line without blocking
+  while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
+    line = sys.stdin.readline()
+    print '[Console]: ',line
+    print 'line length: ',len(line)
+    if ('t' in line or 'T' in line) and len(line) == 4:
+      # target a client to turn on cue led
+      target_id = line[1:3]
+      state_cue = False
+    elif line[0:3] == "end":
+      end_exp()
+    else:
+      ser.write(line)  
 
   while ser.inWaiting() > 0:
     in_msg = ser.readline()
