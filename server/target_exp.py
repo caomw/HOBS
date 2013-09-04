@@ -179,15 +179,16 @@ while True:
     out = send_cue(target_id)
     ser.write(out)
   
-  # read line without blocking
+  # can reset or end exp within a task phase
   while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
     line = sys.stdin.readline()
     print '[Console]: ',line
     print 'line length: ',len(line)
-    if ('t' in line or 'T' in line) and len(line) == 4:
-      # target a client to turn on cue led
-      target_id = line[1:3]
-      state_cue = False
+    if line[0:5] == 'reset':
+      # repeat the cue stage (if cue ack isn't received)
+      list_cursor -= 1
+      state_cue = True
+
     elif line[0:3] == "end":
       end_exp()
     else:
