@@ -8,6 +8,7 @@ import serial, glob, argparse, Queue
 import sys, select
 import time
 import random
+from time import sleep
 
 parser = argparse.ArgumentParser(description='Pyserial for XBee')
 parser.add_argument('--debug', default=False, action='store_true', help='Print More Errors and Launch interactive console on exception or forced exit')
@@ -24,12 +25,14 @@ user_id = "NA"
 start_time = time.time()
 
 target_list = []
-predefined_list = ['01', '02', '03']
+predefined_list = ['01', '02', '01']
 total_client_no = 3
 total_task_round = 10
 list_cursor = 0
-task_interval = 3000  # after selecting a correct candidate, wait for couple seconds till next target shows
+task_interval = 3  # after selecting a correct candidate, wait for couple seconds till next target shows
 state_cue = True
+correct_target = False
+
 MODE_PREDEFINE = 1
 MODE_RANDOM = 2
 MODE_MANUAL = 3
@@ -45,7 +48,7 @@ def logResult(action, obj):
   result_log.append(tup)
   print tup
 
-def populate_target(type):
+def prepare_target_list(type):
   print 'populate, type: ', type
   result = []
   if type == 1: # predefined
@@ -128,7 +131,7 @@ try:
   num = int(raw_input('Enter the number:'))
   if num > 0 and num <= 3:
     exp_mode = num
-    target_list = populate_target(exp_mode)
+    target_list = prepare_target_list(exp_mode)
   else:
     print 'out of range'
     exit(1)
@@ -155,9 +158,10 @@ while True:
 
       cmd = raw_input('Enter command:')  
       print '[Console]: ',cmd
-      # print 'line length: ',len(cmd)
+      print 'line length: ',len(cmd)
       if ('t' in cmd or 'T' in cmd) and len(cmd) == 3:
         # target a client to turn on cue led
+        print 'target set to', cmd[1:3]
         target_id = cmd[1:3]
         state_cue = False
       elif cmd[0:3] == "end":
@@ -167,6 +171,7 @@ while True:
     else: # predefined or random list
       if list_cursor > len(target_list) - 1:
         print 'exp done'
+        end_exp()
         exit(0)
       target_id = target_list[list_cursor]
       state_cue = False
@@ -196,7 +201,7 @@ while True:
       logResult("connect", '')
     elif in_msg[2:9] == "ASELTAR":
       # is ack for target cue, record timestamp
-      logResult("cue shown", '')
+      logResult("cue shown", in_msg[0:2])
     elif in_msg[3:9] == "SEL1st":
       logResult("multiple", in_msg[0:2])
     elif in_msg[3:9] == "SEL NA":
@@ -206,20 +211,26 @@ while True:
     elif in_msg[3:9] == "SELAON":
       if in_msg[0:2] == target_id:
         logResult("correct_single", target_id)
-        target_id = "NA"
-        sleep(task_interval)
       else:
         logResult("wrong_single", in_msg[0:2])
     elif in_msg[3:9] == "SEL ON":
       # a client is selected, check result
       if in_msg[0:2] == target_id:
         logResult("correct_mul", target_id)
-        target_id = "NA"
-        sleep(task_interval)
       else:
         logResult("wrong_mul", in_msg[0:2])
     elif in_msg[3:9] == "SELCAN":
       logResult("cancel_mul", '')
+    elif in_msg[3:9] == "SELOFF":
+      # determine whether disconnected from correct target
+      if in_msg[0:2] == target_id:
+        logResult("disconnected_right", target_id)
+        target_id = "NA"
+        state_cue = True
+        print 'waiting', task_interval, 'sec to cue next target'
+        sleep(task_interval)  # wait 3s to cue next target
+      else:
+        logResult("disconnected_wrong", target_id)
 
 
 
