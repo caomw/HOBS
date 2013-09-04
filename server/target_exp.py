@@ -22,11 +22,12 @@ parser.add_argument('--serial', action='store', default=None, help='serial port'
 target_id = "NA"
 result_log = []
 user_id = "NA"
+ser = None
 start_time = time.time()
 
 target_list = []
-predefined_list = ['01', '02', '01']
-total_client_no = 3
+predefined_list = ['01', '02', '01', '01', '02']
+total_client_no = 2
 total_task_round = 10
 list_cursor = 0
 task_interval = 3  # after selecting a correct candidate, wait for couple seconds till next target shows
@@ -64,13 +65,14 @@ def prepare_target_list(type):
 
 def end_exp():
   print 'writing results'
-  global user_id, result_log
+  global user_id, result_log, ser
   f = open("result_"+user_id[:-1]+".txt", 'w')
   for t in result_log:
     print t
     f.write(' '.join(str(s) for s in t) + '\n') 
   f.close()
   result_log = []
+  ser.write('XXCSELTAR')  # turn off all cue leds
   exit(0)
 
 def send_cue(tid):
