@@ -17,20 +17,20 @@ Our prototype consists of a Google Glass Explorer Edition head-worn computing de
 
 \subsection{Interaction Flow}
 {\bf Look:} Users select a target device by looking in its general direction.
-Glass periodically sends a device id through its IR emitter analogous to Patel's approach~\cite{patel_2-way_2003}. Target appliances have IR receivers and offer immediate visual feedback by toggling an LED whenever a valid id is received. They also respond by initiating an XBee radio connection and sending their id. This allows the Glass application to show which devices are currently targeted on the display.
+Glass periodically sends a device id through its IR emitter analogous to Patel's approach~\cite{patel_2-way_2003}. Target appliances have IR receivers and offer immediate visual feedback by toggling an LED whenever a valid id is received. They also respond by initiating an XBee radio connection and sending their id. This allows the Glass application to show which devices are currently targeted on the display. \sean{Currently the led is implemented but clients don't response with their IDs and display on Glass at this stage. We can add that. But we felt like the users would use led as the primary indicator and not to distract them with frequently changing the content on the screen? }
 
 {\bf Initiate:} Users confirm to initiate interaction by tapping on the Glass touchpad. The next section on disambiguation deals with cases in which multiple devices received valid IR signals. At this point, all further communication switches over to the XBee wireless network so that line of sight to the target is no longer needed (otherwise restricting head movement can become straining).
 
 {\bf Control:} Glass displays a control interface for parameters of the chosen device. \bjoern{Describe the interaction scheme for navigating and adjusting parameters here}.
 Control commands are sent over XBee radios.
 
-{\bf Disengagement:} \bjoern{how do you end an interaction? Is there a timeout if the user forgets to manually back out of the control screen?}
+{\bf Disengagement:} \bjoern{how do you end an interaction? Is there a timeout if the user forgets to manually back out of the control screen?} \sean{currently the only way is to swipe back. A timeout mechanism can be added easily. I guess the design decision lies in what is an appropriate duration?}
 
 \subsection{Disambiguation}
 \bjoern{describe why disambiguation is necessary - combination of the relative inaccuracy of head orientation and the spread of our IR signal. Then describe how to overcome it.}
 
 \subsection{Prototype Implementation}
-In our prototype, Glass communicates over Bluetooth to an additional microcontroller board the user has to wear (Atmel ATMega256). This board marshals XBee to Bluetooth messages in both directions and also controls the IR LED mounted on the Glass frame (Figure~\ref{fig:architecture}). This architecture was mostly chosen for reasons of expediency. We selected XBee 802.15.4 radios to avoid the latency associated with connecting and disconnecting to Bluetooth devices \bjoern{Is this true or not?} Future head-mounted devices could clearly integrate IR emitters; the choice of local wireless technology could also change. In particular, one could substitute WiFi modules. 
+In our prototype, Glass communicates over Bluetooth to an additional microcontroller board the user has to wear (Atmel ATMega256). This board marshals XBee to Bluetooth messages in both directions and also controls the IR LED mounted on the Glass frame (Figure~\ref{fig:architecture}). This architecture was mostly chosen for reasons of expediency. We selected XBee 802.15.4 radios to avoid the latency associated with connecting and disconnecting to Bluetooth devices \bjoern{Is this true or not?} \sean{Origainlly we didn't know we'd work on Google Glass, therefore BT didn't have a higher priority. We learned that bluetooth can concurrently communicate with up to 7 devices (while up to 255 can be paired but inactive), giving us more complexity when scaling up. In addition ZigBee has shorter wakeup delay and lower power consumption. (referenced here: http://superuser.com/questions/332767/limit-to-the-number-of-devices-that-can-be-paired-with-a-bluetooth-device)} Future head-mounted devices could clearly integrate IR emitters; the choice of local wireless technology could also change. In particular, one could substitute WiFi modules. 
 
 \section{Device Characterization}
 We determined the usable range and accuracy empirically with one IR emitter and two IR receivers. The IR emitter constantly sent out an id signal. The receivers that correctly received the signal turn their LED on for 300 ms.
