@@ -46,7 +46,7 @@ char XBeeReturnIDs[20];
 int XBeeReturnCount;
 boolean ir_bcast_mode = true;
 unsigned long ir_time;
-unsigned int ir_cycle = 300;
+unsigned int ir_cycle = 200;  // broadcat IR signal every X ms
 unsigned int ir_response_threshold = 300;
 
 // EXPERIMENT
@@ -145,6 +145,7 @@ void loop() {
         if(msgStr.substring(6,9) == "001") {
           //exp list mode
           exp_mode = MODE_IR;
+          ir_bcast_mode = true;
           
         }else if(msgStr.substring(6,9) == "002") {
           exp_mode = MODE_LIST;
