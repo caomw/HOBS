@@ -284,7 +284,8 @@ void readXBeeDeviceId() {
   readStringfromSerial(&XBee, XBeeInString);
 
   // deviceId = XBeeInString[];
-  int id = atoi(XBeeInString);
+  Serial.println(XBeeInString);
+  int id = (int)strtol(XBeeInString, NULL, 16);
   // string_copy(deviceId, XBeeInString, 0, 1);
 
   if(id<10) { //append 0 at beginning
