@@ -27,11 +27,11 @@
 // In this simplified design, there is no need to save states on client for feedback
 // so I have deleted all state variables like IDLE, PENDING, CONNECTED, etc.
 
-SoftwareSerial XBee(2, 3); // RX, TX
+SoftwareSerial XBee(3,2); // RX, TX
 int ledStatePin = 13;
-int ledSignalPin = 11;
+int ledSignalPin = 10;
 int controlledPin = 12;
-int ledTargetPin = 10;
+int ledTargetPin = 11;
 
 int RECV_PIN = 8;
 IRrecv irrecv(RECV_PIN);
@@ -198,11 +198,17 @@ void loop()
         //1st means selected by system as default candidate
         //080 means switched by user
         //do the same thing but has different meaning in terms of logging
+        DEBUG_TAGGING("my id: ", atoi(deviceId));
+        DEBUG_TAGGING(", select id: ", atoi(p.id));
+        DEBUG_TAGGING(", equal: ", atoi(deviceId)==atoi(p.id));
+        DEBUG_TAGGING("", "");
+        
         if(exp_mode == MODE_IR) {
           if(statePending) {  
             //only change led if it's in pending (is one of the candidates)
             //blink at low frequency
             if(atoi(p.id) == atoi(deviceId)) {
+              
               blinkShort = false;
             } else {
               blinkShort = true;  
@@ -212,6 +218,7 @@ void loop()
             //MODE_LIST
             //only hovered is blinking (fast), all the others doesn't blink
             if(atoi(p.id) == atoi(deviceId)) {
+              
               statePending = true;
               blinkShort = false;
                 
