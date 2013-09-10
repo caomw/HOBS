@@ -26,9 +26,9 @@ ser = None
 start_time = time.time()
 
 target_list = []
-predefined_list = ['01', '02', '01', '01', '02']
-total_client_no = 2
-total_task_round = 10
+predefined_list = ['01', '02', '03', '04', '01']
+total_client_no = 4
+total_task_round = 6
 list_cursor = 0
 task_interval = 3  # after selecting a correct candidate, wait for couple seconds till next target shows
 state_cue = True
