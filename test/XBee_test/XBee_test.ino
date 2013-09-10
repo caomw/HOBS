@@ -19,17 +19,25 @@
 // #define XBee Serial2
 
 SoftwareSerial XBee(3,2);
-
+int ledStatePin = 13;
+int ledSignalPin = 10;
+int controlledPin = 12;
+int ledTargetPin = 11;
 char XBeeInString[50];
 
 void setup() {
   // initialize both serial ports:
+  pinMode(ledStatePin, OUTPUT);
+  pinMode(ledSignalPin, OUTPUT); 
+  pinMode(controlledPin, OUTPUT);
+  pinMode(ledTargetPin, OUTPUT); 
+
   Serial.begin(9600);
   XBee.begin(9600);
   Serial.println("ready!");
 
   enterCommandMode();
-  setID(4);
+  setID(14);
   setChannel(4321);
   readID();
   readChannel();
@@ -81,7 +89,18 @@ void loop() {
   //   stringComplete = false;  
   // }
   
-
+  digitalWrite(ledStatePin, HIGH);
+  delay(500);
+  digitalWrite(ledStatePin, LOW);
+  delay(500);
+  digitalWrite(ledSignalPin, HIGH);
+  delay(500);
+  digitalWrite(ledSignalPin, LOW);
+  delay(500);
+  digitalWrite(ledTargetPin, HIGH);
+  delay(500);
+  digitalWrite(ledTargetPin, LOW);
+  delay(500);
 }
 
 // void serialEvent() {
