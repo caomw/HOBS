@@ -56,8 +56,10 @@ int bucket = 0;
 #define statusPending 1
 #define statusOn 2
 
-const char deviceLaptop[3] = "01";
-const char deviceLamp[3] = "02";
+const char deviceFan[3] = "11";
+const char deviceMusic[3] = "12";
+const char deviceTV[3] = "13";
+const char deviceLamp[3] = "14";
 
 boolean statePending = false;
 boolean signal_response = false;
@@ -202,7 +204,7 @@ void loop()
         DEBUG_TAGGING(", select id: ", atoi(p.id));
         DEBUG_TAGGING(", equal: ", atoi(deviceId)==atoi(p.id));
         DEBUG_TAGGING("", "");
-        
+
         if(exp_mode == MODE_IR) {
           if(statePending) {  
             //only change led if it's in pending (is one of the candidates)
@@ -250,9 +252,11 @@ void loop()
     else if (atoi(p.id) == atoi(deviceId)) {
       
       // pass this message to the function of client
-      if(strcmp(deviceId, deviceLaptop) == 0) {
+      if(strcmp(deviceId, deviceTV) == 0
+        || strcmp(deviceId, deviceMusic) == 0) {
         laptopBridging(p);
-      } else if(strcmp(deviceId, deviceLamp) == 0) {
+      } else if(strcmp(deviceId, deviceLamp) == 0
+        || strcmp(deviceId, deviceFan) == 0) {
         lampClient(p);
 
       }
@@ -263,7 +267,13 @@ void loop()
 void sendBackDeviceID() {
   // randomDelay = random(500);
   // avoid conflicts
-  randomDelay = atoi(deviceId) * 20;
+  
+  if(atoi(deviceId) >10) {
+    randomDelay = (atoi(deviceId) - 10) *20;
+    // if it's 11 - 14 ==> test 2
+  } else {
+    randomDelay = atoi(deviceId) *20;
+  }
   delay(randomDelay);
   DEBUG_TAGGING(randomDelay, " delay, sending back device ID\n" );
   // send back acknowledge packet
@@ -345,7 +355,7 @@ void replyStatus() {
     } else {
       sendXBeePacketFromRaw(&XBee, deviceId, "A", "BRI", " ON");
     }
-  } else if(strcmp(deviceId, deviceLaptop) == 0) {
+  } else if(strcmp(deviceId, deviceTV) == 0) {
     //send a read status cmd to the laptop and wait for reply
     //curently only volume is needed
     Serial.print(deviceId);
