@@ -51,15 +51,16 @@ unsigned long toggle_time;
 unsigned long signal_time;
 unsigned long signal_threshold = 300;
 unsigned long pendingThreshold = 10000;
+int random_mutiplier = 15;
 int bucket = 0;
 #define statusOff 0
 #define statusPending 1
 #define statusOn 2
 
-const char deviceFan[3] = "11";
+const char deviceTV[3] = "11";
 const char deviceMusic[3] = "12";
-const char deviceTV[3] = "13";
-const char deviceLamp[3] = "14";
+const char deviceLamp[3] = "13";
+const char deviceFan[3] = "14";
 
 boolean statePending = false;
 boolean signal_response = false;
@@ -85,7 +86,8 @@ void setup()
 
   toggle_time = millis(); //for pending led purpose
   signal_time = millis();
-
+  Serial.print("random_mutiplier: ");
+  Serial.println(random_mutiplier);
   Serial.println("ready!");
 }
 
@@ -269,10 +271,10 @@ void sendBackDeviceID() {
   // avoid conflicts
   
   if(atoi(deviceId) >10) {
-    randomDelay = (atoi(deviceId) - 10) *20;
+    randomDelay = (atoi(deviceId) - 10) * random_mutiplier;
     // if it's 11 - 14 ==> test 2
   } else {
-    randomDelay = atoi(deviceId) *20;
+    randomDelay = atoi(deviceId) * random_mutiplier;
   }
   delay(randomDelay);
   DEBUG_TAGGING(randomDelay, " delay, sending back device ID\n" );
