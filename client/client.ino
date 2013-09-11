@@ -102,18 +102,20 @@ void loop()
     end_time = millis();
 
     if(end_time - toggle_time > ledStateInterval) {
-      if (blinkShort) {
-        if (digitalRead(ledStatePin)) {
-          digitalWrite(ledStatePin, LOW);
-          bucket = 0;
-        }
-        else if (bucket == blinkShort_ratio)
-          digitalWrite(ledStatePin, HIGH);
-        else
-          bucket++;
-      }
-      else {
+      // if (blinkShort) {
+      //   if (digitalRead(ledStatePin)) {
+      //     digitalWrite(ledStatePin, LOW);
+      //     bucket = 0;
+      //   }
+      //   else if (bucket == blinkShort_ratio)
+      //     digitalWrite(ledStatePin, HIGH);
+      //   else
+      //     bucket++;
+      // }
+      if(!blinkShort) {
         digitalToggle(ledStatePin);
+      } else{
+        digitalWrite(ledStatePin, HIGH);  
       }
       toggle_time = millis();
     }
@@ -132,6 +134,7 @@ void loop()
       //setting itself to pending state and start blinking slow
       statePending = true;
       blinkShort = true;
+      
       
     } else {
       //garbage message
@@ -216,6 +219,7 @@ void loop()
               blinkShort = false;
             } else {
               blinkShort = true;  
+              digitalWrite(ledStatePin, HIGH);
             }  
           }
         } else {
