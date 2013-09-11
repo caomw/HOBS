@@ -37,9 +37,9 @@ void setup() {
   Serial.println("ready!");
 
   enterCommandMode();
-  setID(14);
-  setChannel(4321);
-  readID();
+  // setID(13);
+  setChannel(4322);
+  // readID();
   readChannel();
 
   writePermanent();
@@ -195,6 +195,17 @@ void writePermanent() {
   XBee.print("ATWR\r");
   delay(3000);
   readStringfromSerial(&XBee, XBeeInString);
+}
+
+void exitCommandMode() {
+  delay(1000);
+  memset(XBeeInString, 0, 50);
+  Serial.println("sending ATCN");
+  XBee.print("ATCN\r");
+  delay(2000);
+  // DEBUG_PRINTLN("reading...");
+  readStringfromSerial(&XBee, XBeeInString);
+  // DEBUG_PRINTLN(XBeeInString);  
 }
 
 int readStringfromSerial (SoftwareSerial *SS, char *strArray) {
