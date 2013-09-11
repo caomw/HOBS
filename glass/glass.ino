@@ -63,6 +63,7 @@ void setup()
   BT.begin(57600);
   isWaitingReply = false;
   delay(100);
+
   Serial.print("system begins!");
   ir_time = millis();
 
@@ -171,19 +172,24 @@ void loop() {
     }
   }
 
-  if (XBee.available()) {
+  if (XBee.available() && false == isWaitingReply) {
     delay(10);
     DEBUG_PRINT("[XBee]: ");
     readStringfromSerial(&XBee, message);
-     
-    if(message[6] == 'T' && message[7] == 'A' && message[8] == 'R') {
-      //if ends with TAR => target experiment msg, no need to send to Glass
-    } else if(true == isPacketValid(message)){ 
-      DEBUG_PRINT("[BT]: send ");
-      DEBUG_PRINTLN(message);  
-      BT.println(message);
+    if(true == isPacketValid(message)) {
+      if(message[6] == 'T' && message[7] == 'A' && message[8] == 'R') {
+        //if ends with TAR => target experiment msg, no need to send to Glass
+      } else if(message[2] == 'A' && message[4] == 'I' && message[5] == 'D') {
+        //ID ack that wasn't handled by list, don't send to glass
+        DEBUG_PRINTLN("Intercepted ID Ack");
+      } else { 
+        DEBUG_PRINT("[BT]: send ");
+        DEBUG_PRINTLN(message);  
+        BT.println(message);
 
-    }
+      }
+    } 
+    
   }
   delay(10);
 }
