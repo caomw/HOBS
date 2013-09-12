@@ -38,11 +38,13 @@ void setup() {
 
   enterCommandMode();
   // setID(13);
-  setChannel(4322);
+  setChannel(4321);
   // readID();
   readChannel();
 
   writePermanent();
+
+  exitCommandMode();
 
   Serial.println("done!");
   
