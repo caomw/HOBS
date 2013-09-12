@@ -26,7 +26,7 @@ ser = None
 start_time = time.time()
 
 target_list = []
-predefined_list = ['01', '02', '03', '04', '01']
+predefined_list = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10']
 total_client_no = 4
 total_task_round = 6
 list_cursor = 0
@@ -166,9 +166,12 @@ while True:
         print 'target set to', cmd[1:3]
         target_id = cmd[1:3]
         state_cue = False
+        out = send_cue(target_id)
+        ser.write(out)
       elif cmd[0:3] == "end":
         end_exp()
       else:
+        print 'writing cmd to XBee'
         ser.write(cmd)
     else: # predefined or random list
       if list_cursor > len(target_list) - 1:
@@ -177,9 +180,8 @@ while True:
         exit(0)
       target_id = target_list[list_cursor]
       state_cue = False
-
-    out = send_cue(target_id)
-    ser.write(out)
+      out = send_cue(target_id)
+      ser.write(out)
   
   # can reset or end exp within a task phase
   while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
@@ -194,6 +196,7 @@ while True:
     elif line[0:3] == "end":
       end_exp()
     else:
+      print 'writing cmd to XBee'
       ser.write(line)  
 
   while ser.inWaiting() > 0:
