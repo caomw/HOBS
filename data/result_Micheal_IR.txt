@@ -1,0 +1,59 @@
+0.0 start 08
+4.52357602119 correct_single 08
+39.7257730961 disconnected_right 08
+0.0 start 02
+5.09725904465 correct_single 02
+14.509953022 skip 
+0.0 start 01
+6.72344994545 multiple 01
+8.85132694244 correct_mul 01
+14.5454161167 disconnected_right 01
+0.0 start 05
+8.54828000069 correct_single 05
+17.1365468502 skip 
+0.0 start 07
+6.70913481712 correct_single 07
+10.5307128429 disconnected_right 07
+0.0 start 03
+5.15496993065 correct_single 03
+10.9287540913 disconnected_right 03
+0.0 start 09
+7.41232705116 correct_single 09
+25.479694128 skip 
+0.0 start 01
+9.2161488533 disconnected_right 01
+0.0 start 01
+4.95968699455 next 
+0.0 start 09
+6.03359103203 miss 
+7.78586220741 correct_single 09
+22.3085591793 disconnected_right 09
+0.0 start 02
+10.915211916 disconnected_right 02
+0.0 start 02
+0.999749183655 next 
+0.0 start 10
+10.131729126 disconnected_right 10
+0.0 start 10
+1.42394208908 next 
+0.0 start 07
+6.42181515694 wrong_mul 06
+19.2196559906 next 
+24.687376976 reset 01
+0.0 start 01
+9.72954106331 disconnected_right 01
+0.0 start 01
+1.30414700508 skip 
+0.0 start 02
+5.5438439846 miss 
+6.93546700478 miss 
+10.9824450016 correct_single 02
+18.019605875 disconnected_right 02
+0.0 start 10
+7.77758407593 disconnected_right 10
+0.0 start 10
+5.36587309837 correct_single 10
+7.98858618736 disconnected_right 10
+0.0 start 07
+6.48185992241 correct_mul 07
+15.8504648209 skip 
