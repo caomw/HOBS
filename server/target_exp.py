@@ -83,7 +83,6 @@ def send_cue(tid):
   print 'round', list_cursor+1
   print 'Target msg:', out
   print 'out length:', len(out)
-  list_cursor += 1
   return out
 
 availables = glob.glob('/dev/tty.*')
@@ -165,9 +164,10 @@ while True:
         # target a client to turn on cue led
         print 'target set to', cmd[1:3]
         target_id = cmd[1:3]
-        state_cue = False
+        
         out = send_cue(target_id)
         ser.write(out)
+
       elif cmd[0:3] == "end":
         end_exp()
       else:
@@ -208,6 +208,8 @@ while True:
     elif in_msg[2:9] == "ASELTAR":
       # is ack for target cue, record timestamp
       logResult("cue shown", in_msg[0:2])
+      list_cursor += 1
+      state_cue = False
     elif in_msg[3:9] == "SEL1st":
       logResult("multiple", in_msg[0:2])
     elif in_msg[3:9] == "SEL NA":
