@@ -263,7 +263,7 @@ void loop()
         laptopBridging(p);
       } else if(strcmp(deviceId, deviceLamp) == 0
         || strcmp(deviceId, deviceFan) == 0) {
-        lampClient(p);
+        powerClient(p);
 
       }
     }
@@ -325,26 +325,27 @@ void readXBeeDeviceId() {
   Serial.println(deviceId);  
 }
 
-void lampClient(struct XBeePacket p) {
+void powerClient(struct XBeePacket p) {
   DEBUG_PRINTLN("command issued");
-  if (strcmp(p.func, "R") == 0 && strcmp(p.var, "BRI") == 0 ) {
-    // read the current status and reply
-    int status = digitalRead(controlledPin);
-    if (status == 0) {
-      sendXBeePacketFromRaw(&XBee, deviceId, "A", "BRI", "OFF");
-    } else {
-      sendXBeePacketFromRaw(&XBee, deviceId, "A", "BRI", " ON");
-    }
-  }
-  else if (strcmp(p.func, "C") == 0 && strcmp(p.var, "BRI") == 0 && strcmp(p.data, " ON") == 0) {
+  // if (strcmp(p.func, "R") == 0 && strcmp(p.var, "POW") == 0 ) {
+  //   // read the current status and reply
+  //   int status = digitalRead(controlledPin);
+  //   if (status == 0) {
+  //     sendXBeePacketFromRaw(&XBee, deviceId, "A", "POW", "OFF");
+  //   } else {
+  //     sendXBeePacketFromRaw(&XBee, deviceId, "A", "POW", " ON");
+  //   }
+  // }
+  //taking out because now it auto reply when selected, glass won't send R msg
+  if (strcmp(p.func, "C") == 0 && strcmp(p.var, "POW") == 0 && strcmp(p.data, " ON") == 0) {
     DEBUG_PRINTLN("turned on");
     digitalWrite(controlledPin, HIGH);
-    sendXBeePacketFromRaw(&XBee, deviceId, "A", "BRI", " ON");
+    sendXBeePacketFromRaw(&XBee, deviceId, "A", "POW", " ON");
   }
-  else if (strcmp(p.func, "C") == 0 && strcmp(p.var, "BRI") == 0 && strcmp(p.data, "OFF") == 0) {
+  else if (strcmp(p.func, "C") == 0 && strcmp(p.var, "POW") == 0 && strcmp(p.data, "OFF") == 0) {
     DEBUG_PRINTLN("turned off");
     digitalWrite(controlledPin, LOW);
-    sendXBeePacketFromRaw(&XBee, deviceId, "A", "BRI", "OFF");
+    sendXBeePacketFromRaw(&XBee, deviceId, "A", "POW", "OFF");
   }
   else {
     // error message
@@ -354,14 +355,14 @@ void lampClient(struct XBeePacket p) {
 
 void replyStatus() {
   DEBUG_PRINTLN("ask for client status");
-  if(strcmp(deviceId, deviceLamp) == 0) {
+  if(strcmp(deviceId, deviceLamp) == 0 || strcmp(deviceId, deviceFan) == 0) {
     int status = digitalRead(controlledPin);
     if (status == 0) {
-      sendXBeePacketFromRaw(&XBee, deviceId, "A", "BRI", "OFF");
+      sendXBeePacketFromRaw(&XBee, deviceId, "A", "POW", "OFF");
     } else {
-      sendXBeePacketFromRaw(&XBee, deviceId, "A", "BRI", " ON");
+      sendXBeePacketFromRaw(&XBee, deviceId, "A", "POW", " ON");
     }
-  } else if(strcmp(deviceId, deviceTV) == 0) {
+  } else if(strcmp(deviceId, deviceTV) == 0 || strcmp(deviceId, deviceMusic) == 0) {
     //send a read status cmd to the laptop and wait for reply
     //curently only volume is needed
     Serial.print(deviceId);
