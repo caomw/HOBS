@@ -26,7 +26,8 @@ ser = None
 start_time = time.time()
 
 target_list = []
-predefined_list = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10']
+# predefined_list = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10']
+predefined_list = ['08', '02', '04', '01', '05', '10', '07', '03', '09', '06', '01', '09', '02', '10', '07']
 total_client_no = 4
 total_task_round = 6
 list_cursor = 0
@@ -192,7 +193,6 @@ while True:
       # repeat the cue stage (if cue ack isn't received)
       list_cursor -= 1
       state_cue = True
-
     elif line[0:3] == "end":
       end_exp()
     else:

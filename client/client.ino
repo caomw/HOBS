@@ -94,11 +94,8 @@ void setup()
 void loop()
 {
 
-
+  //blinking when multiple candidates
   if(statePending) {
-
-    
-
     end_time = millis();
 
     if(end_time - toggle_time > ledStateInterval) {
@@ -120,6 +117,7 @@ void loop()
       toggle_time = millis();
     }
   } 
+
 
   if(irrecv.decode(&results)) {
     delay(5);
@@ -187,7 +185,7 @@ void loop()
           digitalWrite(ledStatePin, HIGH);  
 
           //turn off target led if selected correctly
-          digitalWrite(ledTargetPin, LOW);  
+          digitalWrite(ledTargetPin, LOW); 
           replyStatus();
         } else {
           digitalWrite(ledStatePin, LOW);  
