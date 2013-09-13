@@ -1,5 +1,5 @@
-\section{Target Acquisition Experiment}
-To understand the accuracy and performance of head-orientation-based  selection through our device, we carried out a comparative target acquisition study, where participants had to connect to wireless nodes with our technique, and a list selection approach.
+\section{Physical Target Acquisition Study}
+To understand the accuracy and performance of head-orientation-based  selection through our device, we carried out a comparative target acquisition study, where participants had to connect to wireless nodes distributed in a room with our technique, and with an alternate list selection approach.
 
 \begin{figure}[t]
 \centering
@@ -9,7 +9,9 @@ To understand the accuracy and performance of head-orientation-based  selection 
 \end{figure}
 
 \subsection{Apparatus}
-In an indoor environment, 10 wireless nodes are spread across a room at various heights and distances (see Figure~\ref{fig:targeting-study-layout}). The nodes are stand-ins for potential smart appliances and have all relevant functionality for targeting and selection, but do not control any actual appliances. Each node is an embedded wireless system with a microcontroller, IR receiver, a wireless XBee radio, and three status LEDs: an orange LED indicates that the device is the target that should be selected in the current trial; a red LED lights up whenever the device receives an IR signal from Glass; a blue LED shows when participants have successfully connected to a device, and is also used for disambiguation when multiple clients are within IR range (see Figure~\ref{fig:target}). Next to each client device, a paper sheet shows a number and letter combination, which are used for uniquely identifying the devices.
+In an indoor environment, 10 wireless nodes are spread across a room at various heights and distances (see Figure~\ref{fig:targeting-study-layout}). The nodes are stand-ins for potential smart appliances and have all relevant functionality for targeting and wireless communication, but do not control any actual appliances. Each node is an embedded wireless system with a microcontroller, IR receiver, a wireless XBee radio, and three status LEDs (see Figure~\ref{fig:target}). An orange LED indicates that the device is the target that should be selected in the current trial; a red LED lights up whenever the device receives an IR signal from Glass; a blue LED shows when participants have successfully connected to a device, and is also used for disambiguation when multiple clients are within IR range . Next to each client device, a paper sheet shows a number and letter combination, which are used for uniquely identifying the devices.
+
+Some trials also used a {\em distractor} configuration in which 15 additional paper sheets with additional identifiers are added to the environment. We did not create 15 additional wireless nodes though as each node has to be hand-assembled and soldered.
 
 \begin{figure}[b]
 \centering
@@ -19,24 +21,69 @@ In an indoor environment, 10 wireless nodes are spread across a room at various 
 \end{figure}
 
 \subsection{Methodology}
-In our within-subjects design, participants performed 15 target acquisition tasks each with two interaction styles. In the {\em infrared} condition, participants used our IR targeting approach; in the {\em list} condition, participants had to look up a device's letter code and select that letter code from a list displayed on their Glass device. The list was navigated with swipe motions on the Glass touchpad. For each task, participants started at a fixed position in the room. The experimenter called out a number and simultaneously started a timer. Participants then had to find the number on sheets printed and affixed to walls and other surfaces. In the {\em infrared} condition, participants then selected and acquired the target by aiming the infrared beam at the target, and confirmed their selection with a touchpad tap. If more than one target was within range, participants had to either use the disambiguation dialog or reposition themselves. In the {\em list} condition, participants had to read the letter next to the number and then select that letter by browsing a linear list shown in their Glass display. While the list was alphabetized, letter arrangement in the room was not. This design required participants to find the target in the room before starting a list navigation to keep conditions similar to each other.
+In our within-subjects design, participants performed 15 target acquisition tasks each with two interaction styles. In the {\em infrared} condition, participants used our IR targeting approach; in the {\em list} condition, participants had to look up a device's letter code on the printed paper next to the device and then select that letter code from a list displayed on their Glass device. The list was navigated with swipe motions on the Glass touchpad. For each task, participants started at a fixed position in the room. The experimenter called out a number and simultaneously started a timer. Participants then had to find the corresponding device (by looking for its printed code). In the {\em infrared} condition, participants then selected and acquired the target by aiming the infrared beam at the target, and confirmed their selection with a touch pad tap. If more than one target was within range, participants had to either use the disambiguation dialog or reposition themselves. In the {\em list} condition, participants had to read the letter next to the number and then select that letter by browsing a linear list shown in their Glass display. While the list was alphabetized, letter arrangement in the room was not. This design required participants to find the target in the room before starting a list navigation to keep conditions similar to each other.
 
 Afterwards, participants completed a survey that elicited answers to Likert-scale questions as well as open-ended answers about their experience.
 
 \subsection{Participants}
-We recruited N participants from our institution. X had never used Glass before.
+We recruited \bjoern{N} participants from our institution. \bjoern{X} had never used Glass before. \bjoern{Y} wore prescription glasses, which may have affected their task performance as wearing both Glass and regular glasses is possible, but leads to \bjoern{explain problems}.
 
 \subsection{Measures}
-The main measure was {\bf target acquisition time}: the time required to identify, select, and connect to a wireless target device. We also elicited {\bf user preference}: which interface users preferred for the task after completing the study.
+The main measures were {\bf target acquisition time}: the time required to identify, select, and connect to a wireless target device; and{\bf user preference}: which interface users preferred for the task after completing the study.
 
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=1.0\columnwidth]{figures/selection-times2.pdf}
+\caption{Task completion times. \bjoern{update data}}
+\label{fig:selection-times}
+\end{figure}
 \subsection{Results}
 
 \subsubsection{Performance data}
+The time to complete each task can be broken down into the following pieces:
 
-\subsubsection{User preference}
-X of Y users preferred infrared mode over list mode. As slef-report data can skew to please experimenters, we also asked participants to elucidate why they preferred one interface over the other.
+$t_{infrared}=t_{locate}+t_{reorient}+t_{disambiguate}+t_{tap}$
 
-\bjoern{Insert summary of survey data on this point here.}
+$t_{list}=t_{locate}+t_{listnav}+t_{tap}$
 
-\subsubsection{Qualitative results}
+In both conditions, participants first have to locate the target announced by the experimenter ($t_{locate}$). In the {\em infrared} condition, participants may then directly confirm their selection if only a single target was selected ($t_{tap}$). However, if they don't immediately receive feedback that their target was selected, or if multiple targets were selected, users either have change their position or head orientation ($t_{reorient}$) or they have to step through the on-screen disambiguation dialog ($t_{disambiguate}$). In the {\em list} condition, participants must scroll through the list to find the desired target identifier ($t_{listnav}$).
+This analysis makes it clear that any performance benefit depends on whether $t_{reorient}+t_{disambiguate}<t_{listnav}$. This depends on the number of total devices in the environment (increasing $t_{listnav}$), and their density (which will increase $t_{disambiguate}$). 
+
+At 10 devices, total selection times are comparable:
+\bjoern{Hopefully, when adding distractors, the list navigation will become very cumbersome.}
+
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=1.0\columnwidth]{figures/target-likert.pdf}
+\caption{Likert scale ratings for ease of use of aspects of the targeting task. Error bars show standard error. \bjoern{update data}}
+\label{fig:target-likert}
+\end{figure}
+
+\subsubsection{Preference}
+\bjoern{update: 6 of 7} users preferred infrared mode over list mode. While both interfaces were judged similarly on overall ease of connecting, list navigation received the lowest likert scores (see Figure~\ref{fig:target-likert}). As self-report data can easily skew positive as participants try to please experimenters, we also asked participants to elucidate why they preferred one interface over the other.
+
+List mode had certain advantages: It was judged to be more accurate and predictable as there was always exactly one device selected in the list (\studyquote{With the list you never have to worry about accidentally picking up two targets}). Also, it did not require a clear line of sight to the target device so participants did not have to move from their starting position (\studyquote{The shortcoming of the IR mode was that you had to be a certain distance away in order for it to detect the appliance}). 
+
+On the other hand, list mode was judged to be more \studyquote{annoying} and tedious. The temple-based touchpad for selection was difficult to use for a participant with long hair: \studyquote{List mode was physically difficult for me to navigate, since my long hair wasn't tied back and it kept interfering with my swiping.} Another participant also commented on the ergonomic challenge of touchpad use on Glass: \studyquote{The strength of the IR mode was that I didn't have to use my fingers as much to control. If the items were spaced relatively far apart, it was easy to select a specific appliance.}
+
+\bjoern{add more from survey answers}.
+
+%IR mode has semantic meaning (like I said).  I'm likely to want visual feedback from any distant device I'm trying to control, and since I'm already looking at it, this is very easy to get.  List mode was physically difficult for me to navigate, since my long hair wasn't tied back and it kept interfering with my swiping.  Another comment about list mode was that swiping faster didn't seem to navigate the list faster, which would have been convenient for accessing items like W and Y very far from the beginning of the list.  This could also be partially overcome by using a circular linked list (where the list wraps from Y to A) instead of a one-way list.
+%With the list you never have to worry about accidentally picking up two targets, but since you always have to swipe through a (longer) list that's not much of an advantage.
+%List mode felt like I could be more confident in what client I was choosing because I couldn't select more than one client. The IR mode was a little more natural because it involved less clicking and navigating, but it felt easier to select the wrong client which made the list mode more comfortable. 
+%"The shortcoming of the List mode was that the list didn't wrap around. So for example if I wanted to go to Y, I couldn't just go left from A—I had to scroll through all the letters in between.
+
+%The strength of the list mode was that it's pretty accurate, so as long as I swiped the correct amount, I could activate and power off the appliances. I also didn't have to move at all, although perhaps that is a shortcoming because otherwise we might just all turn into Wall-E people.
+
+%The strength of the IR mode was that I didn't have to use my fingers as much to control. If the items were spaced relatively far apart, it was easy to select a specific appliance. 
+
+%The shortcoming of the IR mode was that you had to be a certain distance away in order for it to detect the appliance. "
+%The List Mode is easier to choose the desired item when the item list is short. It became a bit frustrated when I had to swipe many times in order to get to the targeted item. The IR mode works more intuitive in this case, but need a longer time to learn and get used to it.
+%list mode is easier to select what you want, but may take a while to get to since you can only swipe through one at a time; IR is quicker and more intuitive, but unstable
+%"list mode is annoying. i find myself counting how many swipes i have to do.
+
+%IR mode is fun and pretty convenient"
+
 
