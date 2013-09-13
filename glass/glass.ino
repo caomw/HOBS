@@ -47,7 +47,7 @@ int XBeeReturnCount;
 boolean ir_bcast_mode = true;
 unsigned long ir_time;
 unsigned int ir_cycle = 200;  // broadcat IR signal every X ms
-unsigned int ir_response_threshold = 600;
+unsigned int ir_response_threshold = 800;
 
 // EXPERIMENT
 const int MODE_IR = 1;
