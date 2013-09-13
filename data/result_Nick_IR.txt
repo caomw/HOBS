@@ -1,0 +1,66 @@
+17.6627650261 wrong_single 07
+18.6641860008 wrong_single 05
+19.9415590763 reset 08
+0.0 start 08
+5.68399190903 miss 
+7.79511785507 miss 
+8.80204987526 miss 
+12.7369709015 correct_single 08
+15.1361980438 disconnected_right 08
+0.0 start 02
+7.21936392784 correct_single 02
+12.9578061104 reset 02
+0.0 start 04
+8.16652798653 miss 
+10.3664560318 correct_single 04
+29.2541129589 reset 04
+0.0 start 01
+6.63810491562 correct_single 01
+9.19728183746 disconnected_right 01
+0.0 start 05
+4.78074407578 correct_single 05
+11.443582058 reset 05
+13.4278681278 reset 10
+0.0 start 10
+12.0718328953 correct_single 10
+16.0221889019 disconnected_right 10
+0.0 start 07
+9.52477312088 correct_single 07
+11.8119101524 disconnected_right 07
+17.7181100845 reset 03
+0.0 start 03
+5.90484213829 correct_single 03
+8.79896712303 disconnected_right 03
+0.0 start 09
+12.0070769787 correct_single 09
+18.8035571575 disconnected_right 09
+0.0 start 06
+4.74789690971 miss 
+6.90716290474 correct_single 06
+9.76998186111 disconnected_right 06
+0.0 start 05
+5.17435288429 correct_single 05
+8.14984297752 disconnected_right 05
+11.4782018661 reset 09
+13.182281971 reset 09
+14.1343288422 reset 09
+14.9581799507 reset 09
+0.0 start 09
+5.81698012352 correct_single 09
+8.7124710083 disconnected_right 09
+0.0 start 02
+3.59076690674 miss 
+4.74199986458 miss 
+6.11827492714 miss 
+6.87648200989 miss 
+9.66894292831 multiple 01
+11.3154468536 switch 02
+12.3399178982 correct_mul 02
+15.3627519608 disconnected_right 02
+17.4999918938 reset 06
+0.0 start 06
+5.72302699089 correct_single 06
+11.0169818401 disconnected_right 06
+0.0 start 07
+9.00387716293 correct_single 07
+13.162979126 disconnected_right 07
