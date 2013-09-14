@@ -42,3 +42,5 @@ doc/report/main.pdf
 server/*.txt
 
 data/result_test.txt
+
+doc/sigchi14/sigchi14.pdf
