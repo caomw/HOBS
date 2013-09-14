@@ -11,9 +11,16 @@
 \label{fig:architecture}
 \end{figure}
 
-\section{Hardware Device and Interaction}
+\section{Interaction and Hardware Device}
 
-Our prototype consists of a Google Glass Explorer Edition head-worn computing device, augmented with an infrared emitter that is mounted on the frame, pointing out in the direction of the wearer's view (Figure~\ref{fig:glass}). The IR emitter LED is mounted in an opaque hollow tube, that restricts the outgoing angle of illumination. 
+\subsection{Design Goals}
+{\bf Leverage visual attention:} Take advantage of the fact that visual attention can express intention - trigger interaction based on where a user is already looking
+
+{\bf Provide feedback in the environment:} While a near-eye display can push information to the user, locate visual feedback about selection targets in the environment, to prevent distraction and interruption.
+
+{\bf Deal with dense device arrangements and the limit of head positioning}
+
+\bjoern{Finish and expand this section.}
 
 \subsection{Interaction Flow}
 {\bf Look:} Users select a target device by looking in its general direction.
@@ -30,6 +37,8 @@ Control commands are sent over XBee radios.
 \bjoern{describe why disambiguation is necessary - combination of the relative inaccuracy of head orientation and the spread of our IR signal. Then describe how to overcome it.}
 
 \subsection{Prototype Implementation}
+Our prototype consists of a Google Glass Explorer Edition head-worn computing device, augmented with an infrared emitter that is mounted on the frame, pointing out in the direction of the wearer's view (Figure~\ref{fig:glass}). The IR emitter LED is mounted in an opaque hollow tube, that restricts the outgoing angle of illumination. 
+
 In our prototype, Glass communicates over Bluetooth to an additional microcontroller board the user has to wear (Atmel ATMega256). This board marshals XBee to Bluetooth messages in both directions and also controls the IR LED mounted on the Glass frame (Figure~\ref{fig:architecture}). This architecture was mostly chosen for reasons of expediency. We selected XBee 802.15.4 radios to avoid the latency associated with connecting and disconnecting to Bluetooth devices \bjoern{Is this true or not?} \sean{Origainlly we didn't know we'd work on Google Glass, therefore BT didn't have a higher priority. We learned that bluetooth can concurrently communicate with up to 7 devices (while up to 255 can be paired but inactive), giving us more complexity when scaling up. In addition ZigBee has shorter wakeup delay and lower power consumption. (referenced here: http://superuser.com/questions/332767/limit-to-the-number-of-devices-that-can-be-paired-with-a-bluetooth-device)} Future head-mounted devices could clearly integrate IR emitters; the choice of local wireless technology could also change. In particular, one could substitute WiFi modules. 
 
 \section{Device Characterization}
