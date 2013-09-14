@@ -209,6 +209,8 @@ while True:
       state_cue = True
       list_cursor += 1
       logResult("skip", "")
+    elif line[0:3] == "dis":
+      logResult("***discard", "")
     else:
       print 'writing cmd to XBee'
       ser.write(line)  
@@ -261,6 +263,8 @@ while True:
         # sleep(task_interval)  # wait 3s to cue next target
       else:
         logResult("disconnected_wrong", target_id)
+    else:
+      logResult("msg", in_msg)
 
 
 

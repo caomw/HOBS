@@ -1,0 +1,102 @@
+27.9634389877 miss 
+30.3157360554 reset 08
+0.0 start 08
+12.4439179897 next 
+0.0 start 02
+7.11388397217 correct_single 02
+11.208302021 disconnected_right 02
+0.0 start 04
+9.10025191307 disconnected_right 04
+0.0 start 04
+1.28771114349 next 
+0.0 start 01
+4.39098715782 miss 
+21.1855959892 next 
+0.0 start 05
+12.2078440189 disconnected_right 05
+0.0 start 05
+0.951615095139 next 
+2.31944704056 reset 10
+0.0 start 10
+4.47331500053 correct_single 10
+10.6308960915 disconnected_right 10
+0.0 start 07
+11.385488987 next 
+0.0 start 03
+16.6221489906 next 
+0.0 start 09
+68.1251401901 next 
+71.0850970745 reset 06
+0.0 start 06
+76.8593947887 disconnected_wrong 06
+80.1378610134 miss 
+84.4568169117 correct_single 06
+89.6234858036 wrong_single 03
+90.7422459126 disconnected_wrong 06
+93.7975308895 miss 
+97.5717568398 miss 
+101.65032196 cancel_mul 
+118.560614824 next 
+120.600673914 reset 09
+127.448483944 reset 09
+0.0 start 09
+3.43593406677 correct_single 09
+8.65060210228 disconnected_right 09
+0.0 start 02
+4.23416900635 miss 
+5.75355100632 miss 
+19.5906767845 next 
+0.0 start 06
+1.47858786583 disconnected_right 06
+4.28752207756 reset 06
+5.65536689758 reset 06
+0.0 start 06
+5.99987006187 miss 
+7.94459295273 correct_single 06
+12.3020350933 ***discard 
+14.0541100502 disconnected_right 06
+0.0 start 07
+8.39757084846 next 
+0.0 start 08
+1.1191880703 reset 08
+21.0748720169 next 
+0.0 start 01
+1.00047302246 disconnected_wrong 01
+8.2181968689 correct_single 01
+12.776640892 disconnected_right 01
+0.0 start 05
+6.40350413322 correct_single 05
+12.1136021614 disconnected_right 05
+14.5743889809 reset 07
+0.0 start 07
+4.51900982857 miss 
+10.6118659973 miss 
+17.231498003 reset 07
+0.0 start 07
+1.44824194908 skip 
+0.0 start 03
+11.8345601559 disconnected_right 03
+0.0 start 03
+1.18397402763 next 
+0.0 start 09
+4.58146309853 correct_single 09
+11.6387479305 reset 09
+12.9747021198 reset 06
+0.0 start 06
+4.21706390381 correct_single 06
+12.4405200481 reset 06
+0.0 start 02
+3.68186688423 miss 
+11.7039599419 disconnected_right 02
+0.0 start 02
+1.13572692871 skip 
+3.70366597176 reset 07
+0.0 start 07
+4.0007019043 correct_single 07
+7.55182600021 disconnected_right 07
+0.0 start 08
+3.73476600647 correct_single 08
+6.67847585678 disconnected_right 08
+0.0 start 03
+6.64916396141 correct_single 03
+11.1273610592 disconnected_right 03

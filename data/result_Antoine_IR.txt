@@ -1,0 +1,99 @@
+22.4666352272 reset 08
+0.0 start 08
+3.07436299324 msg 08A IDXXX
+
+5.00286412239 correct_single 08
+30.8617551327 reset 08
+0.0 start 02
+2.37363314629 msg 02A IDXXX
+
+4.36516618729 correct_single 02
+9.78701806068 disconnected_right 02
+0.0 start 04
+5.65803813934 miss 
+8.09529495239 msg 04A IDXXX
+
+10.0883159637 correct_single 04
+15.0608451366 disconnected_right 04
+0.0 start 01
+2.48505806923 msg 01A IDXXX
+
+10.6832110882 disconnected_right 01
+0.0 start 01
+1.05547618866 next 
+0.0 start 05
+2.48851013184 msg 05A IDXXX
+
+4.44913101196 correct_single 05
+9.05524110794 disconnected_right 05
+0.0 start 10
+3.70667600632 msg 10A IDXXX
+
+5.58719182014 correct_single 10
+12.3453819752 reset 10
+0.0 start 07
+16.2552409172 miss 
+18.078537941 miss 
+20.3884119987 msg 07A IDXXX
+
+22.3000538349 correct_single 07
+31.8271048069 reset 07
+0.0 start 03
+3.74583506584 msg 03A IDXXX
+
+5.73865699768 correct_single 03
+9.33625197411 disconnected_right 03
+0.0 start 09
+2.51114916801 msg 09A IDXXX
+
+4.3758251667 correct_single 09
+11.5750350952 reset 09
+0.0 start 06
+11.1436741352 disconnected_right 06
+14.4304001331 next 
+0.0 start 05
+4.47562813759 miss 
+6.46721410751 correct_single 05
+12.7385551929 reset 05
+0.0 start 09
+13.520072937 disconnected_right 09
+0.0 start 09
+1.64750099182 next 
+0.0 start 02
+5.25271821022 msg 02A IDXXX
+
+7.22942209244 correct_single 02
+13.9625561237 disconnected_right 02
+15.8034451008 reset 06
+0.0 start 06
+6.59276795387 msg 06A IDXXX
+
+22.4746370316 next 
+43.5149590969 msg 00SMOD001
+44.8981289864 reset 07
+0.0 start 07
+7.26031494141 miss 
+9.08254694939 correct_single 07
+13.7855019569 disconnected_right 07
+0.0 start 01
+3.89950990677 msg 01A IDXXX
+
+5.9082698822 correct_single 01
+9.15484786034 disconnected_right 01
+11.8148310184 reset 06
+0.0 start 06
+2.39977407455 msg 06A IDXXX
+
+4.34444308281 correct_single 06
+9.86212301254 disconnected_right 06
+11.4539051056 reset 09
+0.0 start 09
+5.46731305122 miss 
+7.01923799515 correct_single 09
+13.5191550255 reset 09
+14.8712239265 reset 06
+0.0 start 06
+2.33297610283 msg 06A IDXXX
+
+4.27748990059 correct_single 06
+7.71611809731 disconnected_right 06

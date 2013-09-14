@@ -1,0 +1,92 @@
+0.0 start 08
+30.1473050117 msg 08A IDXXX
+
+32.0598499775 correct_single 08
+42.1996490955 disconnected_right 08
+0.0 start 02
+2.89816093445 msg 02A IDXXX
+
+4.89060497284 miss 
+8.5530090332 msg 00SMOD001
+14.1991391182 next 
+0.0 start 04
+3.47523283958 msg 04A IDXXX
+
+5.46760892868 correct_single 04
+10.6817369461 disconnected_right 04
+0.0 start 01
+4.52912187576 miss 
+6.55154895782 msg 01A IDXXX
+
+8.55999183655 correct_single 01
+15.5403289795 reset 01
+0.0 start 05
+2.21272397041 msg 05A IDXXX
+
+4.15691685677 correct_single 05
+6.20461392403 disconnected_right 05
+0.0 start 10
+3.25860619545 miss 
+7.72978115082 msg 00SMOD001
+13.408326149 next 
+0.0 start 07
+3.45908594131 miss 
+5.38773107529 correct_single 07
+8.18661308289 disconnected_right 07
+0.0 start 03
+4.02848482132 msg 03A IDXXX
+
+6.00518703461 correct_single 03
+9.07567095757 disconnected_right 03
+0.0 start 09
+4.12983894348 miss 
+9.44677901268 next 
+0.0 start 06
+1.00119304657 disconnected_wrong 06
+4.7422349453 msg 06A IDXXX
+
+6.67101097107 correct_single 06
+12.1086969376 disconnected_right 06
+0.0 start 05
+1.93507504463 msg 05A IDXXX
+
+3.89528393745 correct_single 05
+7.70226502419 disconnected_right 05
+0.0 start 09
+3.12258195877 msg 09A IDXXX
+
+5.01938009262 correct_single 09
+15.2504370213 reset 09
+0.0 start 02
+3.37629795074 msg 02A IDXXX
+
+5.35295295715 miss 
+10.3591368198 msg 00SMOD001
+17.3721578121 next 
+0.0 start 06
+5.65998721123 miss 
+6.90769219398 correct_single 06
+10.8100221157 disconnected_right 06
+0.0 start 07
+2.36322402954 msg 07A IDXXX
+
+4.27584505081 correct_single 07
+18.4710278511 reset 07
+0.0 start 02
+2.97087001801 msg 02A IDXXX
+
+4.97958898544 correct_single 02
+7.84172201157 disconnected_right 02
+0.0 start 10
+2.04637694359 msg 10A IDXXX
+
+3.89533090591 correct_single 10
+11.2787759304 reset 10
+0.0 start 09
+4.26651310921 correct_single 09
+11.5755031109 disconnected_right 09
+0.0 start 02
+3.15569186211 msg 02A IDXXX
+
+5.16345191002 correct_single 02
+12.5850389004 disconnected_right 02
