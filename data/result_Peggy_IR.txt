@@ -1,8 +1,3 @@
-0.0 start 08
-30.1473050117 msg 08A IDXXX
-
-32.0598499775 correct_single 08
-42.1996490955 disconnected_right 08
 0.0 start 02
 2.89816093445 msg 02A IDXXX
 

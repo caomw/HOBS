@@ -1,10 +1,6 @@
 0.0 start 08
 6.14507484436 correct_single 08
 17.1702179909 reset 08
-0.0 start 02
-27.5754401684 correct_single 02
-38.5311141014 disconnected_right 02
-41.4428031445 reset 04
 0.0 start 04
 1.00104093552 miss 
 19.0789349079 miss 
