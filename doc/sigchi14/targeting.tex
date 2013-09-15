@@ -9,9 +9,8 @@ To understand the accuracy and performance of head-orientation-based  selection 
 \end{figure}
 
 \subsection{Apparatus}
-In an indoor environment, 10 wireless nodes are spread across a room at various heights and distances (see Figure~\ref{fig:targeting-study-layout}). The nodes are stand-ins for potential smart appliances and have all relevant functionality for targeting and wireless communication, but do not control any actual appliances. Each node is an embedded wireless system with a microcontroller, IR receiver, a wireless XBee radio, and three status LEDs (see Figure~\ref{fig:target}). An orange LED indicates that the device is the target that should be selected in the current trial; a red LED lights up whenever the device receives an IR signal from Glass; a blue LED shows when participants have successfully connected to a device, and is also used for disambiguation when multiple clients are within IR range . Next to each client device, a paper sheet shows a number and letter combination, which are used for uniquely identifying the devices.
+In an indoor environment, 10 wireless nodes are spread across a room at various heights and distances (see Figure~\ref{fig:targeting-study-layout}). The nodes are stand-ins for potential smart appliances and have all relevant functionality for targeting and wireless communication, but do not control any actual appliances. Each node is an embedded wireless system with a microcontroller, IR receiver, a wireless XBee radio, and three status LEDs (see Figure~\ref{fig:target}). An orange LED indicates that the device is the target that should be selected in the current trial; a red LED lights up whenever the device receives an IR signal from Glass; a blue LED shows when participants have successfully connected to a device, and is also used for disambiguation when multiple clients are within IR range . Next to each client device, a paper sheet shows a number and letter combination, which are used for uniquely identifying the devices. \sean{The numbers are the primary identifiers while the letters are in raondom order. The nodes are somewhat sorted by their numbers, making it easy to find in order to simulate a place the users are more familiar with. Therefore, the time spent on finding the target was minimized and the time measured was mainly the acqusition time. }
 
-Some trials also used a {\em distractor} configuration in which 15 additional paper sheets with additional identifiers are added to the environment. We did not create 15 additional wireless nodes though as each node has to be hand-assembled and soldered.
 
 \begin{figure}[b]
 \centering
@@ -57,7 +56,7 @@ At 10 devices, total selection times are comparable:
 \begin{figure}[t]
 \centering
 \includegraphics[width=1.0\columnwidth]{figures/target-likert.pdf}
-\caption{Likert scale ratings for ease of use of aspects of the targeting task. Error bars show standard error. \bjoern{update data}}
+\caption{Likert scale ratings for ease of use of aspects of the targeting task. Error bars show standard error. }
 \label{fig:target-likert}
 \end{figure}
 
