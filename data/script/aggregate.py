@@ -1,6 +1,6 @@
 from glob import glob
 ## schema would be 
-## participant, mode, target, correct_time, correct_type, first_miss_time, miss_count, switch_count, switch_target
+## participant, mode, target, correct_time, correct_type, first_miss_time, miss_count, switch_count, switch_target, wrong_count, wrong_target, multiple_time, fate
 class log:
   def __init__(self, participant, mode, target):
     self.participant = participant
@@ -14,24 +14,26 @@ class log:
     self.switch_target = []
     self.wrong_count = 0
     self.wrong_target = []
+    self.multiple_time = ""
     self.fate = []
   def __repr__(self):
-    return self.participant + ',\t' +\
-           self.mode + ',\t' +\
-           self.target + ',\t' +\
-           self.correct_time + ',\t' +\
-           self.correct_type + ',\t' +\
-           self.first_miss_time + ',\t' +\
-           str(self.miss_count) + ',\t' +\
-           str(self.switch_count) + ',\t' +\
+    return self.participant + ',' +\
+           self.mode + ',' +\
+           self.target + ',' +\
+           self.correct_time + ',' +\
+           self.correct_type + ',' +\
+           self.first_miss_time + ',' +\
+           str(self.miss_count) + ',' +\
+           str(self.switch_count) + ',' +\
            '[' + ';'.join(map(str, self.switch_target)) + '],\t' +\
-           str(self.wrong_count) + ',\t' +\
+           str(self.wrong_count) + ',' +\
            '[' + ';'.join(map(str, self.wrong_target)) + '],\t' +\
+           self.multiple_time + ',' +\
            '[' + ';'.join(map(str, self.fate)) + ']'
 
 filelist = glob("../*.txt")
 f1=open('./data.csv', 'w+')
-print >>f1, "participant, mode, target, correct_time, correct_type, first_miss_time, miss_count, switch_count, switch_target, wrong_count, wrong_target, fate"
+print >>f1, "participant, mode, target, correct_time, correct_type, first_miss_time, miss_count, switch_count, switch_target, wrong_count, wrong_target, multiple_time, fate"
         
 for f in filelist:
   logs = []
@@ -63,5 +65,9 @@ for f in filelist:
       if l[1].split('_')[0] == "wrong":
         new_log.wrong_count += 1
         new_log.wrong_target.append(l[2])
+      if l[1].split('_')[0] == "multiple":
+        new_log.multiple_time = l[0]
+
+
       
         
