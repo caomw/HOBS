@@ -79,6 +79,25 @@ On the other hand, list mode was judged to be more \studyquote{annoying} and ted
 
  A perceived shortcoming of IR mode was the necessity to move the head in order to control a device. One participant said that it was \studyquote{awkward to be aiming your head at things, tweaking back and forth to get it right}. Another noted that observing the head movement didn't capture the site of her attention, because \studyquote {eye movement is an important part of how people look around}.}
 
+\subsubsection{Discussion}
+\sean{to be refined}
+
+\begin{itemize}
+\item During the experiment, a lot of wireless messages were transferred for communication and logging purposes. Some messages got lost or delayed and caused the users had to redo that particular action. Infrared mode requires a lot of more handshake communications than the list mode. This means that in a more robust infrastructure, the performance of infrared mode can improve more than that of the list mode.
+
+\item Some of the infrared performance were affected by the strength and stableness of the infrared emitter. By getting a stronger emitter that would be able to reach to a longer distance, connecting to nodes further away such as 4 and 10 would become easier.
+
+\item As shown in figure X, the average time taken to connect to a certain client is correlated to the order of the node within the list. We therefore can assume that as the system scales, the average time required in list mode would have a linear growth. As for the infrared mode, it is more about the density of nodes in a fix space. There’s an upper bound how many smart appliance one can put on a single ta
+
+\item In list mode, users’ eyes focuses more on the display to traverse between the list while in infrared mode, users’ eyes remain in the physical world more.
+
+\item In our prototype, the IR emitter is nearly fixed. Due to different sizes and shapes of the users’ heads, the emitter wouldn’t necessarily point to the center of their eye sights. An adjustable emitter would even further improve the performance of our design.
+
+\item The list mode could also be improved by making the swiping gestures more responsive, e.g. swiping speed affects traversing speed.
+
+\item In our experiment, after users locates the nodes by ID, they can instantly figure out their names by the label provided. In realistic environments, users have to recall the names of the appliances, which would take a lot more time. Furthermore, finding names such as “Living room corner stand lamp” would be more difficult than an alphabet. On the other hand, infrared mode will most likely to be unaffected since it does not require name-recalling or text matching.
+
+ \end{itemize}
 
 %IR mode has semantic meaning (like I said).  I'm likely to want visual feedback from any distant device I'm trying to control, and since I'm already looking at it, this is very easy to get.  List mode was physically difficult for me to navigate, since my long hair wasn't tied back and it kept interfering with my swiping.  Another comment about list mode was that swiping faster didn't seem to navigate the list faster, which would have been convenient for accessing items like W and Y very far from the beginning of the list.  This could also be partially overcome by using a circular linked list (where the list wraps from Y to A) instead of a one-way list.
 %With the list you never have to worry about accidentally picking up two targets, but since you always have to swipe through a (longer) list that's not much of an advantage.
