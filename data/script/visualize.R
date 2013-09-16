@@ -59,7 +59,7 @@ df.IR.mul <- df[grepl("IR", df$mode) & grepl("mul", df$correct_type), ]
 
 
 #### draw the list mode, time vs. position
-pdf("../../doc/sigchi14/figures/R_List_by_Target.pdf", width=5, height=3)
+pdf("../../doc/sigchi14/figures/R_List_by_Target.pdf", width=7, height=4)
 df.List <- df[grepl("List", df$mode), ]
 # mapping from id to name
 name <- "GOWFJSYRAM"
@@ -98,7 +98,7 @@ dev.off()
 #### draw the list mode, time vs. position
 mode.bind.type <- cbind(df, paste(df$mode, df$correct_type))
 colnames(mode.bind.type)[14] <- "mode_type"
-pdf("../../doc/sigchi14/figures/R_time_by_Category.pdf", width=5, height=4)
+pdf("../../doc/sigchi14/figures/R_time_by_Category.pdf", width=7, height=4)
 box1 <- ggplot(mode.bind.type, aes(factor(mode), correct_time, fill = mode.bind.type$mode))
 box1 <- box1 + geom_boxplot(lwd=0.5) + ylim(2.5,25) + xlab("different mode") +
     theme(legend.position = "none") +
