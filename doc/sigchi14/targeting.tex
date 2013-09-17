@@ -41,25 +41,29 @@ $t_{list}=t_{locate}+t_{listnav}+t_{tap}$
 In both conditions, participants first have to locate the target announced by the experimenter ($t_{locate}$). In the {\em infrared} condition, participants may then directly confirm their selection if only a single target was selected ($t_{tap}$). However, if they don't immediately receive feedback that their target was selected, or if multiple targets were selected, users either have change their position or head orientation ($t_{reorient}$) or they have to step through the on-screen disambiguation dialog ($t_{disambiguate}$). In the {\em list} condition, participants must scroll through the list to find the desired target identifier ($t_{listnav}$).
 This analysis makes it clear that any performance benefit depends on whether $t_{reorient}+t_{disambiguate}<t_{listnav}$. This depends on the number of total devices in the environment (increasing $t_{listnav}$), and their density (which will increase $t_{disambiguate}$). 
 
-At 10 devices, total selection times are comparable:
-\bjoern{Hopefully, when adding distractors, the list navigation will become very cumbersome.}
-
 \begin{figure}[t]
 \centering
 \includegraphics[width=1.0\columnwidth]{figures/R_time_by_Category.pdf}
-\caption{Task completion times.} \sean{label mean on the chart}
+\caption{Task completion times.} \ben{label mean, change xtick, change color}
 \label{fig:selection-times}
 \end{figure}
 
-As a result, infrared mode out performs list mode by 2.186 seconds (6.672 vs 8.858), as shown in figure~\ref{fig:selection-times}. \sean{TBC}  
+We will first show our results at 10 devices and then provide discussions about extrapolation. The $t_{infrared}$ and $t_{list}$ are shown in Figure~\ref{fig:selection-times} {\em (left)}. The average time in two conditions are 6.67 seconds and 8.86 seconds, respectively. Student's t-test result (p=0.00017) shows that they are significantly different. 
+
+To further understand the performance gain in {\em infrared} condition, especially the factor $t_{disambiguate}$, we compare the time it takes in condition of whether there are multiple devices involved (Figure~\ref{fig:selection-times} {\em (right)}). When there is a single device, $t_{disambiguate}$ is 0; it takes 6.40 seconds (on average) to complete one connection. When multiple in range, the time increases to 9.16 seconds, indicating 2.76 seconds required to disambiguate. Though it takes significantly longer (p=0.012 using t-test) in the {\em multiple} case, it's worth pointing out that it happens less frequent (10\%), even we intentionally placed a few devices nearer to each other. % 19 / (19+168 )
+
+
+
+% \bjoern{Hopefully, when adding distractors, the list navigation will become very cumbersome.}
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=1.0\columnwidth]{figures/R_List_by_Target.pdf}
-\caption{Average time taken vs. the order of nodes on the list }
+\caption{Average time taken vs. the order of nodes on the list  } \ben{trend line}
 \label{fig:time-vs-list-order}
 \end{figure}
 
+For each device, $t_{listnav}$ would depends on their relative position in the list. And the average time for all targets would increase if the number of total devices increases. To verify this conjecture, we visualize the time it takes to connect to each device in Figure~\ref{fig:time-vs-list-order}, ordered by their relative position in the list. The order would also reflect the number of swipes to reach each device. A linear trend is visible, and the regression returns with coefficient of determination ($R^2=0.032$).
 
 \begin{figure}[t]
 \centering
