@@ -65,13 +65,14 @@ df.List <- df[grepl("List", df$mode), ]
 name <- "GOWFJSYRAM"
 df.List$target <- sapply(df.List$target, function(x) substr(name, x, x))
 label.x <- sapply(names(table(df.List$target)), function(x) regexpr(x, name))
-box <- ggplot(df.List, aes(factor(target), correct_time, fill = df.List$target))
-box <- box + geom_boxplot(lwd=0.5) + ylim(2.5,15) + xlab("order in list") + scale_x_discrete(labels=seq(0, 9)) + ylab("time (seconds)")
+box <- ggplot(df.List, aes(factor(target), correct_time))
+box <- box + geom_boxplot(lwd=0.5, fill = '#9FB987') + ylim(2.5,15) + xlab("order in list") + ylab("time (seconds)") # + scale_x_discrete(labels=seq(0, 9))
+box <- box + geom_smooth(lwd=1.5, linetype=2, colour = "#477843", aes(group = 1), method="lm", se = F)
+#box <- box + geom_line(data.frame(x = c(0,9), y = c(6.740350,10.85737)), aes(x, y), colour = "red")
 ## linear fit
 sorted.name <- sort(unique(df.List$target))
 target1 <- sapply(df.List$target, function(x) which(sorted.name == x) - 1)
 fit <- lm(df.List$correct_time ~ target1)
-# geom_line(x = c(0,9), y = c(6.740350,10.85737), colour = "red")
 box + theme(legend.position = "none") 
 dev.off()
 
@@ -122,13 +123,14 @@ pdf("../../doc/sigchi14/figures/R_time_by_Category.pdf", width=7, height=4)
 box1 <- ggplot(mode.bind.type, aes(factor(mode), correct_time, fill = mode.bind.type$mode))
 box1 <- box1 + geom_boxplot(lwd=0.5) + ylim(2.5,25) + xlab("different mode") +
     theme(legend.position = "none") +
+    scale_fill_manual(values = c("#A4C3D9", "#9FB987")) + #477843
     stat_summary(fun.y = "mean", geom = "text", label="---", size= 8, color= "white") +
     ylab("time (seconds)")
 toPlot <- mode.bind.type[grepl("IR", mode.bind.type$mode_type), ]
 box2 <- ggplot(toPlot, aes(factor(mode_type), correct_time, fill = toPlot$mode_type))
 box2 <- box2 + geom_boxplot(lwd=0.5) + ylim(2.5,25) + xlab("IR mode") +
     theme(legend.position = "none", axis.title.y=element_blank()) +
-    scale_fill_manual(values = c("pink", "green")) +
+    scale_fill_manual(values = c("#0072B2", "#56B4E9")) +
     stat_summary(fun.y = "mean", geom = "text", label="---", size= 8, color= "white")
 multiplot(box1, box2, cols=2)
 dev.off()
