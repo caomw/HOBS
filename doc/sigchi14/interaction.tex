@@ -12,25 +12,7 @@ Our work is motivated by the following design goals that leverage opportunities 
 
 {\bf Offer efficient ways to disambiguate orientation input:} It may not always be possible to identify a unique target device based on a user's attention and orientation. Offer ways to supplement orientation-based interaction with screen-based interaction to provide disambiguation information.
 
-These design goals find their expression in the following interaction model:
-
-\begin{figure}
-\centering
-\begin{subfigure}{.5\columnwidth}
-  \centering
-  \includegraphics[width=0.9\columnwidth]{figures/screenshot_LAMP_CONTROL.png}
-  \caption{Lamp control}
-  \label{fig:control_lamp}
-\end{subfigure}%
-\begin{subfigure}{.5\columnwidth}
-  \centering
-  \includegraphics[width=0.9\columnwidth]{figures/screenshot_TV_CONTROLS.png}
-  \caption{Video player control}
-  \label{fig:control_tv}
-\end{subfigure}
-\caption{Screenshots of appliance controls}
-\label{fig:test}
-\end{figure}
+These design goals find their expression in the following interaction model.
 
 \subsection{Interaction Flow}
 
@@ -57,6 +39,24 @@ Glass periodically sends a device id through its IR emitter analogous to Patel's
 Control commands are sent over XBee radios.
 
 {\bf Disengagement:} Users stay connected to the last selected device up to a timeout period. During that period, users can disengage through down swipes.
+
+\begin{figure}
+\centering
+\begin{subfigure}{.5\columnwidth}
+  \centering
+  \includegraphics[width=0.9\columnwidth]{figures/screenshot_LAMP_CONTROL.png}
+  \caption{Lamp control}
+  \label{fig:control_lamp}
+\end{subfigure}%
+\begin{subfigure}{.5\columnwidth}
+  \centering
+  \includegraphics[width=0.9\columnwidth]{figures/screenshot_TV_CONTROLS.png}
+  \caption{Video player control}
+  \label{fig:control_tv}
+\end{subfigure}
+\caption{Screenshots of appliance controls}
+\label{fig:test}
+\end{figure}
 
 \subsection{Disambiguation}
 Head orientation only indicates a general area of visual interest. It does not necessarily match gaze orientation as extra-ocular muscles can move the eyes. The IR beam of our device also has a certain spread (see next section). In an environment dense with potential targets, multiple targets could be within range. Users can tell when multiple feedback LEDs in the environment illuminate (Figure~\ref{fig:interaction_multi}A). To disambiguate, users can either move to adjust their head position, or, alternatively, call up a disambiguation dialog on the Glass display. The dialog presents a list filtered to only those devices that are within IR range, whlie devices also lights up blue LED as visual cues (Figure~\ref{fig:interaction_multi}B). Users navigate the list using the touchpad (Figure~\ref{fig:interaction_multi}C), and then continue their interaction as described above.
