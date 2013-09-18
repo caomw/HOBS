@@ -57,9 +57,9 @@ int bucket = 0;
 #define statusPending 1
 #define statusOn 2
 
-const char deviceTV[3] = "11";
-const char deviceMusic[3] = "12";
-const char deviceLamp[3] = "13";
+const char deviceTV[3] = "12";
+const char deviceMusic[3] = "13";
+const char deviceLamp[3] = "11";
 const char deviceFan[3] = "14";
 
 boolean statePending = false;
