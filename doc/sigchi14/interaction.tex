@@ -2,7 +2,7 @@
 This section describes the design goals of our systems and their realization in particular interaction techniques.
 
 \subsection{Design Goals}
-Our work is motivated by the following design goals that leverage opportunities of head-worn computing, but also acknowledge potential challenged:
+Our work is motivated by the following design goals that leverage opportunities of head-worn computing, but also acknowledge potential challenges:
 
 {\bf Leverage visual attention:} Take advantage of the fact that visual attention can express intention - initiate interaction based on where a user is already looking. 
 
@@ -13,6 +13,38 @@ Our work is motivated by the following design goals that leverage opportunities 
 {\bf Offer efficient ways to disambiguate orientation input:} It may not always be possible to identify a unique target device based on a user's attention and orientation. Offer ways to supplement orientation-based interaction with screen-based interaction to provide disambiguation information.
 
 These design goals find their expression in the following interaction model:
+
+% \begin{figure}[t!]
+% \centering
+% \includegraphics[width=0.5\columnwidth]{figures/screenshot_LAMP_CONTROL.png}
+% \caption{ }
+% \label{fig:control_lamp}
+% \end{figure}
+
+% \begin{figure}[t!]
+% \centering
+% \includegraphics[width=0.5\columnwidth]{figures/screenshot_TV_CONTROLS.png}
+% \caption{( devices. }
+% \label{fig:control_tv}
+% \end{figure}
+
+\begin{figure}
+\centering
+\begin{subfigure}{.5\columnwidth}
+  \centering
+  \includegraphics[width=0.9\columnwidth]{figures/screenshot_LAMP_CONTROL.png}
+  \caption{Lamp control}
+  \label{fig:control_lamp}
+\end{subfigure}%
+\begin{subfigure}{.5\columnwidth}
+  \centering
+  \includegraphics[width=0.9\columnwidth]{figures/screenshot_TV_CONTROLS.png}
+  \caption{Video player control}
+  \label{fig:control_tv}
+\end{subfigure}
+\caption{Screenshots of appliance controls}
+\label{fig:test}
+\end{figure}
 
 \subsection{Interaction Flow}
 
@@ -31,11 +63,15 @@ These design goals find their expression in the following interaction model:
 \end{figure}
 
 {\bf Look:} Users select a target device by looking in its general direction.
+<<<<<<< HEAD
 Glass periodically sends a device id through its IR emitter analogous to Patel's approach~\cite{patel_2-way_2003}. Target appliances have IR receivers and offer immediate visual feedback by toggling a red LED whenever a valid id is received (Figure~\ref{fig:interaction}B). This enables {\em scanning} the environment with one's gaze to see which devices can be controlled.
+=======
+Glass periodically sends a device id through its IR emitter analogous to Patel's approach~\cite{patel_2-way_2003}. Target appliances have IR receivers and offer immediate visual feedback by toggling a red LED whenever a valid id is received (Figure~\ref{fig:interaction}A~\ref{fig:interaction}B). This enables {\em scanning} the environment with ones gaze to see which devices can be controlled.
+>>>>>>> 4518d722cf3e3fd0f26848ef395c57e892903062
 
-{\bf Initiate:} Users confirm their desire to connect to a device by tapping on the Glass touchpad. The next section on disambiguation deals with cases in which multiple devices received valid IR signals. At this point, all further communication switches over to the 802.15.4 wireless network so that line of sight to the target is no longer needed.
+{\bf Initiate:} Users confirm their desire to connect to a device by tapping on the Glass touchpad (Figure~\ref{fig:interaction}C). The next section on disambiguation deals with cases in which multiple devices received valid IR signals. At this point, all further communication switches over to the 802.15.4 wireless network so that line of sight to the target is no longer needed.
 
-{\bf Control:} Glass displays a user interface for parameters of the chosen device. The interface is controlled with the temple-mounted touchpad through the following gesture set: tapping toggles discrete parameters; single finger swipe changes between available parameters; double finger swipe adjusts continuous parameters. This scheme was chosen because the touchpad is only comfortably operable in the coronal plane (front to back) but not in the saggital plane (up and down). 
+{\bf Control:} Glass displays a user interface for parameters of the chosen device. The interface is controlled with the temple-mounted touchpad through the following gesture set: tapping toggles discrete parameters (such as power for a lamp as Figure~\ref{fig:control_lamp}); single finger swipe changes between available parameters; double finger swipe adjusts continuous parameters (such as volume for a video player as Figure~\ref{fig:control_tv}). This scheme was chosen because the touchpad is only comfortably operable in the coronal plane (front to back) but not in the saggital plane (up and down). 
 Control commands are sent over XBee radios.
 
 {\bf Disengagement:} Users stay connected to the last selected device up to a timeout period. During that period, users can disengage through down swipes.
