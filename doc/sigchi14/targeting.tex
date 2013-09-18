@@ -4,7 +4,7 @@ To understand the accuracy and performance of head-orientation-based  selection 
 \begin{figure}[t]
 \centering
 \includegraphics[width=1.0\columnwidth]{figures/targeting-study-layout.pdf}
-\caption{In the targeting study, participants had to find and select one of 10 targets in a lab environment. Targets were called out by number; for the list condition, participants had to match numbers to letters.}
+\caption{In the targeting study, participants had to find and select one of 10 targets in a lab environment. Targets were called out by number; for the list mode condition, participants need to match numbers to letters.}
 \label{fig:targeting-study-layout}
 \end{figure}
 
@@ -19,15 +19,15 @@ In an indoor environment, 10 wireless nodes are spread across a room at various 
 \end{figure}
 
 \subsection{Methodology}
-In our within-subjects design, participants performed 15 target acquisition tasks each with two interaction styles. In the {\em infrared} condition, participants used our IR targeting approach; in the {\em list} condition, participants had to look up a device's letter code on the printed paper next to the device and then select that letter code from a list displayed on their Glass device. The list was navigated with swipe motions on the Glass touchpad. For each task, participants started at a fixed position in the room. The experimenter called out a number and simultaneously started a timer. Participants then had to find the corresponding device (by looking for its printed code). In the {\em infrared} condition, participants then selected and acquired the target by aiming the infrared beam at the target, and confirmed their selection with a touch pad tap. If more than one target was within range, participants had to either use the disambiguation dialog or reposition themselves. In the {\em list} condition, participants had to read the letter next to the number and then select that letter by browsing a linear list shown in their Glass display. While the list was alphabetized, letter arrangement in the room was not. This design required participants to find the target in the room before starting a list navigation to keep visual search times similar in each condition.
+In our within-subjects design, participants performed 15 target acquisition tasks each with two interaction styles. In the {\em infrared} mode condition, participants used our IR targeting approach; in the {\em list} mode condition, participants had to look up a device's letter code on the printed paper next to the device and then select that letter code from a list displayed on their Glass device. The list was navigated with swipe motions on the Glass touchpad. For each task, participants started at a fixed position in the room. The experimenter called out a number and simultaneously started a timer. Participants then had to find the corresponding device (by looking for its printed code). In the {\em infrared} mode, participants then selected and acquired the target by aiming the IR beam at the target, and confirmed their selection with a touch pad tap. If more than one target was within range, participants had to either use the disambiguation dialog or reposition themselves. In the {\em list} mode, participants had to read the letter next to the number and then select that letter by browsing a linear list shown in their Glass display. While the list was alphabetized, letter arrangement in the room was not. This design required participants to find the target in the room before starting a list navigation to keep visual search times similar in each condition.
 
 Afterwards, participants completed a survey that elicited answers to Likert-scale questions as well as open-ended answers about their experience.
 
 \subsection{Participants}
-We recruited 14 participants from our institution. 13 had never used Glass before. 4 wore prescription glasses, which may have affected their task performance as wearing glasses beneath Glass makes it more cumbersome to secure the position of Glass and to adjust the screen to the optimal angle. Half of them performed {\em infrared} condition first and the other half did {\em list} condition first.
+We recruited 14 participants from our institution. 13 had never used Glass before. 4 wore prescription glasses, which may have affected their task performance as wearing glasses beneath Glass makes it more cumbersome to secure the position of Glass and to adjust the screen to the optimal angle. Half of them performed {\em infrared} mode first and the other half did {\em list} mode first.
 
 \subsection{Measures}
-The main measures were {\bf target acquisition time}: the time required to identify, select, and connect to a wireless target device; {\bf error rate} and {\bf user preference}: which interface users preferred for the task after completing the study.
+The main measures were {\bf target acquisition time}: the time required to identify, select, and connect to a wireless target device; and {\bf user preference}: which interface users preferred for the task after completing the study.
 
 \subsection{Results}
 \subsubsection{Performance data}
@@ -37,33 +37,34 @@ $t_{infrared}=t_{locate}[+t_{reorient}][+t_{disambiguate}]+t_{tap}$
 
 $t_{list}=t_{locate}+t_{listnav}+t_{tap}$
 
-In both conditions, participants first have to locate the target announced by the experimenter through visual search ($t_{locate}$). In the {\em infrared} condition, participants may then directly confirm their selection if only a single target was selected ($t_{tap}$). However, if they don't immediately receive feedback that their target was selected, or if multiple targets were selected, users either have change their position or head orientation ($t_{reorient}$) or they have to step through the on-screen disambiguation dialog ($t_{disambiguate}$). In the {\em list} condition, participants must scroll through the list to find the desired target identifier ($t_{listnav}$).
+In both conditions, participants first have to locate the target announced by the experimenter through visual search ($t_{locate}$). In the {\em infrared} mode, participants may then directly confirm their selection if only a single target was selected ($t_{tap}$). However, if they don't immediately receive feedback that their target was selected, or if multiple targets were selected, users either have change their position or head orientation ($t_{reorient}$) or they have to step through the on-screen disambiguation dialog ($t_{disambiguate}$). In the {\em list} mode, participants must scroll through the list to find the desired target identifier ($t_{listnav}$).
 Thus, {\em infrared} will show a performance benefit if $(t_{reorient}+t_{disambiguate})<t_{listnav}$. This depends on the number of total devices in the environment (increasing $t_{listnav}$), and their density (which will increase $t_{disambiguate}$). 
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=1.0\columnwidth]{figures/R_time_by_Category.pdf}
-\caption{Boxplot of task completion times for the comparison between {\em infrared} condition and {\em list} condition (A), between IR multiple responses cases and IR single response cases (B). The centers of boxes are median values, while white dashed lines are mean values; they are also annotated on the top part.}
+\caption{Boxplot of task completion times for the comparison between {\em infrared} mode and {\em list} mode (A), between IR multiple responses cases and IR single response cases (B). The centers of boxes are median values, while white dashed lines are mean values; they are also annotated on the top part.}
 \label{fig:selection-times}
 \end{figure}
 
 We first show results for 10 targets and then discuss extrapolations of these results. Average target acquisition time $t_{infrared}$ was 6.67 seconds, while $t_{list}$ was 8.86 seconds (Figure~\ref{fig:selection-times}A). This difference is significant (Student's t-test, $t(279)=-3.81, p=0.00017$). % \bjoern{you need to report the t statistic and degrees of freedom as well - t(df)= n,p=m.} 
 
-To further understand the performance gain in {\em infrared} condition, especially the factor $t_{disambiguate}$, we compare selection times when multiple devices are targeted (and disambiguation is required) to single-device selection times (Figure~\ref{fig:selection-times}B). When there is a single device, $t_{disambiguate}$ is 0 and it takes 6.40 seconds (on average) to complete the connection. When multiple devices are in range, the time increases to 9.16 seconds, indicating 2.76 seconds required to disambiguate. Though it takes significantly longer ($t(19)=-2.7827, p=0.012$ using t-test) in the {\em multiple} case, these cases made up only 10\% of total infrared trials.
+To further understand the performance gain in {\em infrared} mode, especially the factor $t_{disambiguate}$, we compare selection times when multiple devices are targeted (and disambiguation is required) to single-device selection times (Figure~\ref{fig:selection-times}B). When there is a single device, $t_{disambiguate}$ is 0 and it takes 6.40 seconds (on average) to complete the connection. When multiple devices are in range, the time increases to 9.16 seconds, indicating 2.76 seconds required to disambiguate. Though it takes significantly longer ($t(19)=-2.7827, p=0.012$ using t-test) in the {\em multiple} case, these cases made up only 10\% of total infrared trials.
 %, even we intentionally placed a few devices nearer to each other. % 19 / (19+168 )
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=1.0\columnwidth]{figures/R_List_by_Target.pdf}
-\caption{Time taken to select a device vs.~the order in the list. The dotted line is a linear fit between the mean times and device orders. We also annotate two horizontal lines in {\em infrared} condition to compare different techniques.} % \bjoern{Add horizontal lines at $t_{IRsingle}$ and $t_{IRmultiple}$.}
+\caption{Times taken to select a device vs.~the order in the list. The dotted line is a linear fit between the mean times and device orders. Two horizontal lines of mean target acquisition times in {\em infrared} mode are also annotated for comparison.}
+ % \bjoern{Add horizontal lines at $t_{IRsingle}$ and $t_{IRmultiple}$.}
 \label{fig:time-vs-list-order}
 \end{figure}
 
-For each device, $t_{listnav}$ depends on their relative position in the list. Figure~\ref{fig:time-vs-list-order} shows the time it takes to select a device (means and standard deviations) as a function of its list position - the trend line (dotted) enables extrapolation to estimate at what number of devices different interaction techniques will outperform {\em list} condition. 
+For each device, $t_{listnav}$ depends on their relative position in the list. Figure~\ref{fig:time-vs-list-order} shows the time it takes to select a device (means and standard deviations) as a function of its list position - the trend line (dotted) enables extrapolation to estimate at what number of devices the {\em infrared} mode interaction techniques will outperform {\em list} mode\footnote{The higher mean value at $order=1$ is caused by one outlier when the participant failed multiple times to connect to the right target}. From the figure, we can see that once the target's order has increased to be larger than 6, the average $t_{listnav}$ would be larger than $t_{reorient} + t_{disambiguate}$. 
 
 % \bjoern{A linear trend is visible, and the regression returns with coefficient of determination ($R^2=0.032$). --- This R value is basically no correlation at all! try to run a correlation only on the median times. }
 
-Error rates were low in both conditions (1.1\% in {\em infrared} condition, and 2.9\% in {\em list} condition), precluding us from running a more detailed analysis.
+Participants' selection errors do occur in both conditions. However, error rates were low (1.1\% in {\em infrared} mode, and 2.9\% in {\em list} mode, repspectively). This precludes us from running a more detailed analysis. 
 
 \begin{figure}[t]
 \centering
