@@ -46,6 +46,48 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
   }
 }
 
+## Summarizes data.
+## Gives count, mean, standard deviation, standard error of the mean, and confidence interval (default 95%).
+##   data: a data frame.
+##   measurevar: the name of a column that contains the variable to be summariezed
+##   groupvars: a vector containing names of columns that contain grouping variables
+##   na.rm: a boolean that indicates whether to ignore NA's
+##   conf.interval: the percent range of the confidence interval (default is 95%)
+summarySE <- function(data=NULL, measurevar, groupvars=NULL, na.rm=FALSE, conf.interval=.95, .drop=TRUE) {
+    require(plyr)
+
+    # New version of length which can handle NA's: if na.rm==T, don't count them
+    length2 <- function (x, na.rm=FALSE) {
+        if (na.rm) sum(!is.na(x))
+        else       length(x)
+    }
+
+    # This is does the summary; it's not easy to understand...
+    datac <- ddply(data, groupvars, .drop=.drop,
+                   .fun= function(xx, col, na.rm) {
+                           c( N    = length2(xx[,col], na.rm=na.rm),
+                              mean = mean   (xx[,col], na.rm=na.rm),
+                              sd   = sd     (xx[,col], na.rm=na.rm)
+                              )
+                          },
+                    measurevar,
+                    na.rm
+             )
+
+    # Rename the "mean" column    
+    datac <- rename(datac, c("mean"=measurevar))
+
+    datac$se <- datac$sd / sqrt(datac$N)  # Calculate standard error of the mean
+
+    # Confidence interval multiplier for standard error
+    # Calculate t-statistic for confidence interval: 
+    # e.g., if conf.interval is .95, use .975 (above/below), and use df=N-1
+    ciMult <- qt(conf.interval/2 + .5, datac$N-1)
+    datac$ci <- datac$se * ciMult
+
+    return(datac)
+}
+
 
 ## read data in first
 df <- read.csv("data.csv")
@@ -57,28 +99,41 @@ df <- df[!(grepl("valkerie", df$participant) | grepl("Micheal", df$participant))
 df.IR.single <- df[grepl("IR", df$mode) & grepl("single", df$correct_type), ]
 df.IR.mul <- df[grepl("IR", df$mode) & grepl("mul", df$correct_type), ]
 
-# function for mean labels
-mean.n <- function(x){
-  return(c(y = 3, label = round(median(x),2))) 
-  # experiment with the multiplier to find the perfect position
-}
-
 #### draw the list mode, time vs. position
 ## notice this is no longer reproducible for the graph we use in the paper
 ## due to my stupid usage of git
 pdf("../../doc/sigchi14/figures/R_List_by_Target.pdf", width=7, height=4)
 df.List <- df[grepl("List", df$mode), ]
+df.List <- df.List[!grepl("next", df.List$fate),]
 # mapping from id to name
 name <- "GOWFJSYRAM"
 df.List$target <- sapply(df.List$target, function(x) substr(name, x, x))
+dfc <- summarySE(df.List, measurevar="correct_time", groupvars = "target", na.rm=TRUE)
 label.x <- sapply(names(table(df.List$target)), function(x) regexpr(x, name))
+# Standard error of the mean
+cols <- c("LINE1"="#56B4E9","LINE2"="#3591d1","BAR"="#62c76b")
+ggplot(dfc, aes(x=target, y=correct_time, group=1)) + 
+    geom_line(lwd=0.5, alpha=0.5) +
+    geom_errorbar(aes(ymin=correct_time-se, ymax=correct_time+se), width=.1) +
+    geom_point(shape=21, size=3, fill="white") +
+    geom_abline(intercept = 5.08526, slope = 0.59287, lwd=0.5, alpha=0.7, linetype=3) +
+    geom_hline(lwd=0.5, colour = "#56B4E9" , yintercept=9.16, linetype=1) +
+    geom_hline(lwd=0.5, colour = "#56B4E9", yintercept=6.40, linetype=1) +
+    annotate("text", x = 1, y = 9.4, colour = "#56B4E9", label = "IR multiple", size=4) +
+    annotate("text", x = 0.9, y = 6.66, colour = "#56B4E9", label = "IR single", size=4) +
+    ylim(3,14) + xlab("order in list") + ylab("time (seconds)") + scale_x_discrete(labels=seq(0, 9)) +
+    scale_colour_manual(name="Error Bars",values=cols) + scale_fill_manual(name="Bar",values=cols) +
+    theme(legend.position = c(.5, .5))
+dev.off()
+
 box <- ggplot(df.List, aes(factor(target), correct_time))
 box <- box + geom_boxplot(lwd=0.5, fill = '#9FB987', alpha=0.3) + ylim(2.5,15) + xlab("order in list") + ylab("time (seconds)") + scale_x_discrete(labels=seq(0, 9))
-box <- box + geom_hline(lwd=0.5, fill='black', yintercept=9.16) +
+box <- box +
+    geom_hline(lwd=0.5, fill='black', yintercept=9.16) +
     geom_hline(lwd=0.5, fill='black', yintercept=6.40) +
-    geom_abline(intercept = 5.04, slope = 0.6, lwd=0.5) +
+    geom_abline(intercept = 5.74455, slope = 0.51521, lwd=0.5) +
 ##    stat_summary(fun.y = "median", geom = "text", label="---", size= 6, color= "blue") +
-    stat_summary(fun.data = function(x) c(y = 2.6, label = round(median(x),2)), geom = "text", size = 4, fun.y = median)
+    stat_summary(fun.data = function(x) c(y = 2.6, label = round(mean(x),2)), geom = "text", size = 4, fun.y = mean)
 ## linear fit
 sorted.name <- sort(unique(df.List$target))
 target1 <- sapply(df.List$target, function(x) which(sorted.name == x) - 1)
@@ -86,11 +141,50 @@ fit <- lm(df.List$correct_time ~ target1)
 box + theme(legend.position = "none") 
 dev.off()
 
+## Call:
+## lm(formula = dfc$correct_time ~ seq(1, 10))
 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -0.8289 -0.4426 -0.3235  0.4911  1.1009 
 
-## y <- c(4.76, 6.25, 5.67, 6.92, 7.25, 8.1, 9.34, 8.99, 10, 10.11)
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  5.08526    0.49923  10.186 7.40e-06 ***
+## seq(1, 10)   0.59287    0.08046   7.369 7.85e-05 ***
+## ---
+## Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+
+## Residual standard error: 0.7308 on 8 degrees of freedom
+## Multiple R-squared: 0.8716,	Adjusted R-squared: 0.8555 
+## F-statistic:  54.3 on 1 and 8 DF,  p-value: 7.852e-05
+
+## y1 <- c(5.24, 7.37, 6.03, 7.03, 7.8, 8.78, 9.28, 8.94, 9.98, 10.18)
+## y2 <- c(4.76, 6.25, 5.67, 6.92, 7.25, 8.1, 9.34, 8.99, 10, 10.11)
 ## x <- seq(0, 9)
-## summary(lm(y~x))
+
+## summary(lm(y1~x))
+
+## Call:
+## lm(formula = y ~ x)
+
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -0.7450 -0.3733 -0.1034  0.3616  1.1102 
+
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  5.74455    0.34402  16.698 1.67e-07 ***
+## x            0.51521    0.06444   7.995 4.39e-05 ***
+## ---
+## Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+
+## Residual standard error: 0.5853 on 8 degrees of freedom
+## Multiple R-squared: 0.8888,	Adjusted R-squared: 0.8749 
+## F-statistic: 63.92 on 1 and 8 DF,  p-value: 4.386e-05 
+
+
+## summary(lm(y2~x))
 
 ## Call:
 ## lm(formula = y ~ x)
