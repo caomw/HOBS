@@ -63,11 +63,7 @@ These design goals find their expression in the following interaction model:
 \end{figure}
 
 {\bf Look:} Users select a target device by looking in its general direction.
-<<<<<<< HEAD
 Glass periodically sends a device id through its IR emitter analogous to Patel's approach~\cite{patel_2-way_2003}. Target appliances have IR receivers and offer immediate visual feedback by toggling a red LED whenever a valid id is received (Figure~\ref{fig:interaction}B). This enables {\em scanning} the environment with one's gaze to see which devices can be controlled.
-=======
-Glass periodically sends a device id through its IR emitter analogous to Patel's approach~\cite{patel_2-way_2003}. Target appliances have IR receivers and offer immediate visual feedback by toggling a red LED whenever a valid id is received (Figure~\ref{fig:interaction}A~\ref{fig:interaction}B). This enables {\em scanning} the environment with ones gaze to see which devices can be controlled.
->>>>>>> 4518d722cf3e3fd0f26848ef395c57e892903062
 
 {\bf Initiate:} Users confirm their desire to connect to a device by tapping on the Glass touchpad (Figure~\ref{fig:interaction}C). The next section on disambiguation deals with cases in which multiple devices received valid IR signals. At this point, all further communication switches over to the 802.15.4 wireless network so that line of sight to the target is no longer needed.
 
