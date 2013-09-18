@@ -57,8 +57,15 @@ df <- df[!(grepl("valkerie", df$participant) | grepl("Micheal", df$participant))
 df.IR.single <- df[grepl("IR", df$mode) & grepl("single", df$correct_type), ]
 df.IR.mul <- df[grepl("IR", df$mode) & grepl("mul", df$correct_type), ]
 
+# function for mean labels
+mean.n <- function(x){
+  return(c(y = 3, label = round(median(x),2))) 
+  # experiment with the multiplier to find the perfect position
+}
 
 #### draw the list mode, time vs. position
+## notice this is no longer reproducible for the graph we use in the paper
+## due to my stupid usage of git
 pdf("../../doc/sigchi14/figures/R_List_by_Target.pdf", width=7, height=4)
 df.List <- df[grepl("List", df$mode), ]
 # mapping from id to name
@@ -66,9 +73,12 @@ name <- "GOWFJSYRAM"
 df.List$target <- sapply(df.List$target, function(x) substr(name, x, x))
 label.x <- sapply(names(table(df.List$target)), function(x) regexpr(x, name))
 box <- ggplot(df.List, aes(factor(target), correct_time))
-box <- box + geom_boxplot(lwd=0.5, fill = '#9FB987') + ylim(2.5,15) + xlab("order in list") + ylab("time (seconds)") # + scale_x_discrete(labels=seq(0, 9))
-box <- box + geom_smooth(lwd=1.5, linetype=2, colour = "#477843", aes(group = 1), method="lm", se = F)
-#box <- box + geom_line(data.frame(x = c(0,9), y = c(6.740350,10.85737)), aes(x, y), colour = "red")
+box <- box + geom_boxplot(lwd=0.5, fill = '#9FB987', alpha=0.3) + ylim(2.5,15) + xlab("order in list") + ylab("time (seconds)") + scale_x_discrete(labels=seq(0, 9))
+box <- box + geom_hline(lwd=0.5, fill='black', yintercept=9.16) +
+    geom_hline(lwd=0.5, fill='black', yintercept=6.40) +
+    geom_abline(intercept = 5.04, slope = 0.6, lwd=0.5) +
+##    stat_summary(fun.y = "median", geom = "text", label="---", size= 6, color= "blue") +
+    stat_summary(fun.data = function(x) c(y = 2.6, label = round(median(x),2)), geom = "text", size = 4, fun.y = median)
 ## linear fit
 sorted.name <- sort(unique(df.List$target))
 target1 <- sapply(df.List$target, function(x) which(sorted.name == x) - 1)
@@ -76,25 +86,29 @@ fit <- lm(df.List$correct_time ~ target1)
 box + theme(legend.position = "none") 
 dev.off()
 
-## > summary(fit)
+
+
+## y <- c(4.76, 6.25, 5.67, 6.92, 7.25, 8.1, 9.34, 8.99, 10, 10.11)
+## x <- seq(0, 9)
+## summary(lm(y~x))
 
 ## Call:
-## lm(formula = df.List$correct_time ~ target1)
+## lm(formula = y ~ x)
 
 ## Residuals:
-##    Min     1Q Median     3Q    Max 
-## -3.904 -2.106 -1.066  0.260 95.364 
+##     Min      1Q  Median      3Q     Max 
+## -0.5673 -0.2697 -0.0640  0.1395  0.7000 
 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)   6.7403     0.9685   6.959 4.62e-11 ***
-## target1       0.4574     0.1768   2.588   0.0104 *  
+## (Intercept)  5.03600    0.25522   19.73 4.53e-08 ***
+## x            0.60067    0.04781   12.56 1.51e-06 ***
 ## ---
 ## Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 
-## Residual standard error: 7.416 on 203 degrees of freedom
-## Multiple R-squared: 0.03193,	Adjusted R-squared: 0.02716 
-## F-statistic: 6.696 on 1 and 203 DF,  p-value: 0.01036 
+## Residual standard error: 0.4342 on 8 degrees of freedom
+## Multiple R-squared: 0.9518,	Adjusted R-squared: 0.9457 
+## F-statistic: 157.9 on 1 and 8 DF,  p-value: 1.509e-06
 
 
 pdf("../../doc/sigchi14/figures/R_List_by_Target.pdf", width=7, height=4)
@@ -121,17 +135,26 @@ mode.bind.type <- cbind(df, paste(df$mode, df$correct_type))
 colnames(mode.bind.type)[14] <- "mode_type"
 pdf("../../doc/sigchi14/figures/R_time_by_Category.pdf", width=7, height=4)
 box1 <- ggplot(mode.bind.type, aes(factor(mode), correct_time, fill = mode.bind.type$mode))
-box1 <- box1 + geom_boxplot(lwd=0.5) + ylim(2.5,25) + xlab("different mode") +
+box1 <- box1 + geom_boxplot(lwd=0.5) + ylim(2.5,25) + xlab("(A)") +
     theme(legend.position = "none") +
     scale_fill_manual(values = c("#A4C3D9", "#9FB987")) + #477843
     stat_summary(fun.y = "mean", geom = "text", label="---", size= 8, color= "white") +
-    ylab("time (seconds)")
+    ylab("time (seconds)") +
+    annotate("text", x = 1, y = 25, label = "mean: 6.67", size=3.6) +
+    annotate("text", x = 1, y = 23.6, label = "median: 5.77", size=3.6) +
+    annotate("text", x = 2, y = 25, label = "mean: 8.86", size=3.6) +
+    annotate("text", x = 2, y = 23.6, label = "median: 7.96", size=3.6)
 toPlot <- mode.bind.type[grepl("IR", mode.bind.type$mode_type), ]
 box2 <- ggplot(toPlot, aes(factor(mode_type), correct_time, fill = toPlot$mode_type))
-box2 <- box2 + geom_boxplot(lwd=0.5) + ylim(2.5,25) + xlab("IR mode") +
+box2 <- box2 + geom_boxplot(lwd=0.5) + ylim(2.5,25) + xlab("(B)") +
     theme(legend.position = "none", axis.title.y=element_blank()) +
     scale_fill_manual(values = c("#0072B2", "#56B4E9")) +
-    stat_summary(fun.y = "mean", geom = "text", label="---", size= 8, color= "white")
+    stat_summary(fun.y = "mean", geom = "text", label="---", size= 8, color= "white") +
+    annotate("text", x = 1, y = 25, label = "mean: 9.16", size=3.6) +
+    annotate("text", x = 1, y = 23.6, label = "median: 7.67", size=3.6) +
+    annotate("text", x = 2, y = 25, label = "mean: 6.40", size=3.6) +
+    annotate("text", x = 2, y = 23.6, label = "median: 5.63", size=3.6) +
+    scale_x_discrete(labels=c("IR multiple", "IR single"))
 multiplot(box1, box2, cols=2)
 dev.off()
 

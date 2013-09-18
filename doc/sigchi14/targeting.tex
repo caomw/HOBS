@@ -43,19 +43,19 @@ Thus, {\em infrared} will show a performance benefit if $(t_{reorient}+t_{disamb
 \begin{figure}[t]
 \centering
 \includegraphics[width=1.0\columnwidth]{figures/R_time_by_Category.pdf}
-\caption{Task completion times.} \ben{label mean, change xtick}
+\caption{Boxplot of task completion times for the comparison between {\em infrared} condition and {\em list} condition (A), between IR multiple responses cases and IR single response cases (B). The centers of boxes are median values, while white dashed lines are mean values; they are also annotated on the top part.}
 \label{fig:selection-times}
 \end{figure}
 
 We first show results for 10 targets and then discuss extrapolations of these results. Average target acquisition time $t_{infrared}$ was 6.67 seconds, while $t_{list}$ was 8.86 seconds (Figure~\ref{fig:selection-times}A). This difference is significant (Student's t-test, $t(279)=-3.81, p=0.00017$). % \bjoern{you need to report the t statistic and degrees of freedom as well - t(df)= n,p=m.} 
 
-To further understand the performance gain in {\em infrared} condition, especially the factor $t_{disambiguate}$, we compare selection times when multiple devices are targeted (and disambiguation is required) to single-device selection times (Figure~\ref{fig:selection-times}B). When there is a single device, $t_{disambiguate}$ is 0 and it takes 6.40 seconds (on average) to complete the connection. When multiple devices are in range, the time increases to 9.16 seconds, indicating 2.76 seconds required to disambiguate. Though it takes significantly longer (p=0.012 using t-test) in the {\em multiple} case, these cases made up only 10\% of total infrared trials.
+To further understand the performance gain in {\em infrared} condition, especially the factor $t_{disambiguate}$, we compare selection times when multiple devices are targeted (and disambiguation is required) to single-device selection times (Figure~\ref{fig:selection-times}B). When there is a single device, $t_{disambiguate}$ is 0 and it takes 6.40 seconds (on average) to complete the connection. When multiple devices are in range, the time increases to 9.16 seconds, indicating 2.76 seconds required to disambiguate. Though it takes significantly longer ($t(19)=-2.7827, p=0.012$ using t-test) in the {\em multiple} case, these cases made up only 10\% of total infrared trials.
 %, even we intentionally placed a few devices nearer to each other. % 19 / (19+168 )
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=1.0\columnwidth]{figures/R_List_by_Target.pdf}
-\caption{Average time taken vs. the order of nodes on the list  } \bjoern{Add horizontal lines at $t_IRsingle$ and $t_IRmultiple$.}
+\caption{Time taken to select a device vs. the order in the list.} % \bjoern{Add horizontal lines at $t_{IRsingle}$ and $t_{IRmultiple}$.}
 \label{fig:time-vs-list-order}
 \end{figure}
 
