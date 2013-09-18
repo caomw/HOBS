@@ -9,14 +9,13 @@ To understand the accuracy and performance of head-orientation-based  selection 
 \end{figure}
 
 \subsection{Apparatus}
-In an indoor environment, 10 wireless nodes are spread across a room at various heights and distances (see Figure~\ref{fig:targeting-study-layout}). The nodes are stand-ins for potential smart appliances and have all relevant functionality for targeting and wireless communication, but do not control any actual appliances. Each node is an embedded wireless system with a microcontroller, IR receiver, a wireless XBee radio, and three status LEDs (see Figure~\ref{fig:target}). An orange LED indicates that the device is the target that should be selected in the current trial; a red LED lights up whenever the device receives an IR signal from Glass; a blue LED shows when participants have successfully connected to a device, and is also used for disambiguation when multiple clients are within IR range. Next to each client device, a paper sheet shows a number and letter combination, which are used for uniquely identifying the devices. The numbers are the primary identifiers, ordered from left to right in the room. This ordering makes it easy to locate them, which simulates looking towards an appliance with a well-known location in a room, and minimizes visual search time.
-
+In an indoor environment, 10 wireless nodes are spread across a room at various heights and distances (Figure~\ref{fig:targeting-study-layout}). The nodes are stand-ins for potential smart appliances and have all relevant functionality for targeting and wireless communication, but do not control any actual appliances. Each node is an embedded wireless system with a microcontroller, IR receiver, a wireless XBee radio, and three status LEDs (Figure~\ref{fig:target}). An yellow LED indicates that the device is the target that should be selected in the current trial; a red LED lights up whenever the device receives an IR signal from Glass; a blue LED shows when participants have successfully connected to a device, and is also used for disambiguation when multiple clients are within IR range. Next to each client device, a paper sheet shows a number and letter combination, which is used for uniquely identifying the device. The numbers are the primary identifiers, ordered from left to right in the room. This ordering makes it easy to locate them, which simulates looking towards an appliance with a well-known location in a room, and minimizes visual search time.
 
 \begin{figure}[b]
 \centering
 \includegraphics[width=0.8\columnwidth]{figures/study-node.pdf}
 \caption{An example node from the targeting study --- we constructed 10 such nodes - each mounted in a box.}
-\label{fig:targeting-study-layout}
+\label{fig:target}
 \end{figure}
 
 \subsection{Methodology}
@@ -25,7 +24,7 @@ In our within-subjects design, participants performed 15 target acquisition task
 Afterwards, participants completed a survey that elicited answers to Likert-scale questions as well as open-ended answers about their experience.
 
 \subsection{Participants}
-We recruited 14 participants from our institution. 13 had never used Glass before. 4 wore prescription glasses, which may have affected their task performance as wearing glasses beneath Glass makes it more cumbersome to secure the position of Glass and to adjust the screen to the optimal angle. Half of them performed {\em infrared} mode first and the other half did {/em list} mode first.
+We recruited 14 participants from our institution. 13 had never used Glass before. 4 wore prescription glasses, which may have affected their task performance as wearing glasses beneath Glass makes it more cumbersome to secure the position of Glass and to adjust the screen to the optimal angle. Half of them performed {\em infrared} condition first and the other half did {\em list} condition first.
 
 \subsection{Measures}
 The main measures were {\bf target acquisition time}: the time required to identify, select, and connect to a wireless target device; {\bf error rate} and {\bf user preference}: which interface users preferred for the task after completing the study.
@@ -48,9 +47,9 @@ Thus, {\em infrared} will show a performance benefit if $(t_{reorient}+t_{disamb
 \label{fig:selection-times}
 \end{figure}
 
-We first show results for 10 targets and then discuss extrapolations of these results. Average target acquisition time $t_{infrared}$ was 6.67 seconds, while $t_{list}$ was 8.86 seconds (Figure~\ref{fig:selection-times} {\em (left)}). This difference is significant (Student's t-test, p=0.00017). \bjoern{you need to report the t statistic and degrees of freedom as well - t(df)= n,p=m.} 
+We first show results for 10 targets and then discuss extrapolations of these results. Average target acquisition time $t_{infrared}$ was 6.67 seconds, while $t_{list}$ was 8.86 seconds (Figure~\ref{fig:selection-times}A). This difference is significant (Student's t-test, $t(279)=-3.81, p=0.00017$). % \bjoern{you need to report the t statistic and degrees of freedom as well - t(df)= n,p=m.} 
 
-To further understand the performance gain in {\em infrared} condition, especially the factor $t_{disambiguate}$, we compare selection times when multiple devices are targeted (and disambiguation or is required) to single-device selection times (Figure~\ref{fig:selection-times} {\em (right)}). When there is a single device, $t_{disambiguate}$ is 0 and it takes 6.40 seconds (on average) to complete the connection. When multiple devices are in range, the time increases to 9.16 seconds, indicating 2.76 seconds required to disambiguate. Though it takes significantly longer (p=0.012 using t-test) in the {\em multiple} case, these cases made up only 10\% of total infrared trials.
+To further understand the performance gain in {\em infrared} condition, especially the factor $t_{disambiguate}$, we compare selection times when multiple devices are targeted (and disambiguation is required) to single-device selection times (Figure~\ref{fig:selection-times}B). When there is a single device, $t_{disambiguate}$ is 0 and it takes 6.40 seconds (on average) to complete the connection. When multiple devices are in range, the time increases to 9.16 seconds, indicating 2.76 seconds required to disambiguate. Though it takes significantly longer (p=0.012 using t-test) in the {\em multiple} case, these cases made up only 10\% of total infrared trials.
 %, even we intentionally placed a few devices nearer to each other. % 19 / (19+168 )
 
 \begin{figure}[t]
@@ -60,7 +59,8 @@ To further understand the performance gain in {\em infrared} condition, especial
 \label{fig:time-vs-list-order}
 \end{figure}
 
-For each device, $t_{listnav}$ depends on their relative position in the list. Figure~\ref{fig:time-vs-list-order} shows the time it takes to select a device as a function of its list position - the trend line enables extrapolation to estimate at what number of devices different interaction techniques will outperform list mode. \bjoern{A linear trend is visible, and the regression returns with coefficient of determination ($R^2=0.032$). --- This R value is basically no correlation at all! try to run a correlation only on the median times. }
+For each device, $t_{listnav}$ depends on their relative position in the list. Figure~\ref{fig:time-vs-list-order} shows the time it takes to select a device as a function of its list position - the trend line enables extrapolation to estimate at what number of devices different interaction techniques will outperform {\em list} condition. We see a linear trend of the median values, and the fit returns $R^2=0.952$, indicating a strong linear prediction.
+% \bjoern{A linear trend is visible, and the regression returns with coefficient of determination ($R^2=0.032$). --- This R value is basically no correlation at all! try to run a correlation only on the median times. }
 
 \begin{figure}[t]
 \centering
@@ -72,7 +72,7 @@ For each device, $t_{listnav}$ depends on their relative position in the list. F
 Error rates were low in both conditions (\bjoern{enter number of user errors in each condition}), precluding us from running a more detailed analysis.
 
 \subsubsection{Preference}
-Eleven of 15 users preferred infrared mode over list mode (three preferred list, one was undecided). While both interfaces were judged similarly on overall ease of connecting, list navigation was also perceived to be cumbersome (see Figure~\ref{fig:target-likert}). As self-report data can easily skew positive as participants try to please experimenters, we also asked participants to elucidate why they preferred one interface over the other.
+Eleven of 15 users preferred infrared mode over list mode (three preferred list, one was undecided). While both interfaces were judged similarly on overall ease of connecting, list navigation was also perceived to be cumbersome (Figure~\ref{fig:target-likert}). As self-report data can easily skew positive as participants try to please experimenters, we also asked participants to elucidate why they preferred one interface over the other.
 
 List mode had certain advantages: It was judged to be more accurate and predictable as there was always exactly one device selected in the list (\studyquote{With the list you never have to worry about accidentally picking up two targets}). Also, it did not require a clear line of sight to the target device so participants did not have to move from their starting position (\studyquote{The shortcoming of the IR mode was that you had to be a certain distance away in order for it to detect the appliance}). 
 
