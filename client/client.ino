@@ -18,11 +18,10 @@
 #include <IRremote.h>
 #include <string.h>
 
-// #define DEBUG
-#define DEBUG_TAG
+/* #define DEBUG */
+/* #define DEBUG_TAG */
 
 #include "utils.h"
-
 
 // In this simplified design, there is no need to save states on client for feedback
 // so I have deleted all state variables like IDLE, PENDING, CONNECTED, etc.
@@ -118,7 +117,8 @@ void loop()
     }
   } 
 
-
+  // results.value = 0xFFFE;
+  
   if(irrecv.decode(&results)) {
     delay(5);
     // DEBUG_TAGGING("IR: ", results.value);
@@ -126,14 +126,12 @@ void loop()
       digitalWrite(ledSignalPin, HIGH);
       signal_time = millis();
       signal_response = true;
-    } else if(results.value <= 0x32){
+    } else if(results.value <= 0x32 && results.value > 0){
       // limit the session ID to be a random number between 0~50
       sendBackDeviceID();
       //setting itself to pending state and start blinking slow
       statePending = true;
       blinkShort = true;
-      
-      
     } else {
       //garbage message
     }

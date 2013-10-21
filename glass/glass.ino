@@ -59,14 +59,13 @@ void setup()
   Serial.begin(9600);
   randomSeed(analogRead(5));
   digitalWrite(ledPin, LOW);
+  pinMode(9, OUTPUT);  // Mega uses pin 9 for IR
   XBee.begin(9600);
   BT.begin(57600);
-  isWaitingReply = false;
   delay(100);
-
+  isWaitingReply = false;
   Serial.print("system begins!");
   ir_time = millis();
-
 }
 
 void loop() {
@@ -91,26 +90,41 @@ void loop() {
       } else {  //no respondants
         XBeeReturnIDs[0] = '\0';
       }
-        
+      BT.print("f"); //fuck
+      BT.println(XBeeReturnIDs);
       DEBUG_PRINT("IDs list:");
       DEBUG_PRINTLN(XBeeReturnIDs);
       DEBUG_PRINT("IDs counts:");
       DEBUG_PRINTLN(XBeeReturnCount);
+
+      isWaitingReply = false;
+
+      // print again to just ensure reception
+      delay(30);
+      BT.print("f"); //fuck
       BT.println(XBeeReturnIDs);
-      isWaitingReply = false;    
+
+      // print again to just ensure reception
+      delay(30);
+      BT.print("f"); //fuck
+      BT.println(XBeeReturnIDs);
+
+      // print again to just ensure reception
+      delay(30);
+      BT.print("f"); //fuck
+      BT.println(XBeeReturnIDs);
+
     }
   }
-
+  
   if(ir_bcast_mode){
     //constantly sending out ir broadcast as visual cue
     if(millis() - ir_time > ir_cycle) {
-      // -1 indicates for broacast which is different than normal session id
-      // DEBUG_PRINTLN("broadcasting IR");
+    // -1 indicates for broacast which is different than normal session id
       irsend.sendSony(0xFFFF,16);
       ir_time = millis();
     }  
   }
-  
       
   if (BT.available()) {
     // when receive message from Bluetooth, only trigger IR if
@@ -186,7 +200,6 @@ void loop() {
         DEBUG_PRINT("[BT]: send ");
         DEBUG_PRINTLN(message);  
         BT.println(message);
-
       }
     } 
     
@@ -213,7 +226,7 @@ boolean isFuncValid(char *message) {
 
 int readStringfromSerial (HardwareSerial *SS, char *strArray) {
   int i = 0;
-  while ((*SS).available()) {
+  while ((*SS).available() && i < 20) {
     strArray[i] = (*SS).read();
     if (strArray[i] == '\n') {
       break;
