@@ -21,12 +21,14 @@ void setup()
 {
   Serial.begin(9600);
   delay(100);
+  pinMode(9, OUTPUT);
+
   Serial.print("system begins!");
 }
 
 void loop() {
-  delay(1000);
-  unsigned int session_id = random(0xFFFF);
+  delay(300);
+  unsigned int session_id = 0xFFFF;
   Serial.print("[INIT] Sending IR: ");
   Serial.println(session_id);
   irsend.sendSony(session_id, 16);
