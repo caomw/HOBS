@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>WiSee</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Latest compiled and minified CSS -->
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <link href="./css/bootstrap-responsive.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 20px;
+        padding-bottom: 40px;
+      }
+
+      /* Custom container */
+      .container-narrow {
+        margin: 0 auto;
+        max-width: 800px;
+      }
+      .container-narrow > hr {
+        margin: 30px 0;
+      }
+    </style>
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+	<script src="//cdnjs.bootcss.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>
+	<![endif]-->
+
+    </script>
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://wisee.cs.washington.edu/assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://wisee.cs.washington.edu/assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://wisee.cs.washington.edu/assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="http://wisee.cs.washington.edu/assets/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="http://wisee.cs.washington.edu/assets/ico/favicon.png">
+    
+    <style>[touch-action="none"]{ -ms-touch-action: none; touch-action: none; }[touch-action="pan-x"]{ -ms-touch-action: pan-x; touch-action: pan-x; }[touch-action="pan-y"]{ -ms-touch-action: pan-y; touch-action: pan-y; }[touch-action="scroll"],[touch-action="pan-x pan-y"],[touch-action="pan-y pan-x"]{ -ms-touch-action: pan-x pan-y; touch-action: pan-x pan-y; }</style></head>
+
+<body>
+
+  <div id="banner" class="container-narrow">
+    <div class="masthead">
+      <ul class="nav nav-pills pull-right">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#motivation">Motivation</a></li>
+        <li><a href="#prototype">Prototype</a></li>
+        <li><a href="#people">Researchers</a></li>
+  	<li><a href="#publication">Publications</a></li>
+      </ul>
+      <h2 class="text-muted">GlasSees</h2>
+    </div>
+    <hr>
+
+    <section id="motivation">
+      <h3 class="text-muted">Motivation</h3>  	
+      <div class="row">
+	<div class="span8">
+	  <p>
+	    Increasingly, swarm devices in our built environment are networked and can be controlled remotely (visit <a href="http://swarmlab.eecs.berkeley.edu/">SwarmLab</a> and <a href="http://www.terraswarm.org/">TerraSwarm</a> for more on swarm vision). Their proliferation has raised the question of how to best interact with them, especially how to select the intended target. Existing list-browsing solutions have problems in scaling, and there is no consensus naming for physical appliances (use "Light 4 in area E"?). 
+	  </p>
+	  <p>
+	    There are various approaches, and we take the perspective of interacting with the swarm throught visual attention -- "what you see is what you can control". We illustrate an initial approach in the following figure, where a wearable device is employed to assist such interaction.</p>
+	  <br/>
+	  <img src="./images/stepbystep.png" class="span7 span_center" alt="Interacting with device by looking at them"/>
+	</div>
+      </div>
+    </section>
+    
+    <section id="prototype">
+      <h3 class="text-muted">Prototype</h3>  	
+      <div class="row">
+	<div class="span8">
+	  <p>To explore and evaluate on this interaction technique, we have augmented Google Glass with a narrow-beam IR emitter for this purpose. This configuration yields a usable beam width of 2 to 4 feet (60 to 120cm) for targeting at room scale. And we instruments clients with IR receivers and LEDs for direct visual feedback.
+	  </p>
+	  <br/>
+	  <img src="./images/glass-with-ir.jpg" style="text-align:center;" class="span7" alt="Interacting with device by looking at them"/>
+	  <br>
+	</div>
+      </div>
+    </section>
+
+    <!-- <section id="demo"> -->
+    <!--   <h3 class="text-muted">Demo</h3>  	 -->
+    <!--   <div class="row"> -->
+    <!-- 	<div class="span8"> -->
+    <!-- 	  <p>A demo video of our system. -->
+    <!-- 	  </p> -->
+    <!-- 	  <div class="flex-video widescreen" style="text-align:center;"> -->
+    <!-- 	    <iframe allowfullscreen=""  width="640" height="390" src="http://youtu.be/XD2gHNFDIAc" frameborder="0"></iframe> -->
+    <!-- 	  </div> -->
+    <!-- 	</div> -->
+    <!--   </div> -->
+    <!-- </section> -->
+
+    <section id="people">
+      <h3 class="text-muted">Researchers</h3>  
+      <p> 
+        <a href="http://sean-c.com/">Yu-Hsiang Chen</a>, 
+        <a href="http://eecs.berkeley.edu/~benzh/">Ben Zhang</a>, 
+        <a href="#">Claire Tuna</a>,
+        <a href="http://research.google.com/pubs/author38946.html">Yang Li</a>, 
+        <a href="http://ptolemy.berkeley.edu/~eal/">Edward Lee</a>, 
+        <a href="http://www.cs.berkeley.edu/~bjoern/">Björn Hartmann</a>
+      </p>
+    </section>
+
+    <section id="publication">
+      <h3 class="text-muted">Publications</h3> 
+      <p>A Context Menu for the Real World: Controlling Physical Appliances Through Head-Worn Infrared Targeting [<a href="http://www.eecs.berkeley.edu/Pubs/TechRpts/2013/EECS-2013-182.pdf">paper</a>]</br> 
+      Yu-Hsiang Chen, Ben Zhang, Claire Tuna, Yang Li, Edward A. Lee and Björn Hartmann
+      <br>
+      <i>EECS Department, University of California, Berkeley, Technical Report</i>
+    </section>
+    
+    <br>
+    <br>
+    <div class="footer">
+      <p class="muted">&copy; <a href="http://eecs.berkeley.edu/~benzh/">Ben Zhang</a>, Electrical Engineering &amp; Computer Science, University of California, Berkeley.<br>Powered by <a href="http://getbootstrap.com/2.3.2/">Bootstrap</a>.<br></p>
+    </div>
+  </div> <!-- /container -->
+
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="./js/bootstrap.min.js"></script>
+  <script> window.onresize = function(){resizeFrame();}; </script>
+</div></body></html>
