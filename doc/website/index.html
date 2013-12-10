@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-    <title>WiSee</title>
+    <title>GlasSees</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -23,6 +23,31 @@
       .container-narrow > hr {
         margin: 30px 0;
       }
+
+      .flex-video {
+      position: relative;
+      padding-top: 25px;
+      padding-bottom: 67.5%;
+      height: 0;
+      margin-bottom: 16px;
+      overflow: hidden;
+      }
+      
+      .flex-video.widescreen { padding-bottom: 57.25%; }
+      .flex-video.vimeo { padding-top: 0; }
+      
+      .flex-video iframe,
+      .flex-video object,
+      .flex-video embed {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      }
+      @media only screen and (max-device-width: 800px), only screen and (device-width: 1024px) and (device-height: 600px), only screen and (width: 1280px) and (orientation: landscape), only screen and (device-width: 800px), only screen and (max-width: 767px) {
+      .flex-video { padding-top: 0; }
+      }
     </style>
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -31,11 +56,6 @@
 	<![endif]-->
 
     </script>
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://wisee.cs.washington.edu/assets/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://wisee.cs.washington.edu/assets/ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://wisee.cs.washington.edu/assets/ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="http://wisee.cs.washington.edu/assets/ico/apple-touch-icon-57-precomposed.png">
-    <link rel="shortcut icon" href="http://wisee.cs.washington.edu/assets/ico/favicon.png">
     
     <style>[touch-action="none"]{ -ms-touch-action: none; touch-action: none; }[touch-action="pan-x"]{ -ms-touch-action: pan-x; touch-action: pan-x; }[touch-action="pan-y"]{ -ms-touch-action: pan-y; touch-action: pan-y; }[touch-action="scroll"],[touch-action="pan-x pan-y"],[touch-action="pan-y pan-x"]{ -ms-touch-action: pan-x pan-y; touch-action: pan-x pan-y; }</style></head>
 
@@ -53,7 +73,16 @@
       <h2 class="text-muted">GlasSees</h2>
     </div>
     <hr>
-
+    <section id="video">
+      <h3 class="text-muted">What is GlasSees</h3>  	
+      <div class="row">
+	<div class="span8">
+	  <div class="flex-video widescreen">
+	  <iframe src="https://www.youtube.com/embed/UOfIj5nHHQ0" frameborder="0" allowfullscreen></iframe>
+	  </div>
+	</div>
+      </div>
+    </section>
     <section id="motivation">
       <h3 class="text-muted">Motivation</h3>  	
       <div class="row">
@@ -64,7 +93,9 @@
 	  <p>
 	    There are various approaches, and we take the perspective of interacting with the swarm throught visual attention -- "what you see is what you can control". We illustrate an initial approach in the following figure, where a wearable device is employed to assist such interaction.</p>
 	  <br/>
-	  <img src="./images/stepbystep.png" class="span7 span_center" alt="Interacting with device by looking at them"/>
+	  <p><img src="./images/stepbystep2.jpg" width="100%" alt="Interacting with device by looking at them"/></p>
+	  <br />
+	  <p><img src="./images/teaser_small.jpg" width="100%" alt="Teaser"/></p>
 	</div>
       </div>
     </section>
@@ -76,7 +107,7 @@
 	  <p>To explore and evaluate on this interaction technique, we have augmented Google Glass with a narrow-beam IR emitter for this purpose. This configuration yields a usable beam width of 2 to 4 feet (60 to 120cm) for targeting at room scale. And we instruments clients with IR receivers and LEDs for direct visual feedback.
 	  </p>
 	  <br/>
-	  <img src="./images/glass-with-ir.jpg" style="text-align:center;" class="span7" alt="Interacting with device by looking at them"/>
+	  <img src="./images/glass-with-ir.jpg" style="text-align:center;" width="100%" alt="Interacting with device by looking at them"/>
 	  <br>
 	</div>
       </div>
@@ -109,12 +140,11 @@
 
     <section id="publication">
       <h3 class="text-muted">Publications</h3> 
-      <p>A Context Menu for the Real World: Controlling Physical Appliances Through Head-Worn Infrared Targeting [<a href="http://www.eecs.berkeley.edu/Pubs/TechRpts/2013/EECS-2013-182.pdf">paper</a>]</br> 
+      <p>A Context Menu for the Real World: Controlling Physical Appliances Through Head-Worn Infrared Targeting [<a href="http://www.eecs.berkeley.edu/Pubs/TechRpts/2013/EECS-2013-199.pdf">paper</a>]</br> 
       Yu-Hsiang Chen, Ben Zhang, Claire Tuna, Yang Li, Edward A. Lee and Björn Hartmann
       <br>
       <i>EECS Department, University of California, Berkeley, Technical Report</i>
     </section>
-    
     <br>
     <br>
     <div class="footer">
