@@ -1,0 +1,34 @@
+\section{Discussion}
+Our study procedures demonstrated that users can successfully select and control smart appliances with head-worn infrared targeting, and that this technique outperforms list selection on the Google Glass wearable device. In this section, we revisit some of the results and observations and discuss their larger significance and potential paths for future work.
+
+\paragraph{Meaningful Results?}
+While the performance increase in our targeting study is statistically significant, readers may wonder whether it is truly meaningful. We believe it is, for two reasons: first, our technique avoids the problems of {\em naming} and {\em scoping} inherent in any interface that uses representations of objects (e.g., a list of identifiers) rather than the objects themselves. We argue that this disintermediation of interaction leads to a cognitively simpler design. Second, our existing study only showed results for a modest number of targets. Our technique should have a wider margin as the number of targets increases. Of course, the number of targets one can realistically expect may vary across application domains.
+
+\paragraph{Hands-Free Operation}
+While head movement is not as precise as hand positioning (e.g., in Patel's mobile laser pointing~\cite{patel_2-way_2003}), one key benefit of our target acquisition step is that it does not require the user's hands. This raises the question if the rest of the interaction (disambiguation and device control) could also be achieved in a hands-free fashion. Voice-command control is an obvious candidate, though such approaches have not found widespread adoption because of social acceptability and other factors.
+
+\paragraph{Hardware Limitations}
+In our prototype, the IR emitter is fixed in a single position. Due to different sizes and shapes of the users’ heads, the emitter may not line up exactly with their head orientation. An adjustable emitter (paired with a suitable calibration routing) would improve the performance of our design. Some of our users also mentioned that they had to move closer to some targets to successfully select them. A stronger emitter could overcome these problems, but care has to be taken to avoid possible reflection problems where IR light bounces off a wall and hits an unintended target behind the user.
+
+More importantly though, the main limitation of our design is that extra hardware for infrared communication is needed for the head-mounted device and each controllable appliance. One potential approach to sidestep this requirement would be to combine the growing availability of high-resolution indoor maps with live data from the point-of-view camera on the device to determine what a user is looking at without any infrared data exchange.
+
+\paragraph{The Midas Look}
+Our participants suggested eliminating explicit initiation of a connection by the user. However, one of the design guidelines for near-eye displays is to avoid pushing information to the display without an initial request from the user --- flashing device information on screen each time a user moves their head would surely be counterproductive. Future work should investigate how to intelligently decide when and how to initiate interaction for the user.
+
+\paragraph{Where is the Target?}
+One open design question of our approach is where infrared receivers should be placed. For a light, one might put a received on the light itself, or on the light switch, to cater to existing expectations. For volume control, the infrared receiver might be located on a speaker or on the amplifier. A thorough study of user preferences would be interesting; though we also point out that our architecture could easily support multiple receivers that end up controlling the same appliance.
+
+
+%Our prototype does not yet have a general way of communicating device descriptions and capabilities - this means our prototype cannot yet control new, unknown devices - they first have to be modeled. We may extend the PUC work~\cite{nichols} to address this issue.
+
+
+%bjoern: these below are details about what happened in the experiment; they are less relevant to the research contributions of the paper.
+%\item During the experiment, a lot of wireless messages were transferred for communication and logging purposes. Some messages got lost or delayed and caused the users had to redo that particular action. Infrared mode requires a lot of more handshake communications than the list mode. This means that in a more robust infrastructure, the performance of infrared mode can improve more than that of the list mode.
+
+%\item In list mode, users’ eyes focuses more on the display to traverse between the list while in infrared mode, users’ eyes remain in the physical world more.
+
+
+%\item The list mode could also be improved by making the swiping gestures more responsive, e.g. swiping speed affects traversing speed. % too detailed - partially covered later
+
+%\item In our experiment, after users locates the nodes by ID, they can instantly figure out their names by the label provided. In realistic environments, users have to recall the names of the appliances, which would take a lot more time. Furthermore, finding names such as “Living room corner stand lamp” would be more difficult than an alphabet. On the other hand, infrared mode will most likely to be unaffected since it does not require name-recalling or text matching. %too detailed
+

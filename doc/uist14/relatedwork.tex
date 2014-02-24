@@ -1,0 +1,34 @@
+\section{Related Work}
+\bjoern{TODO: Add discussion of ~\cite{swindells_that_2002,merrill_augmenting_2007}.}
+Relevant prior work exists in the areas of remote control of physical appliances, evaluations of pointing in physical space and augmented reality applications. We discuss each in turn.
+
+\subsection{Remote Control of Physical Appliances}
+Standard infrared remote controls for televisions and AV equipment are only meant to control a single device. These controllers tend to use wide-angle infrared LEDs. Universal remote controls are available as dedicated devices (e.g, Crestron\footnote{\url{http://www.crestron.com}}) or applications for smart phones (e.g., Belkin WeMo\footnote{\url{http://www.belkin.com/us/wemo}}). They do not offer spatial selection of target devices, forcing users to browse through lists of pre-configured devices instead. Rukzio found that users strongly preferred either touching a mobile device to a target appliance or pointing at a distance to list browsing~\cite{rukzio_experimental_2006}.
+
+Several approaches to spatial selection with handheld devices exist to control appliances~\cite{beigl_point_1999,patel_2-way_2003,wilson_xwand:_2003,schmidt_picontrol:_2012} or to exchange information with smart infrastructure sensor networks ~\cite{lifton_tricorder:_2007,mittal_ubicorder:_2011,costanza_sensortune:_2010}. Key design decisions are the method by which a target device is selected; and the method by which it is then later controlled or configured.
+
+In several techniques, users select objects of interest with laser pointers. The laser dot provides immediate visual feedback to the user what is being selected (though it does not indicate whether the pointed-at object can indeed be controlled). Furthermore, laser pointer becomes obtrusive when there are other people in the space. Beigl's early AIDA handheld combines laser pointing with IR communication to exchange commands~\cite{beigl_point_1999}. Patel extends this technique by modulating the laser light to communicate the controllers' identity~\cite{patel_2-way_2003} to initiate radio communication. These proofs-of-concept do not include thorough evaluations. Kemp et al. use a laser pointer to indicate to robots which item to pick up in a room~\cite{kemp_point-and-click_2008}. 
+
+The XWand~\cite{wilson_xwand:_2003} determines its absolute position and orientation and uses a virtual room model to select target devices. Position is determined through two ceiling-mounted cameras; orientation is determined using a built-in IMU. Users can employ physical gestures or utter speech commands to control selected devices. This technique requires room instrumentation and an up-to-date virtual model of device locations. The Tricorder~\cite{lifton_tricorder:_2007} uses IMU orientation coupled with room-localization based on received signal strength indicators (RSSI) to estimate what a user is pointing at.
+
+Handheld projectors can both display a user interface in space and communicate control information optically, e.g., by encoding information temporally (using Gray codes in Picontrol~\cite{schmidt_picontrol:_2012} and RFIG~\cite{raskar_rfig_2004}) or spatially (using QR codes in the infrared spectrum in SideBySide~\cite{willis_sidebyside:_2011}). Printed tags like QR codes can also be affixed to devices and read by cameras. Common tagging systems are optimized to be read from a close distance, though it is possible to redesign codes that can be read further away (by encoding less information)~\cite{cross_low-cost_2012}. 
+%However, visible tags at appropriate sizes may be rejected by users because of their negative aesthetic effect on the space.
+
+Our main area of differentiation is that we employ head orientation as the selection mechanism instead of pointing --- the user looks at the target device to initiate interaction. Selection techniques with very small selectors such as laser dots are less appropriate for head-mounted applications. We therefore select a source with a wider angle of illumination (an IR LED), but restrict its angle to be narrower than in general purpose IR applications.
+
+\subsection{Evaluation of room-scale selection}
+Pausch et al.'s early investigation of head-mounted displays compared head-tracking to handheld orientation control for a target acquisition task in a virtual reality room shown on a head-mounted display~\cite{pausch_user_1993}. They found a clear performance benefit for head-tracking.
+
+On the other hand, Card et al. experimentally determined that the bandwidth of neck muscles is much lower than that of arm, wrist or finger muscle groups~\cite{card_morphological_1991}, which limits the performance of any head orientation-based interaction scheme. However, many other factors such as device characteristics and device acquisition time (e.g., pulling a phone out of one's pocket) contribute to overall performance and preference of different selection techniques.  Compared to a screen where every pixel is a potential target, the required accuracy for physical device selection in a room is much lower, and head orientation may provide sufficient accuracy. Our work only uses head orientation for the initial selection step; since we believe a user's attention is often drawn to the objects they intend to interact with. 
+
+Myers et al compared different methods of interacting with displays at a distance~\cite{myers_interacting_2002} and quantified selection time and jitter or position error when using remote handheld pointing. Various techniques outperformed laser pointers. 
+
+Our work is complementary as it provides concrete performance data on using head orientation to select targets in a physical environment.
+
+
+\subsection{Augmented Reality Interfaces}
+Augmented reality applications overlay digital information and graphics on the real world, e.g., through head-mounted displays~\cite{azuma_recent_2001} or other wearable devices. 
+Our work is somewhat orthogonal to the research focus of this field as our device's graphics are shown in the visual periphery; they are not referenced to particular objects in the world, though our techniques could be extended to such configurations.
+
+%\bjoern{add something about the assembly instruction work here.}
+%\bjoern{most of the prior head-mounted work is in the AR space. I don't know much about it yet, but Kortuem~\cite{kortuem_context-aware_1998} might be a good starting point.}
