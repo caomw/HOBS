@@ -1,0 +1,409 @@
+CHI 2014 Papers and Notes
+
+Reviews of submission #1441: "A Context Menu for the Real World:
+Controlling Physical Appliances Through Head-Worn Infrared Targeting"
+
+------------------------ Submission 1441, Review 4 ------------------------
+
+Reviewer:           primary
+
+Your Assessment of this Paper's Contribution to HCI
+
+   This paper explores the usage of a modified hmd as remote control for
+   smart appliances.  A very simple proof-of-concept prototype is detailed
+   alongside a comparative user study. Results indicate that the
+   head-orientation based approach outperforms a linear list shown on the
+   hmd. I think this is a very small contribution and it is mainly based on
+   the thoroughness of the study design and execution.
+
+Overall Rating
+
+   3.0 - Neutral: Overall I would not argue for accepting or rejecting this paper. 
+
+Expertise
+
+   4  (Expert )
+
+The Review
+
+   he paper proposes the usage of a IR emitter attached to a commercially
+   available hmd in combination with IR receivers installed in the
+   environment. The head orientation is used to initiate device (or
+   receiver) communication. Once a device is selected the actual device
+   control is performed using the wearable computer. 
+
+   Using direct pointing as control method for real-world objects is
+   certainly not novel and using a head-worn optical emitter only makes
+   sense when the user has already opted into wearing the hmd. This in turn
+   makes the idea of using head orientation a rather straightforward (but
+   not generalizable) choice - I think the paper should tone down the
+   discussion and claims in that respect somewhat. The discussion of classic
+   VR literature is entertaining but not really all that relevant here as
+   this technique stands and falls with the (prior) decision to wear a hmd.
+   Without this no user would strap an IR emitter to their head, given that
+   they still needed to get a phone or other computing device out of their
+   pocket.
+
+   So if the concept (and implementation) is only a small contribution then
+   the main contribution must lie in the findings from the experiment. Not
+   surprisingly the bulk of the paper is made up by the different user
+   studies. I think the experiments are very well designed, structured and
+   reported. Furthermore the baseline for comparison (linear list on hmd)
+   makes sense. However, I do wonder how much we learn from the experiments.
+
+
+   The first experiment (device characterization) is somewhat odd as most of
+   the results should be attainable by consulting the datasheets and some
+   basic trigonometry unless I'm missing something. Of course taking
+   real-world measurements is valuable in the case of a real-world proposal
+   but this technology is certainly not what one would use in the real world
+   (the authors admit this in the conclusion). Therefore the value of this
+   exercise is very limited.  
+
+   The second experiment (appliance acquisition) is much more meaningful and
+   the results show that the proposed technique works better for
+   establishing communication with a smart appliance than the baseline. But
+   the question is does it matter? The savings over the baseline might be
+   statistically significant over the baseline but the task that is being
+   measured is only a fraction of the interaction. Surely actually
+   controlling the appliance is the more complex task (other than in the
+   most simplest cases such as lights) and will take up the most time. This
+   is not even discussed in the paper and it would have been interesting to
+   see whether the initiation of communication is actually the important
+   part or whether it is dominated by the actual device control. This
+   omission does dampen the contribution somewhat and I would recommend the
+   authors discuss this in their rebuttal. 
+
+   A final question is how the findings translate into the real world. The
+   paper admits that the technology itself is unlikely to be implemented as
+   is (due to the need of IR receivers and LED everywhere in the
+   environment). So one wonders what is the proposal for a real world
+   implementation? The suggestion that a camera based solution could be the
+   next step is farfetched as many technical difficult questions that aren't
+   in the slightest addressed remain and I would say that it is
+   intellectually dishonest to suggest the two approaches share many
+   communalities (a necessary condition in order for the findings of this
+   paper to be meaningful).  
+
+   In summary, I think this is a well written paper, well controlled and
+   executed study with mildly interesting results. Overall there is a small
+   contribution that may or may not be enough for a full paper at CHI.
+
+The Meta-Review
+
+   The   external reviewers are very much on the fence about this paper. R1
+   scores the lowest (2.5) and is the most critical in particular about the
+   generality of the concept and presentation of the paper. R2 gives a 3.5
+   score but does not provide many arguments that speak for inclusion of the
+   paper - in fact this reviewer has concerns about the novelty of the work
+   but appreciates the well-executed study. R3 also scores 3.5 and is the
+   most positive of the reviewers, this reviewer likes the study in general
+   and the choice of baseline  in particular. 
+
+   R1 raises concerns about the novelty of the approach. While many of the
+   approaches that use direct pointing have been discussed in the submission
+   this review also points to additional work that uses gaze, which is even
+   more accurate than the head-orientation proposed here. The reviewer
+   summarizes the concerns in saying "this paper presents a cool (maybe
+   somewhat obvious) idea, which was fully implemented, but it does not
+   contribute much new in terms of concept or technical depth".  
+
+   The reviewer also echoes my own concerns about how much this idea stands
+   on its own feet "If you happen to use
+   Glass, sure, you'd probably install this--but getting Glass for the sake
+   of a better universal remote control is not convincing". And suggests
+   that the first part of the study should be "substantially shortened" and
+   asks for clarification of the associated figures. The reviewer also
+   raises a very good point in asking how the advantages of the list-based
+   approach are considered here (or rather aren't).  Overall I would suggest
+   the authors take these issues seriously and try to address as many as
+   possible in their rebuttal.
+
+   R2 provides additional links to related work and asks for clarifications
+   in several places.
+
+   As mentioned earlier R3 is the most positive and  thinks "paper is very
+   well written and structured and addresses a timely and relevant research
+   area" and argues that the "overall interaction concept is very well
+   explained and the individual steps are very well motivated". The reviewer
+   also asks "to include a discussion of the technologies / approaches one
+   would / could use in practice when commercializing such a system".
+   Despite the overall positive outlook R3 thinks that the contribution is
+   probably limited "to 8 pages so it’s crisper and avoids lengthy
+   discussion of not so important aspects".
+
+   I would encourage the authors to address as many points of criticism as
+   possible in their rebuttal  especially concerns about the novelty of the
+   concept, the generality of it and the real-world relevance of the study
+   findings.
+
+
+------------------------ Submission 1441, Review 1 ------------------------
+
+Reviewer:           external
+
+Your Assessment of this Paper's Contribution to HCI
+
+   This paper presents a universal remote control implementation based on
+   Google Glass. To this end, Glass is augmented with a narrow-beam IR
+   emitter and a radio, and target appliances with an IR receiver, a radio,
+   and LEDs for feedback. Users look in the general direction of a target
+   for selection (using IR) and they control a target via an UI displayed in
+   Glass (using radio communication). The authors also present a
+   disambiguation technique. A user study suggests that users prefer and are
+   faster with selection based on head direction compared to list-based
+   selection.
+
+Overall Rating
+
+   2.5 . . . Between possibly reject and neutral 
+
+Expertise
+
+   4  (Expert )
+
+The Review
+
+   This paper presents a practical solution for a universal remote control
+   based on Google Glass. The system is fully implemented and appears to
+   work smoothly in a lab environment (judging from the video figure).
+   Interactions for selecting a remote appliance are straightforward and I
+   could imagine myself using such a system--if I had Glass.
+
+   On the downside, the idea of equipping appliances with sensors and
+   combining IR and radio for controlling them from a distance is not
+   new--and has been shown several times (as cited by the authors). To my
+   knowledge, no one used the head direction for selection so far, but
+   others proposed gaze [A], which is arguably a more accurate version of
+   head direction. Further, it is difficult to generalize from the presented
+   study results as they seem to be rather specific to a certain
+   implementation and the test environment.
+
+   In short, I think this paper presents a cool (maybe somewhat obvious)
+   idea, which was fully implemented, but it does not contribute much new in
+   terms of concept or technical depth. It feels like it could be a great
+   CHI note, rather than a full paper.
+
+   =Details=
+
+   I rather see this system as an extension to Glass (or similar HMD AR
+   systems), not as a new standalone solution for a universal remote
+   control. Therefore, I have difficulties with the author's motivation of
+   overcoming limitations of handheld universal remote controls by
+   introducing a HMD-based system (p. 1, right column). If you happen to use
+   Glass, sure, you'd probably install this--but getting Glass for the sake
+   of a better universal remote control is not convincing.
+
+   The device characterization study could be substantially shortened. It
+   would be sufficient to tell the reader what range is covered. After all,
+   the presented numbers are specific to the used hardware. On top, the used
+   LED or receiver model is not even mentioned. Also, Table 1 is confusing.
+   First, I believe the order of "distance" and "depth" should be switched.
+   Second, why is it that with increasing distance between sender and
+   receiver the angle gets more narrow--shouldn't it be the other way
+   around?
+
+   It seems that the user study results do not generalize well as
+   acquisition times obviously depend on the number of devices and their
+   spatial arrangement (e.g., Figure 10b and 11 underline this). In this
+   study, only 10% of selections required disambiguation. How would a more
+   cluttered environment influence the results?  In addition, I do not agree
+   with the authors' decision of artificially introducing a visual
+   localization task for the list condition. One of the advantages of the
+   list-based approach is that devices do _not_ need to be in sight. It is
+   unclear if users would be faster without this localization step. Also,
+   with an increasing number of available appliances, one would probably not
+   use a linear list but a hierarchical menu structure, thus shortening the
+   selection time.
+
+   Regarding user feedback: asking if something was cumbersome already
+   introduces a bias. On top, why did you not ask the same question for IR?
+   As it is, there is no meaningful result being produced.
+
+   Regarding the home scenario: It does not seem to make a lot of sense to
+   compare the ease of use controlling devices of different complexities,
+   since the focus of the presented system is device selection. The actual
+   control UIs are not further discussed.
+
+   What is missing is a discussion of multi-user scenarios. What happens if
+   there are a couple of people in a room all using this system
+   simultaneously?
+
+
+   =Other Comments=
+   * please use the metric system throughout the paper
+   * I do not understand why there is an additional UI list displayed if
+   multiple devices are within range--aren't the LEDs indication enough?
+   * p. 4, right column: typo, should read "placed" not "places"
+   * in the study, why 15 target acquisition tasks if you had only 10
+   targets? where do the additional 5 tasks come from?
+   * p. 6, user preference: 11 preferred IR, 3 list, 1 was undecided = 15
+   participants, but there were only 14
+   * Figure 12: scale is wrong, cannot "strongly" agree to "ease of…"
+   * Figure 12 adn 14: you cannot use the mean for ordinal scales, such as a
+   Likert scale, it does not make sense; rather use mode or median
+   * p. 7: enumeration uses smaller fonts
+
+   =Additional References=
+   [A] http://dl.acm.org/citation.cfm?id=1057041
+   [B] http://people.inf.ethz.ch/mringwal/publ/ringwald-interaction.pdf
+
+
+------------------------ Submission 1441, Review 2 ------------------------
+
+Reviewer:           external
+
+Your Assessment of this Paper's Contribution to HCI
+
+   This paper presents a method for interacting with smart appliances using
+   an optical head-mounted display (in this case Google Glass). The proposed
+   method uses a narrow-beam IR emitter to target IR-sensor-equipped
+   receivers on appliances, enabling selection of devices using head
+   orientation. A user study is provided to assess the efficacy of the
+   proposed technique over previous appliance-selection approaches.
+
+Overall Rating
+
+   3.5 . . . Between neutral and possibly accept 
+
+Expertise
+
+   3  (Knowledgeable)
+
+The Review
+
+   == Overall ==
+   The paper presents an interesting, scalable method for targeting smart
+   appliances indoors. The use of head orientation to target devices is
+   especially appropriate for a head-mounted display like the Google Glass.
+   The evaluation demonstrates useful improvements in targeting performance
+   and usability.
+
+   The paper is well-written, and the video does a reasonable job of
+   describing the system’s design.
+
+   I have relatively few comments for this paper. My primary reservation is
+   that it may not constitute a work that is sufficiently novel to deserve a
+   full paper; however, the paper mostly makes up for this by having a good
+   study and discussion.
+
+   I feel that the paper is a reasonable candidate for inclusion, as it is a
+   relatively interesting, well-thought-out interaction technique, which is
+   backed by a good implementation, study and discussion.
+
+   == Related Work ==
+
+   Missing reference:
+
+   David Fleer and Christian Leichsenring. 2012. MISO: a context-sensitive
+   multimodal interface for smart objects based on hand gestures and finger
+   snaps. In Adjunct proceedings of the 25th annual ACM symposium on User
+   interface software and technology (UIST Adjunct Proceedings '12). ACM,
+   New York, NY, USA, 93-94. DOI=10.1145/2380296.2380338
+   http://doi.acm.org/10.1145/2380296.2380338 
+   	This project provides a point-and-snap interface for controlling smart
+   objects, a two-step process similar to the orient-and-confirm approach
+   proposed in this paper.
+
+   == Implementation and Evaluation ==
+   The completeness of the implementation is appropriate for the scope of
+   the paper.
+
+   The frequency of the IR emitter chirps (ID signal transmissions) should
+   be specified.
+
+   In each of the completion time figures (figure 10), several black points
+   are shown. I interpret these as outliers, but it would be clearer to
+   state this in the description (and describe how the outliers were
+   determined).
+
+   Participant age and gender distribution should be specified.
+
+
+------------------------ Submission 1441, Review 3 ------------------------
+
+Reviewer:           external
+
+Your Assessment of this Paper's Contribution to HCI
+
+   The paper introduces a novel concept for selection of and interaction
+   with physical appliances using a head-worn display. The authors describe
+   nicely the novel interaction concept and the implementation of the
+   prototype. A comparative study shows the advantages of the approach over
+   the state of the art (list based selection) in terms of task completion
+   time and preferences. The presented research could be seen as a
+   significant scientific contribution supporting the selection of and
+   interaction with objects in smart environments. 
+
+Overall Rating
+
+   3.5 . . . Between neutral and possibly accept 
+
+Expertise
+
+   4  (Expert )
+
+The Review
+
+   The paper is very well written and structured and addresses a timely and
+   relevant research area / problem (selection of and interaction with
+   physical appliances). 
+
+   The introduction describes nicely the issues of currently available
+   (list-based) solutions (heavily used in practice) and discusses also the
+   disadvantages of using mobile devices when compared with using a head
+   worn display.  
+
+   The discussion of augmented reality interfaces and interaction with
+   head-worn displays is rather brief and should be extended. Include e.g. 
+   "Augmented Reality Through Wearable Computing" from Starner et al.
+
+   The overall interaction concept is very well explained and the individual
+   steps are very well motivated. Here it might be beneficial to discuss
+   whether the "three different LEDs" approach would be useful in practice /
+   real life (probably not as they would be disturbing and there are
+   probably many situations in which one can't identify the colour of a
+   LED). Here it would be beneficial to include a discussion of alternative
+   approaches which rely e.g. exclusively on Google Glass when it comes to
+   feedback. 
+
+   The paper discusses intensively the technology used for the prototype.
+   This is positive as this would help others to build a similar system and
+   to re-run the user study. But it would be beneficial to include a
+   discussion of the technologies / approaches one would / could use in
+   practice when commercializing such a system.   
+
+   Include a discussion of the statistics regarding the user behaviour when
+   using Google Glass when more than one target was in range: Did most of
+   them reposition themselves or did most (how many) use the disambiguation
+   approach?
+
+   The smart home control scenario is nice to have but it's not that
+   beneficial for the paper in terms of scientific contribution. In general
+   I would think that the authors could compress the paper to 8 pages so
+   it’s crisper and avoids lengthy discussion of no so important aspects. 
+
+   The well designed user study speaks for the presented approach in terms
+   of task completion time and error rate (when compared with the state of
+   the art - list based selection) and should therefore be seen as a
+   significant scientific contribution (=accepted for CHI). The most
+   important contributions are:
+   - the paper is the first to report an interaction techniques for for the
+   selection of and interaction with physical appliances using a head-worn
+   display
+   - the paper shows a prototypical implementation that shows the
+   feasibility of the approach, shows practical requirements and provides
+   the basis for a corresponding user study
+   - the user study shows the advantages of the presented approach when
+   compared with the state of the art (in a laboratory setting)
+
+   Minor comments:
+   - a footnote regarding Google Glass (first page) is not necessary
+   (anymore)
+   - Figure 2a is not referenced in the text
+   - The paper is partially tricky to read as many figures and tables seem
+   to be at arbitrary locations. A table or figure should always appear
+   close to the text where it belongs to.
+
+
+
