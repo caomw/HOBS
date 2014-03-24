@@ -3,7 +3,7 @@
 
   For old code that works with Aruidno Uno, see git log and pull it from the repo
 
-  Modified upon "Mega multple serial test"
+  Modified upon "Mega multiple serial test"
   
   Receives from the main serial port, sends to the others. 
   Receives from serial port 2 (BT), sends to the main serial (Serial 0).
@@ -33,6 +33,7 @@ void loop() {
   // read from port 0, send to port 1:
   if (Serial.available()) {
     int inByte = Serial.read();
+    Serial.write(inByte);
     BT.write(inByte);
     BT.write('\n');
   }
