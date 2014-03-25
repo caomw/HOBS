@@ -20,8 +20,15 @@
 void setup() {
   // initialize both serial ports:
   Serial.begin(9600);
+  
   BT.begin(57600);
+  BT.println("AT");  // Print three times individually
+  
+  delay(100);  // Short delay, wait for the Mate to send back CMD
+
 }
+
+String serialString;
 
 void loop() {
   // read from port 1, send to port 0:
@@ -32,9 +39,15 @@ void loop() {
   
   // read from port 0, send to port 1:
   if (Serial.available()) {
-    int inByte = Serial.read();
-    Serial.write(inByte);
-    BT.write(inByte);
-    BT.write('\n');
+    delay(50);                 //delay to allow buffer to fill 
+    while (Serial.available()) {
+      char c = Serial.read();  //gets one byte from serial buffer
+      serialString += c; //makes the string readString
+    }
+    
+    Serial.println(serialString);
+    BT.println(serialString);
+    serialString = "";
+    
   }
 }
