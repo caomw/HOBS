@@ -19,4 +19,7 @@ when XBee receives a usb serial port signal, it'll print to radio, plus a '!'
 
 
 ## updates
-For the amplification circuit of IR, we use the third from this [diagram](http://www.blogcdn.com/www.diylife.com/media/2008/01/fet-diagram2.png).
+1.  For the amplification circuit of IR, we use the third from this [diagram](http://www.blogcdn.com/www.diylife.com/media/2008/01/fet-diagram2.png).
+
+2.  This is the reference for old BlueSMiRF [ATMP Command Set 
+](https://www.sparkfun.com/datasheets/RF/BlueRadios_ATMP_Commands_Rev_3.5.2.1.4.0.pdf).
