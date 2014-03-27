@@ -6,12 +6,23 @@
   Modified upon "Mega multiple serial test"
   
   Receives from the main serial port, sends to the others. 
-  Receives from serial port 2 (BT), sends to the main serial (Serial 0).
+  Receives from serial1 (BT), sends to the main serial (Serial 0).
  
-  This example works only on the Arduino Mega
- 
-  created 07/25/2013
-  by Ben Zhang <benzh@eecs.berkeley.edu>
+  This example works only on the Arduino Mega, and the BT command "$$$" is for BlueSMiRF (see https://learn.sparkfun.com/tutorials/using-the-bluesmirf/all). Once the code is running, simply type "D" will yield the following information:
+
+  **Settings***
+  BTA=0006666624C3
+  BTName=RNBT-24C3
+  Baudrt(SW4)=115K
+  Mode  =Slav
+  Authen=0
+  PinCod=1234
+  Bonded=0
+  Rem=0006666624C4
+
+  created  : 07/25/2013
+  modified : 03/26/2013
+  author   : Ben Zhang <benzh@eecs.berkeley.edu>
  
  */
 
@@ -21,10 +32,12 @@ void setup() {
   // initialize both serial ports:
   Serial.begin(9600);
   
-  BT.begin(57600);
-  BT.println("AT");  // Print three times individually
+  BT.begin(115200);
   
-  delay(100);  // Short delay, wait for the Mate to send back CMD
+  BT.print("$");  // Print three times individually
+  BT.print("$");
+  BT.print("$");  // Enter command mode
+  delay(100);  // Short delay, wait for the Mate to
 
 }
 
