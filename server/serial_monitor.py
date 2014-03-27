@@ -3,6 +3,7 @@
 
 import serial, glob, argparse, Queue
 import sys, select
+from datetime import datetime
 
 parser = argparse.ArgumentParser(description='Pyserial Monitor')
 parser.add_argument('--baud', type=int, action='store', default=9600, help='Specify the baud rate')
@@ -65,11 +66,13 @@ while True:
   # read line without blocking
   while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
     line = sys.stdin.readline()
-    print '[Console]: ', line,
+    ts = datetime.now().strftime('%Y-%m-%d %H:%M:%S %f')
+    print '[', ts, ', Console]: ', line,
     ser.write(line)
 
   while ser.inWaiting() > 0:
-    print '[Serial]: ',
+    ts = datetime.now().strftime('%Y-%m-%d %H:%M:%S %f')
+    print '[', ts, ', Serial]: ',
     line = ser.readline()
     sys.stdout.write(line)
     if len(line.strip()) > 0 and is_osc_on:
