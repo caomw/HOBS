@@ -8,14 +8,13 @@
 
   Now we've switched to Arduino Mega, no need for software serial. For old code, using git log to find it... 
 
-  Created 07/17/2013
-  Modified 07/25/2013
-  By benzh@eecs.berkeley.edu
+  Created  : 07/17/2013
+  Modified : 03/25/2014
+  Author   : Ben Zhang <benzh@eecs.berkeley.edu>
 
 */
 
 #include <IRremote.h>
-
 
 #define DEBUG
 
@@ -28,13 +27,11 @@
   #define DEBUG_PRINTLN(x)
 #endif
 
-
 #define BT Serial1
 #define XBee Serial2
 
-
-
-// An IR LED must be connected to Arduino PWM pin 3.
+// An IR LED must be connected to Arduino Uno PWM pin 3.
+// For Arduino Mega, it's pin 9
 IRsend irsend;
 int ledPin = 8;
 
