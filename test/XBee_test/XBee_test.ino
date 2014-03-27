@@ -1,22 +1,16 @@
 /*
-  XBee test on Mega
+  XBee test 
 
-  For old code that works with Aruidno Uno, see git log and pull it from the repo
+  This code now takes charge of interfacing with XBee radio through Arduino Uno's software serial
 
-  Modified upon "Mega multple serial test"
-  
-  Receives from the main serial port, sends to the others. 
-  Receives from serial port 2 (XBee), sends to the main serial (Serial 0).
- 
-  This example works only on the Arduino Mega
- 
-  created 07/25/2013
-  by Ben Zhang <benzh@eecs.berkeley.edu>
+  The idea is to execute AT command.
+
+  created  : 07/25/2013
+  modified : 03/26/2013
+  author   : Sean Chen <sean.yhc@gmail.com>
  
  */
 #include <SoftwareSerial.h>
-
-// #define XBee Serial2
 
 SoftwareSerial XBee(3,2);
 int ledStatePin = 13;
@@ -26,71 +20,30 @@ int ledTargetPin = 11;
 char XBeeInString[50];
 
 void setup() {
-  // initialize both serial ports:
   pinMode(ledStatePin, OUTPUT);
   pinMode(ledSignalPin, OUTPUT); 
   pinMode(controlledPin, OUTPUT);
   pinMode(ledTargetPin, OUTPUT); 
 
+  // initialize both serial ports:
   Serial.begin(9600);
   XBee.begin(9600);
   Serial.println("ready!");
 
+  // uncomment the one that you want to use
   enterCommandMode();
   // setID(13);
-  setChannel(4321);
-  // readID();
+  // setChannel(4321);
+  readID();
   readChannel();
-
   writePermanent();
-
   exitCommandMode();
 
   Serial.println("done!");
-  
 }
 
 void loop() {
-  // read from port 1, send to port 0:
-  // if (XBee.available()) {
-  //   memset(XBeeInString, 0, 50);
-  //   readStringfromSerial(&XBee, XBeeInString);
-  //   Serial.println(XBeeInString);
-  // }
-  
-  // read from port 0, send to port 1:
-  // if (Serial.available()) {
-
-  //   int inByte = Serial.read();
-  //   Serial.print("input: ");
-  //   Serial.println(inByte);
-  //   XBee.print(inByte);
-  //   // XBee.write('\n');
-  // }
-
-  // if(Serial.available()) {
-  //   // get the new byte:
-  //   char inChar = (char)Serial.read(); 
-  //   // Serial.println(inChar);
-  //   // add it to the inputString:
-  //   inputString += inChar;
-  //   // if the incoming character is a newline, set a flag
-  //   // so the main loop can do something about it:
-  //   if (inChar == '\n') {
-  //     Serial.println("string complete");
-  //     stringComplete = true;
-  //   } 
-  // }
-  
-  // if(stringComplete) {
-  //   Serial.print("input: ");
-  //   Serial.println(inputString); 
-  //   // XBee.print(inputString);
-  //     // clear the string:
-  //   inputString = "";
-  //   stringComplete = false;  
-  // }
-  
+  // some useless loop, just indicating the code is running
   digitalWrite(ledStatePin, HIGH);
   delay(500);
   digitalWrite(ledStatePin, LOW);
@@ -104,21 +57,6 @@ void loop() {
   digitalWrite(ledTargetPin, LOW);
   delay(500);
 }
-
-// void serialEvent() {
-//   while (Serial.available()) {
-//     // get the new byte:
-//     char inChar = (char)Serial.read(); 
-//     // add it to the inputString:
-//     inputString += inChar;
-//     // if the incoming character is a newline, set a flag
-//     // so the main loop can do something about it:
-//     if (inChar == '\n') {
-//       Serial.println("string complete");
-//       stringComplete = true;
-//     } 
-//   }
-// }
 
 void enterCommandMode() {
   delay(2000);
