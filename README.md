@@ -23,3 +23,7 @@ when XBee receives a usb serial port signal, it'll print to radio, plus a '!'
 
 2.  This is the reference for old BlueSMiRF [ATMP Command Set 
 ](https://www.sparkfun.com/datasheets/RF/BlueRadios_ATMP_Commands_Rev_3.5.2.1.4.0.pdf).
+
+3.  New OS Maverick removes the `Bluetooth Setup Assistant.app` from the Application folder. To open it, you could do `open /System/Library/CoreServices/Bluetooth\ Setup\ Assistant.app` in terminal.
+
+
