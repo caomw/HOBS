@@ -11,7 +11,6 @@
   Created  : 07/17/2013
   Modified : 03/25/2014
   Author   : Ben Zhang <benzh@eecs.berkeley.edu>
-
 */
 
 #include <IRremote.h>
@@ -34,9 +33,15 @@
 // For Arduino Mega, we connect an IR LED to pin 9
 IRsend irsend;
 
+// pin configuration
 const int led_pin = 8;
 const int ir_pin = 9;
 
+// variables
+int ir_rssi_max = 0;
+int ir_current_rssi = 0;
+char current_id[03] = "00";
+bool is_increase_available = false;
 char message[20];
 unsigned long start_time;
 boolean isWaitingReply;
@@ -44,7 +49,9 @@ char XBeeReturnIDs[20];
 int XBeeReturnCount;
 boolean ir_bcast_mode = true;
 unsigned long ir_time;
+unsigned long visual_cue_time;
 unsigned int ir_cycle = 100;  // broadcat IR signal every X ms
+unsigned int visual_cue_cycle = 300;  // how frequently update visual cue
 unsigned int ir_response_threshold = 800;
 
 void setup()
@@ -64,24 +71,49 @@ void setup()
   delay(100);
   isWaitingReply = false;
   Serial.print("system begins!");
+  visual_cue_time = millis();
   ir_time = millis();
 }
 
 void loop() {
   if(ir_bcast_mode){
     // constantly sending out ir broadcast as visual cue
+    Serial.println(ir_time);
     if(millis() - ir_time > ir_cycle) {
       // -1 (0xFFFF) indicates for broacast which is different than normal session id
       irsend.sendSony(0xFFFF,16);
       ir_time = millis();
     }
+    if(millis() - visual_cue_time > visual_cue_cycle) {
+      // before sending out, we choose to see the last largest readings
+      int current_selected = atoi(current_id);
+      if (current_selected != 0) {
+	XBee.write(current_id);
+	XBee.write("H");
+	XBee.write("XXX");
+	XBee.println("XXX");
+	ir_rssi_max = 0;
+	visual_cue_time = millis();
+      }
+    }
+
     delay(10);
     if (XBee.available()) {
       delay(10);
       while (XBee.available()) {
 	readStringfromSerial(&XBee, message, false);
 	DEBUG_PRINTLN(message);
-	// for now the message could be defined as id + "n" + value
+	// for now the message could be defined as id + "x" + value
+	// we parse the message and update the queue
+
+	ir_current_rssi = atoi(message+3);
+
+	if (ir_current_rssi > ir_rssi_max) {
+	  // then we should update it
+	  ir_rssi_max = ir_current_rssi;
+	  current_id[0] = message[0];
+	  current_id[1] = message[1];
+	}
       }
     }
   }
