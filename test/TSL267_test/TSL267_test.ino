@@ -6,7 +6,7 @@
 
 #undef TWO_SENSOR
 
-int analogPin1 = 4;  
+int analogPin1 = 5;
 
 #ifdef TWO_SENSOR
 int analogPin2 = 5;     
