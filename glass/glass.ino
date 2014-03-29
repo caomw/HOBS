@@ -42,6 +42,7 @@ int ir_rssi_max = 0;
 int ir_current_rssi = 0;
 char current_id[03] = "00";
 bool is_increase_available = false;
+bool is_connected = false;
 char message[20];
 unsigned long start_time;
 boolean isWaitingReply;
@@ -76,7 +77,8 @@ void setup()
 }
 
 void loop() {
-  if(ir_bcast_mode){
+  // in IR broadcast mode, we keep sending IR signal and hover the one with largeste intensity reading
+  if (ir_bcast_mode) {
     // constantly sending out ir broadcast as visual cue
     Serial.println(ir_time);
     if(millis() - ir_time > ir_cycle) {
@@ -97,7 +99,6 @@ void loop() {
       }
     }
 
-    delay(10);
     if (XBee.available()) {
       delay(10);
       while (XBee.available()) {
@@ -116,7 +117,24 @@ void loop() {
 	}
       }
     }
+    if (BT.available()) {
+      delay(10);
+      DEBUG_PRINT("[BT]: ");
+      readStringfromSerial(&BT, message);
+      // if it's LIST command, then list all available devices by sending IR
+      if ( message[0] == 'F' && message[1] == 'F') {
+	// return currentId
+	BT.println(currentId);
+      }
+      is_connected = true;
+      ir_bcast_mode = false;
+    }
   }
+  else { // if(ir_bcast_mode){
+    // this is the place when we only have a single connection with one device
+    // TODO: implement later
+  }
+
 }
 
 boolean isPacketValid(char *message) {
