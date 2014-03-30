@@ -1,0 +1,37 @@
+% set up tight list spacing
+\usepackage{enumitem} 
+\setlist{nolistsep,nosep}
+
+% for toggles
+\usepackage{etoolbox}
+
+
+% CHANGE FROM TOGGLE TRUE TO TOGGLE FALSE FOR NON-ANONYMOUS RENDERING
+% http://tex.stackexchange.com/questions/5894/latex-conditional-expression
+\newtoggle{anonymous}
+\toggletrue{anonymous}
+%\togglefalse{anonymous}
+
+% CHANGE FROM TOGGLE TRUE TO TOGGLE FALSE TO HIDE COMMENTS
+\newtoggle{comments}
+\toggletrue{comments}
+%\togglefalse{comments}
+
+% Comment region command (from Wesley Willett)
+\usepackage[usenames]{color}
+\usepackage[usenames,dvipsnames]{xcolor}
+\iftoggle{comments} {
+  %if we want to show comments
+  \newcommand {\claire}[1]{{\color{Orange}\bf{CT: #1}\normalfont}}
+  \newcommand {\sean}[1]{{\color{magenta}\bf{SC: #1}\normalfont}}
+  \newcommand {\yang}[1]{{\color{NavyBlue}\bf{YL: #1}\normalfont}}
+  \newcommand {\ben}[1]{{\color{violet}\bf{BZ: #1}\normalfont}}
+  \newcommand {\bjoern}[1]{{\color{BrickRed}\bf{BH: #1}\normalfont}}
+}{
+  %if we don't want to show comments
+  \newcommand {\claire}[1]{}
+  \newcommand {\sean}[1]{}
+  \newcommand {\yang}[1]{}
+  \newcommand {\ben}[1]{}
+  \newcommand {\bjoern}[1]{}
+}
