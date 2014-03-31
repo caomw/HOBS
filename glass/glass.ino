@@ -15,7 +15,7 @@
 
 #include <IRremote.h>
 
-#define DEBUG
+#undef DEBUG
 
 #ifdef DEBUG
   #define DEBUG_PRINT(x)  Serial.print(x)
@@ -66,7 +66,7 @@ void setup()
   // set up serials
   Serial.begin(9600);
   XBee.begin(9600);
-  BT.begin(57600);
+  BT.begin(115200);
 
   // make sure the radio is ready
   delay(100);
@@ -80,7 +80,6 @@ void loop() {
   // in IR broadcast mode, we keep sending IR signal and hover the one with largeste intensity reading
   if (ir_bcast_mode) {
     // constantly sending out ir broadcast as visual cue
-    Serial.println(ir_time);
     if(millis() - ir_time > ir_cycle) {
       // -1 (0xFFFF) indicates for broacast which is different than normal session id
       irsend.sendSony(0xFFFF,16);
@@ -119,12 +118,19 @@ void loop() {
     }
     if (BT.available()) {
       delay(10);
-      DEBUG_PRINT("[BT]: ");
-      readStringfromSerial(&BT, message);
+      Serial.print("[BT]: ");
+      readStringfromSerial(&BT, message, true);
+      Serial.print(message);
       // if it's LIST command, then list all available devices by sending IR
       if ( message[0] == 'F' && message[1] == 'F') {
-	// return currentId
-	BT.println(currentId);
+	// return current_id to BT and set up connection to the client
+	DEBUG_PRINT("sending back ID");
+	DEBUG_PRINTLN(current_id);
+	BT.println(current_id);
+	XBee.write(current_id);
+	XBee.write("H");
+	XBee.write("XXX");
+	XBee.println("XXX");
       }
       is_connected = true;
       ir_bcast_mode = false;
@@ -133,6 +139,25 @@ void loop() {
   else { // if(ir_bcast_mode){
     // this is the place when we only have a single connection with one device
     // TODO: implement later
+    if (BT.available()) {
+      delay(10);
+      Serial.print("[BT]: ");
+      readStringfromSerial(&BT, message, true);
+      Serial.print(message);
+      // if it's LIST command, then list all available devices by sending IR
+      if ( message[0] == 'D') {
+	// return current_id to BT and set up connection to the client
+	DEBUG_PRINT("sending back ID");
+	DEBUG_PRINTLN(current_id);
+	// this is temporarily just clear all the targets
+	XBee.write("00");
+	XBee.write("H");
+	XBee.write("XXX");
+	XBee.println("XXX");
+      }
+      is_connected = false;
+      ir_bcast_mode = true;
+    }
   }
 
 }

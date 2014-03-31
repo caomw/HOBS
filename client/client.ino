@@ -188,7 +188,8 @@ void loop()
     DEBUG_TAGGING(", var: ", p.var);
     DEBUG_TAGGING(", data: ", p.data);
     DEBUG_TAGGING("", "\n");
-
+    
+    // the led only lights up when it receives commands from the master
     if ( strcmp(p.func, "H") == 0 ) {   // hover
       // turn on LED
       if (strcmp(p.id, deviceId) == 0) {
