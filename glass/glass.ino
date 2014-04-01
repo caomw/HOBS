@@ -120,21 +120,23 @@ void loop() {
       delay(10);
       Serial.print("[BT]: ");
       readStringfromSerial(&BT, message, true);
-      Serial.print(message);
+      Serial.println(message);
       // if it's LIST command, then list all available devices by sending IR
       if ( message[0] == 'F' && message[1] == 'F') {
 	// return current_id to BT and set up connection to the client
-	DEBUG_PRINT("sending back ID");
+	DEBUG_PRINT("sending back ID: ");
 	DEBUG_PRINTLN(current_id);
 	BT.println(current_id);
 	XBee.write(current_id);
-	XBee.write("H");
+	XBee.write("C"); // click event
 	XBee.write("XXX");
 	XBee.println("XXX");
+	
+	is_connected = true;
+	ir_bcast_mode = false;
       }
-      is_connected = true;
-      ir_bcast_mode = false;
     }
+
   }
   else { // if(ir_bcast_mode){
     // this is the place when we only have a single connection with one device
@@ -143,20 +145,21 @@ void loop() {
       delay(10);
       Serial.print("[BT]: ");
       readStringfromSerial(&BT, message, true);
-      Serial.print(message);
+      Serial.println(message);
       // if it's LIST command, then list all available devices by sending IR
       if ( message[0] == 'D') {
 	// return current_id to BT and set up connection to the client
-	DEBUG_PRINT("sending back ID");
+	DEBUG_PRINT("sending back ID: ");
 	DEBUG_PRINTLN(current_id);
 	// this is temporarily just clear all the targets
 	XBee.write("00");
 	XBee.write("H");
 	XBee.write("XXX");
 	XBee.println("XXX");
+
+	is_connected = false;
+	ir_bcast_mode = true;
       }
-      is_connected = false;
-      ir_bcast_mode = true;
     }
   }
 
