@@ -149,11 +149,11 @@ void loop() {
       // if it's LIST command, then list all available devices by sending IR
       if ( message[0] == 'D') {
 	// return current_id to BT and set up connection to the client
-	DEBUG_PRINT("sending back ID: ");
+	DEBUG_PRINT("disconnect the clients");
 	DEBUG_PRINTLN(current_id);
-	// this is temporarily just clear all the targets
+	// send out disconnection message to all the nodes
 	XBee.write("00");
-	XBee.write("H");
+	XBee.write("D");
 	XBee.write("XXX");
 	XBee.println("XXX");
 

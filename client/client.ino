@@ -200,6 +200,21 @@ void loop()
       }
     }
 
+    else if ( strcmp(p.func, "C") == 0 ) {   // click
+      // turn on LED
+      if (strcmp(p.id, deviceId) == 0) {
+	digitalWrite(led_state_pin, HIGH);
+      }
+      else {
+	digitalWrite(led_state_pin, LOW);
+      }
+    }
+
+    else if ( strcmp(p.func, "D") == 0 ) {   // click
+      // turn on LED
+      digitalWrite(led_state_pin, LOW);
+    }
+
     else if ( strcmp(p.id, "FF") == 0 ) {
       // broadcast message
       sendBackDeviceID();
