@@ -11,12 +11,11 @@
   Created  : 07/17/2013
   Modified : 03/25/2014
   Author   : Ben Zhang <benzh@eecs.berkeley.edu>
-
 */
 
 #include <IRremote.h>
 
-#define DEBUG
+#undef DEBUG
 
 #ifdef DEBUG
   #define DEBUG_PRINT(x)  Serial.print(x)
@@ -27,181 +26,143 @@
   #define DEBUG_PRINTLN(x)
 #endif
 
+// For Arduino Mega, we are using the hardware serial, which provides best performance
 #define BT Serial1
 #define XBee Serial2
 
-// An IR LED must be connected to Arduino Uno PWM pin 3.
-// For Arduino Mega, it's pin 9
+// For Arduino Mega, we connect an IR LED to pin 9
 IRsend irsend;
-int ledPin = 8;
 
-char message[50];
+// pin configuration
+const int led_pin = 8;
+const int ir_pin = 9;
 
+// variables
+int ir_rssi_max = 0;
+int ir_current_rssi = 0;
+char current_id[03] = "00";
+bool is_increase_available = false;
+bool is_connected = false;
+char message[20];
 unsigned long start_time;
 boolean isWaitingReply;
 char XBeeReturnIDs[20];
 int XBeeReturnCount;
 boolean ir_bcast_mode = true;
 unsigned long ir_time;
-unsigned int ir_cycle = 200;  // broadcat IR signal every X ms
+unsigned long visual_cue_time;
+unsigned int ir_cycle = 100;  // broadcat IR signal every X ms
+unsigned int visual_cue_cycle = 300;  // how frequently update visual cue
 unsigned int ir_response_threshold = 800;
-
-// EXPERIMENT
-const int MODE_IR = 1;
-const int MODE_LIST = 2;
-int exp_mode = MODE_IR;
 
 void setup()
 {
+  // Mega uses pin 9 for IR
+  pinMode(ir_pin, OUTPUT);  
+  pinMode(led_pin, OUTPUT);
+
+  digitalWrite(led_pin, LOW);
+
+  // set up serials
   Serial.begin(9600);
-  randomSeed(analogRead(5));
-  digitalWrite(ledPin, LOW);
-  pinMode(9, OUTPUT);  // Mega uses pin 9 for IR
   XBee.begin(9600);
-  BT.begin(57600);
+  BT.begin(115200);
+
+  // make sure the radio is ready
   delay(100);
   isWaitingReply = false;
   Serial.print("system begins!");
+  visual_cue_time = millis();
   ir_time = millis();
 }
 
 void loop() {
-  if (isWaitingReply) {
-    if (XBee.available()) {
-      if (XBeeReturnCount >= 1) {
-        XBeeReturnIDs[XBeeReturnCount*3-1] = ':';
-      }
-      delay(10);
-      readStringfromSerial(&XBee, message);
-      if (true == isPacketValid(message)) {
-        XBeeReturnIDs[XBeeReturnCount*3] = message[0];
-        XBeeReturnIDs[XBeeReturnCount*3+1] = message[1];
-        XBeeReturnCount++;
-      }
-    }
-       
-    if (millis() - start_time > ir_response_threshold) {
-      if (XBeeReturnCount > 0) {  //has respondant(s)
-        XBeeReturnIDs[XBeeReturnCount*3-1] = '\0';
-        
-      } else {  //no respondants
-        XBeeReturnIDs[0] = '\0';
-      }
-      BT.print("f"); //fuck
-      BT.println(XBeeReturnIDs);
-      DEBUG_PRINT("IDs list:");
-      DEBUG_PRINTLN(XBeeReturnIDs);
-      DEBUG_PRINT("IDs counts:");
-      DEBUG_PRINTLN(XBeeReturnCount);
-
-      isWaitingReply = false;
-
-      // print again to just ensure reception
-      delay(30);
-      BT.print("f"); //fuck
-      BT.println(XBeeReturnIDs);
-
-      // print again to just ensure reception
-      delay(30);
-      BT.print("f"); //fuck
-      BT.println(XBeeReturnIDs);
-
-      // print again to just ensure reception
-      delay(30);
-      BT.print("f"); //fuck
-      BT.println(XBeeReturnIDs);
-
-    }
-  }
-  
-  if(ir_bcast_mode){
-    //constantly sending out ir broadcast as visual cue
+  // in IR broadcast mode, we keep sending IR signal and hover the one with largeste intensity reading
+  if (ir_bcast_mode) {
+    // constantly sending out ir broadcast as visual cue
     if(millis() - ir_time > ir_cycle) {
-    // -1 indicates for broacast which is different than normal session id
+      // -1 (0xFFFF) indicates for broacast which is different than normal session id
       irsend.sendSony(0xFFFF,16);
       ir_time = millis();
-    }  
-  }
-      
-  if (BT.available()) {
-    // when receive message from Bluetooth, only trigger IR if
-    // message is FFL_____, otherwise, use XBee to relay the message
-    delay(10);
-    DEBUG_PRINT("[BT]: ");
-    readStringfromSerial(&BT, message);
-    // if it's LIST command, then list all available devices by sending IR
-    if ( message[0] == 'F' && message[1] == 'F') {
-      unsigned int session_id = random(0x32);
-      DEBUG_PRINT("[INIT] Sending IR: ");
-      DEBUG_PRINTLN(session_id);
-      irsend.sendSony(session_id, 16);
-      start_time = millis();
-      memset(XBeeReturnIDs, 0, 20);
-      XBeeReturnCount = 0;
-      isWaitingReply = true;
     }
-    else if (true == isPacketValid(message)) {
-      DEBUG_PRINT("[XBee]: send message: ");
-      DEBUG_PRINTLN(message);      
-
-      XBee.print(message);
-
-      //check if led broadcast related msg
-      //turn off broadcast when a client is connected
-      //e.g. "IDCSEL ON" or "IDCSELAON"
-      //also turn off when in multiple selecting mode
-      //e.g. "IDSSEL080" or "IDCSEL1st"
-
-      String msgStr = String(message);
-      if(msgStr.substring(3,6) == "MOD") {
-        if(msgStr.substring(6,9) == "001") {
-          //exp list mode
-          exp_mode = MODE_IR;
-          ir_bcast_mode = true;
-          
-        }else if(msgStr.substring(6,9) == "002") {
-          exp_mode = MODE_LIST;
-          ir_bcast_mode = false;
-        }
+    if(millis() - visual_cue_time > visual_cue_cycle) {
+      // before sending out, we choose to see the last largest readings
+      int current_selected = atoi(current_id);
+      if (current_selected != 0) {
+	XBee.write(current_id);
+	XBee.write("H");
+	XBee.write("XXX");
+	XBee.println("XXX");
+	ir_rssi_max = 0;
+	visual_cue_time = millis();
       }
-      else if(msgStr.substring(3,6) == "SEL") {
-        if(msgStr.substring(7,9) == "ON" || msgStr.substring(6,9) == "080"
-          || msgStr.substring(6,9) == "1st") {
-          ir_bcast_mode = false;
-          DEBUG_PRINTLN("turning off IR bcast");
-        } else if(msgStr.substring(6,9) == "OFF" || msgStr.substring(6,9) == "CAN") {
-          if(exp_mode == MODE_IR) {
-            //only switch ir bcast to true in IR mode
-            ir_bcast_mode = true;  
-            DEBUG_PRINTLN("turning on IR bcast");
-          }
-          
-          
-        }
+    }
+
+    if (XBee.available()) {
+      delay(10);
+      while (XBee.available()) {
+	readStringfromSerial(&XBee, message, false);
+	DEBUG_PRINTLN(message);
+	// for now the message could be defined as id + "x" + value
+	// we parse the message and update the queue
+
+	ir_current_rssi = atoi(message+3);
+
+	if (ir_current_rssi > ir_rssi_max) {
+	  // then we should update it
+	  ir_rssi_max = ir_current_rssi;
+	  current_id[0] = message[0];
+	  current_id[1] = message[1];
+	}
       }
-      
+    }
+    if (BT.available()) {
+      delay(10);
+      Serial.print("[BT]: ");
+      readStringfromSerial(&BT, message, true);
+      Serial.println(message);
+      // if it's LIST command, then list all available devices by sending IR
+      if ( message[0] == 'F' && message[1] == 'F') {
+	// return current_id to BT and set up connection to the client
+	DEBUG_PRINT("sending back ID: ");
+	DEBUG_PRINTLN(current_id);
+	BT.println(current_id);
+	XBee.write(current_id);
+	XBee.write("C"); // click event
+	XBee.write("XXX");
+	XBee.println("XXX");
+	
+	is_connected = true;
+	ir_bcast_mode = false;
+      }
+    }
+
+  }
+  else { // if(ir_bcast_mode){
+    // this is the place when we only have a single connection with one device
+    // TODO: implement later
+    if (BT.available()) {
+      delay(10);
+      Serial.print("[BT]: ");
+      readStringfromSerial(&BT, message, true);
+      Serial.println(message);
+      // if it's LIST command, then list all available devices by sending IR
+      if ( message[0] == 'D') {
+	// return current_id to BT and set up connection to the client
+	DEBUG_PRINT("disconnect the clients");
+	DEBUG_PRINTLN(current_id);
+	// send out disconnection message to all the nodes
+	XBee.write("00");
+	XBee.write("D");
+	XBee.write("XXX");
+	XBee.println("XXX");
+
+	is_connected = false;
+	ir_bcast_mode = true;
+      }
     }
   }
 
-  if (XBee.available() && false == isWaitingReply) {
-    delay(10);
-    DEBUG_PRINT("[XBee]: ");
-    readStringfromSerial(&XBee, message);
-    if(true == isPacketValid(message)) {
-      if(message[6] == 'T' && message[7] == 'A' && message[8] == 'R') {
-        //if ends with TAR => target experiment msg, no need to send to Glass
-      } else if(message[2] == 'A' && message[4] == 'I' && message[5] == 'D') {
-        //ID ack that wasn't handled by list, don't send to glass
-        DEBUG_PRINTLN("Intercepted ID Ack");
-      } else { 
-        DEBUG_PRINT("[BT]: send ");
-        DEBUG_PRINTLN(message);  
-        BT.println(message);
-      }
-    } 
-    
-  }
-  delay(10);
 }
 
 boolean isPacketValid(char *message) {
@@ -221,7 +182,7 @@ boolean isFuncValid(char *message) {
   return false;
 }
 
-int readStringfromSerial (HardwareSerial *SS, char *strArray) {
+int  readStringfromSerial (HardwareSerial *SS, char *strArray, bool debug) {
   int i = 0;
   while ((*SS).available() && i < 20) {
     strArray[i] = (*SS).read();
@@ -234,10 +195,11 @@ int readStringfromSerial (HardwareSerial *SS, char *strArray) {
   if (strArray[i-1] == '\n') {
     strArray[i-1] = '\0';
   }
-  DEBUG_PRINT("read message: ");
-  DEBUG_PRINT(strArray);
-  DEBUG_PRINT("  count: ");
-  DEBUG_PRINTLN(i);
+  if (debug) {
+    DEBUG_PRINT("read message: ");
+    DEBUG_PRINT(strArray);
+    DEBUG_PRINT("  count: ");
+    DEBUG_PRINTLN(i);
+  }
   return i;
 }
-

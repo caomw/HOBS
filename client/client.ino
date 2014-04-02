@@ -18,28 +18,31 @@
 #include <IRremote.h>
 #include <string.h>
 
-/* #define DEBUG */
-/* #define DEBUG_TAG */
+// #define DEBUG 
+#define DEBUG_TAG
 
 #include "utils.h"
 
-// In this simplified design, there is no need to save states on client for feedback
-// so I have deleted all state variables like IDLE, PENDING, CONNECTED, etc.
-
 SoftwareSerial XBee(3,2); // RX, TX
-int ledStatePin = 13;
-int ledSignalPin = 10;
-int controlledPin = 12;
-int ledTargetPin = 11;
 
-int RECV_PIN = 8;
-IRrecv irrecv(RECV_PIN);
+const int led_state_pin = 13;
+const int led_signal_pin = 10;
+const int control_pin = 12;
+const int led_target_pin = 11;
+const int tsl267_pin = 5;
+const int ir_rcv_pin = 8;
+
+IRrecv irrecv(ir_rcv_pin);
 decode_results results;
 
 char deviceId[3] = "00";
 char XBeeInString[50];
 
-
+// other variables
+int ir_rssi = 0;
+int ir_rssi_current_max = 0;
+int ir_rssi_last_max = 0;
+int ir_rssi_increase = 0;
 boolean blinkShort = false;
 unsigned int blinkShort_ratio = 6;
 unsigned int ledStateInterval = 200;
@@ -56,6 +59,7 @@ int bucket = 0;
 #define statusPending 1
 #define statusOn 2
 
+// hard coded appliance IDs
 const char deviceTV[3] = "12";
 const char deviceMusic[3] = "13";
 const char deviceLamp[3] = "11";
@@ -72,11 +76,13 @@ int exp_mode = MODE_IR;
 void setup()  
 {
   Serial.begin(9600);
-  pinMode(ledStatePin, OUTPUT);
-  pinMode(ledSignalPin, OUTPUT); 
-  pinMode(controlledPin, OUTPUT);
-  pinMode(ledTargetPin, OUTPUT); 
-  Serial.println("system begins!");
+  Serial.println("Configuring...");
+  pinMode(led_state_pin, OUTPUT);
+  pinMode(led_signal_pin, OUTPUT); 
+  pinMode(control_pin, OUTPUT);
+  pinMode(led_target_pin, OUTPUT); 
+  pinMode(tsl267_pin, INPUT); 
+
   // set the data rate for the SoftwareSerial port
   XBee.begin(9600);
   irrecv.enableIRIn(); // Start the receiver
@@ -92,38 +98,42 @@ void setup()
 
 void loop()
 {
-
-  //blinking when multiple candidates
-  if(statePending) {
-    end_time = millis();
-
-    if(end_time - toggle_time > ledStateInterval) {
-      // if (blinkShort) {
-      //   if (digitalRead(ledStatePin)) {
-      //     digitalWrite(ledStatePin, LOW);
-      //     bucket = 0;
-      //   }
-      //   else if (bucket == blinkShort_ratio)
-      //     digitalWrite(ledStatePin, HIGH);
-      //   else
-      //     bucket++;
-      // }
-      if(!blinkShort) {
-        digitalToggle(ledStatePin);
-      } else{
-        digitalWrite(ledStatePin, HIGH);  
-      }
-      toggle_time = millis();
-    }
-  } 
-
   // results.value = 0xFFFE;
-  
-  if(irrecv.decode(&results)) {
+
+  // irrecv.decode will return non zero result when the data is ready. 
+  // before that we should keep polling the data from the tsl267_pin
+  // and tracks the maximum
+  ir_rssi = analogRead(tsl267_pin);
+  if (ir_rssi > ir_rssi_current_max)
+    ir_rssi_current_max = ir_rssi;
+
+  if(irrecv.decode(&results)) {    
     delay(5);
-    // DEBUG_TAGGING("IR: ", results.value);
+    Serial.print("IR: ");
+    Serial.print(results.value);
+    Serial.print(", ");
+    Serial.println(ir_rssi_current_max);
+    ir_rssi_increase = ir_rssi_current_max - ir_rssi_last_max;
+    ir_rssi_last_max = ir_rssi_current_max;
+    ir_rssi_current_max = 0;
+
     if(results.value == 0xFFFF){
-      digitalWrite(ledSignalPin, HIGH);
+      // send the rssi back through XBee
+      // digitalWrite(led_signal_pin, HIGH);
+      // think about how to do the scheduling such that there is no conflict
+      
+      if (ir_rssi_increase > 100) {
+	XBee.println(deviceId + String("i") + String(ir_rssi_last_max));
+      }
+      else if (ir_rssi_increase < -100) {
+	delay(30);
+	XBee.println(deviceId + String("d") + String(ir_rssi_last_max));
+      }
+      else {
+	delay((atoi(deviceId) % 3 + 1) * 30);
+	XBee.println(deviceId + String("u") + String(ir_rssi_last_max));
+      }
+
       signal_time = millis();
       signal_response = true;
     } else if(results.value <= 0x32 && results.value > 0){
@@ -138,14 +148,37 @@ void loop()
     irrecv.resume();    
   }
 
+  //blinking when multiple candidates
+  if(statePending) {
+    end_time = millis();
+
+    if(end_time - toggle_time > ledStateInterval) {
+      // if (blinkShort) {
+      //   if (digitalRead(led_state_pin)) {
+      //     digitalWrite(led_state_pin, LOW);
+      //     bucket = 0;
+      //   }
+      //   else if (bucket == blinkShort_ratio)
+      //     digitalWrite(led_state_pin, HIGH);
+      //   else
+      //     bucket++;
+      // }
+      if(!blinkShort) {
+        digitalToggle(led_state_pin);
+      } else{
+        digitalWrite(led_state_pin, HIGH);  
+      }
+      toggle_time = millis();
+    }
+  } 
+
   if(signal_response){
     if(millis() - signal_time > signal_threshold){
       signal_response = false;
-      digitalWrite(ledSignalPin, LOW);
+      digitalWrite(led_signal_pin, LOW);
     }
   }
-  
-  
+       
   if (XBee.available()) {
     delay(5);
     struct XBeePacket p = readXBeePacket(&XBee);
@@ -155,8 +188,34 @@ void loop()
     DEBUG_TAGGING(", var: ", p.var);
     DEBUG_TAGGING(", data: ", p.data);
     DEBUG_TAGGING("", "\n");
+    
+    // the led only lights up when it receives commands from the master
+    if ( strcmp(p.func, "H") == 0 ) {   // hover
+      // turn on LED
+      if (strcmp(p.id, deviceId) == 0) {
+	digitalWrite(led_signal_pin, HIGH);
+      }
+      else {
+	digitalWrite(led_signal_pin, LOW);
+      }
+    }
 
-    if ( strcmp(p.id, "FF") == 0 ) {
+    else if ( strcmp(p.func, "C") == 0 ) {   // click
+      // turn on LED
+      if (strcmp(p.id, deviceId) == 0) {
+	digitalWrite(led_state_pin, HIGH);
+      }
+      else {
+	digitalWrite(led_state_pin, LOW);
+      }
+    }
+
+    else if ( strcmp(p.func, "D") == 0 ) {   // click
+      // turn on LED
+      digitalWrite(led_state_pin, LOW);
+    }
+
+    else if ( strcmp(p.id, "FF") == 0 ) {
       // broadcast message
       sendBackDeviceID();
     }
@@ -180,20 +239,20 @@ void loop()
         //"AON" means only 1 client responded so auto on
         // if(atoi(p.id) == atoi(deviceId)) {
         if(strcmp(p.id, deviceId) == 0) {
-          digitalWrite(ledStatePin, HIGH);  
+          digitalWrite(led_state_pin, HIGH);  
 
           //turn off target led if selected correctly
-          digitalWrite(ledTargetPin, LOW); 
+          digitalWrite(led_target_pin, LOW); 
           replyStatus();
         } else {
-          digitalWrite(ledStatePin, LOW);  
+          digitalWrite(led_state_pin, LOW);  
         }
         statePending = false;
 
       } else if(strcmp(p.data, "OFF") == 0 || strcmp(p.data, "CAN") == 0 ) {
         //turn off all the led just in case
 
-        digitalWrite(ledStatePin, LOW);
+        digitalWrite(led_state_pin, LOW);
         statePending = false;
 
       } else if(strcmp(p.data, "080") == 0 || strcmp(p.data, "1st") == 0) {
@@ -215,7 +274,7 @@ void loop()
               blinkShort = false;
             } else {
               blinkShort = true;  
-              digitalWrite(ledStatePin, HIGH);
+              digitalWrite(led_state_pin, HIGH);
             }  
           }
         } else {
@@ -229,7 +288,7 @@ void loop()
             } else {
               statePending = false;
               blinkShort = true;
-              digitalWrite(ledStatePin, LOW);
+              digitalWrite(led_state_pin, LOW);
               //in case it happened to be on at the moment
             }
 
@@ -240,9 +299,9 @@ void loop()
             //turn on target light and return ack
             DEBUG_TAGGING("Target received", "");
             sendXBeePacketFromRaw(&XBee, deviceId, "A", "SEL", "TAR");
-            digitalWrite(ledTargetPin, HIGH);
+            digitalWrite(led_target_pin, HIGH);
           } else {
-            digitalWrite(ledTargetPin, LOW);
+            digitalWrite(led_target_pin, LOW);
           }
         
 
@@ -284,18 +343,15 @@ void sendBackDeviceID() {
 }
 
 void readXBeeDeviceId() {
-  delay(500);
-
+  delay(100);
   memset(XBeeInString, 0, 50);
   DEBUG_PRINTLN("sending +++");
   XBee.print("+++");
-  delay(3000);
+  delay(2500);
   // DEBUG_PRINTLN("reading...");
   readStringfromSerial(&XBee, XBeeInString);
   // DEBUG_PRINTLN(XBeeInString);
-  
-  delay(1000);
-  
+  delay(500);
   memset(XBeeInString, 0, 50);
   DEBUG_PRINTLN("sending ATMY");
   XBee.print("ATMY\r");
@@ -325,7 +381,7 @@ void powerClient(struct XBeePacket p) {
   DEBUG_PRINTLN("command issued");
   // if (strcmp(p.func, "R") == 0 && strcmp(p.var, "POW") == 0 ) {
   //   // read the current status and reply
-  //   int status = digitalRead(controlledPin);
+  //   int status = digitalRead(control_pin);
   //   if (status == 0) {
   //     sendXBeePacketFromRaw(&XBee, deviceId, "A", "POW", "OFF");
   //   } else {
@@ -335,12 +391,12 @@ void powerClient(struct XBeePacket p) {
   //taking out because now it auto reply when selected, glass won't send R msg
   if (strcmp(p.func, "C") == 0 && strcmp(p.var, "POW") == 0 && strcmp(p.data, " ON") == 0) {
     DEBUG_PRINTLN("turned on");
-    digitalWrite(controlledPin, HIGH);
+    digitalWrite(control_pin, HIGH);
     sendXBeePacketFromRaw(&XBee, deviceId, "A", "POW", " ON");
   }
   else if (strcmp(p.func, "C") == 0 && strcmp(p.var, "POW") == 0 && strcmp(p.data, "OFF") == 0) {
     DEBUG_PRINTLN("turned off");
-    digitalWrite(controlledPin, LOW);
+    digitalWrite(control_pin, LOW);
     sendXBeePacketFromRaw(&XBee, deviceId, "A", "POW", "OFF");
   }
   else {
@@ -352,7 +408,7 @@ void powerClient(struct XBeePacket p) {
 void replyStatus() {
   DEBUG_PRINTLN("ask for client status");
   if(strcmp(deviceId, deviceLamp) == 0 || strcmp(deviceId, deviceFan) == 0) {
-    int status = digitalRead(controlledPin);
+    int status = digitalRead(control_pin);
     if (status == 0) {
       sendXBeePacketFromRaw(&XBee, deviceId, "A", "POW", "OFF");
     } else {

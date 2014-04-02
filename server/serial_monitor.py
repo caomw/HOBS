@@ -76,4 +76,9 @@ while True:
     line = ser.readline()
     sys.stdout.write(line)
     if len(line.strip()) > 0 and is_osc_on:
-      osc_send("/serial", int(line)/256)
+      try:
+        osc_send(line[0:2], int(line[3:])/1024.0)
+      except ValueError:
+        pass
+
+        
