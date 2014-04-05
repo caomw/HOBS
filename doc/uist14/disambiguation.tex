@@ -1,17 +1,21 @@
 \section{Disambiguation Techniques}
 \label{sec:disamb-techn}
 
-This section discusses the three different disambiguation techniques we have proposed.
+For area selection technique, when multiple targets are within the range, the disambiguation is necessary. We propose three different ways of disambiguation solutions in this section. Initially our system leaves the disambiguation to the user \ben{cite our paper}. However, our studies showed that manual disambiguation is a time-consuming task, so we only consult manual action when the system cannot figure out itself. The automatic disambiguation are based on the observation that users tend to adjust their head orientation a bit when they found the target is wrong. So we achieve a more fine-grained targeting by exploiting the IR intensity and the change of IR readings, as well as the sensors on Google Glass.
 
 \subsection{Using IR Intensity}
 \label{sec:using-ir-intensity}
 
+From the IR datasheet\footnote{https://www.sparkfun.com/datasheets/Components/LED/YSL-R531FR2C-F1.pdf}, for a directional IR emitter, the illuminance at the receiver falls off as the receiver is positioned at an angle from the emitter. Therefore, given multiple targets that are equidistant from the user, the one straight most directly in the line of sight will read the highest intensity values. However, illuminance could also drop off as $\frac{1}{d^2}$ where $d$ is the distance between emitter and receiver. So a closer targets will read higher intensity values. This introduces problems for two targets which are not equidistant from the user, since the closer one will always read a higher value. To overcome this problem, we utilize the fact that the user might move his head a little bit and the changes in the intensity readings will give us such information. We put a higher weight on those with a higher intensity reading gains.
+
 \subsection{Using Glass Sensors}
 \label{sec:using-glass-sensors}
+The second disambiguation technique is to use the sensors on Google Glass. As we discussed before, Google Glass not only provides us with the head-up display, but also many other sensors. For head orientation, we uses the rotation vector sensor provided by Android API. Such orientation provides the relative movement of user's head. However, without the absolute map, we cannot easily map the readings into targets. In this case, the combination of IR directions provide an anchor direction and the Glass application calibrates its estimation of orientation. From a successful targeting event, we construct the adjacent map during the learning phase and use the model to predict user's targeting if we detect multiple IR readings and also user's head movement. 
 
 \subsection{Manual Disambiguation}
 \label{sec:manu-disamb}
 
+For cases where the ambient IR noise is too high, and the environment is too dense, or when our disambiguation fails, we always enable the manual disambiguation option to the users. This is achieved in a way similar to mouse click. When the user single click, we only display the current highlighted targets, when the user click again (a double clicke event), we confirm the selection. Therefore, before the second click even happens, the user is always free to change the target by swiping forward or backward.
 
 
 %%% Local Variables: 

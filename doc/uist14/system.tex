@@ -1,5 +1,8 @@
 \section{System Design and Prototyping}
 \label{sec:syst-design-prot}
+
+\ben{This section is still far from my expectation, will refine a lot later! Now I am just laying down ideas.}
+
 Given the background study on using head orientation for targeting, we have designed and prototyped a low-cost system to study how it can be used in a real-world scenario. In this section, we will first briefly describe our design considerations and then for each considerations we propose commercial off-the-shelf (COTS) solutions that enable our prototyping.
 
 \subsection{Design Considerations}
@@ -15,21 +18,35 @@ Given the background study on using head orientation for targeting, we have desi
 
 {\bf Flexible communication:} Since the system enables interaction with the physical environment, it's important to provide communication between each end-node. With the advance in wireless communication, we can scatter the nodes in an indoor-environment for both testing and deployment.
 
-{\bf Adjustable angle:} We learned from the study about human's head orientation pointing that there is a certain bias and variance per person. To fit each person's line of sight, the system should enable adjustability for calibration.
+{\bf Adjustable angle:} We learned from the study about human's head orientation pointing that there is a certain bias and variance per person. To fit each person's line of sight, the system should enable adjust-ability for calibration.
 
 These design considerations find their expression in our selection of techniques in the following few subsections.
 
 \subsection{IR as beam cursor}
 \label{sec:ir-as-beam}
+\ben{will expand on each.}
+We choose IR as the proper hardware for the area selection beam for a couple of reasons. First, IR has been used in many home appliances for remote control. Both the emitter and receivers are fairly cheap to manufacture and integrated into devices which can be put in physical environment. Second, the signal characteristics of IR gives us a cone-shape coverage, which is ideal for area selection. While the intensity of IR signal can be easily read from a receiver, it also provides potentials for disambiguation when multiple devices fall in the reception area. Third, IR could be immune to most interference. The ambient could be annoying, but with a combination of IR signal validation, it's still safe. For multipath and reflection exist, the intensity reading can rule out them easily.
 
-\subsection{Head-up Display}
+Therefore, we can add IR emitter to the user and IR receiver in the environment to detect both IR signals and also the intensity of IR. For the visual feedback from the environment, we designed the system such that when they receive the IR signal and the intensity reading is the largest amongst the nodes that have received an valid signal, it lights up a LED for the beam cursor indication. 
+
+\subsection{Head-up Display with interaction capability}
 \label{sec:head-up-display}
+As we argued for a rich interface, the head-up display (HUD) is an ideal solution to overlay content on top of the physical environment. We have considered a few COTS solutions (including a custom hardware solution, Goggle, Google Glass). And Google Glass has become our choice because it's desigend for everyday use, capable for a rich set of gesture and voice commands, and the head-up display is easy to use and program. 
 
 \subsection{Wireless Communication}
 \label{sec:wirel-comm}
+The IR can be only used for expressing the user's targeting intention, we need another data communication technique that is more reliable and flexible. This is not only necessary for our targeting experiement to transmit received IR signals and the IR intensity readings, but also useful for application development that can exchange arbitrary application-specific messages. We have considered WiFi, Bluetooth Low Energy (BLE) and 802.15.4 (ZigBee) radio. A detailed comparison is out of the scope of this paper, but we have chosen to use 802.15.4 radio, since it is designed for personal area network (PAN) communication, and there are both industrial activity to promote it \footnote{XBee: http://www.digi.com/xbee/} and academia research \cite{watteyne2012openwsn} to make it lower power and more suitable for IoT.
 
 \subsection{3D Printed Adjustable Holder}
 \label{sec:3d-print-adjust}
+Since we have chosen to use IR for targeting, the holder where IR emitter resides can be designed for adjustment. We have designed a ball-joint model and 3D printed it. See Figure 1.
+
+\subsection{Overall System}
+\label{sec:overall-system}
+So far, we have described our choice separately, in this subsection we focus on our system architecture that stitches the components together. 
+Figure 2 is our overall architecture photo. Because we need to take command from Google Glass, we have used another microcontroller that speaks Bluetooth to communicate with the Google Glass. 
+
+%% show the figure here
 
 
 
