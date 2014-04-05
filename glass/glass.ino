@@ -51,9 +51,12 @@ int XBeeReturnCount;
 boolean ir_bcast_mode = true;
 unsigned long ir_time;
 unsigned long visual_cue_time;
+unsigned long keep_history_time;
 unsigned int ir_cycle = 100;  // broadcat IR signal every X ms
 unsigned int visual_cue_cycle = 300;  // how frequently update visual cue
+unsigned int keep_history_cycle = 800;  // how frequently update visual cue
 unsigned int ir_response_threshold = 800;
+unsigned int ir_reply_count = 0;
 
 void setup()
 {
@@ -73,6 +76,7 @@ void setup()
   isWaitingReply = false;
   Serial.print("system begins!");
   visual_cue_time = millis();
+  keep_history_time = millis();
   ir_time = millis();
 }
 
@@ -93,9 +97,17 @@ void loop() {
 	XBee.write("H");
 	XBee.write("XXX");
 	XBee.println("XXX");
-	ir_rssi_max = 0;
 	visual_cue_time = millis();
       }
+    }
+
+    if (millis() - keep_history_time > keep_history_cycle) {
+	current_id[0] = '0';
+	current_id[1] = '0';
+	ir_current_rssi = 0;
+	ir_reply_count = 0;
+	ir_rssi_max = 0;
+	keep_history_time = millis();
     }
 
     if (XBee.available()) {
@@ -122,7 +134,8 @@ void loop() {
       readStringfromSerial(&BT, message, true);
       Serial.println(message);
       // if it's LIST command, then list all available devices by sending IR
-      if ( message[0] == 'F' && message[1] == 'F') {
+      if ( message[0] == 'F' && message[1] == 'F' && 
+	   !(current_id[0] == '0' && current_id[1] == '0') ) {
 	// return current_id to BT and set up connection to the client
 	DEBUG_PRINT("sending back ID: ");
 	DEBUG_PRINTLN(current_id);

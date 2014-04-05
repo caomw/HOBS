@@ -1,8 +1,23 @@
 \section{System Design and Prototyping}
 \label{sec:syst-design-prot}
+Given the background study on using head orientation for targeting, we have designed and prototyped a low-cost system to study how it can be used in a real-world scenario. In this section, we will first briefly describe our design considerations and then for each considerations we propose commercial off-the-shelf (COTS) solutions that enable our prototyping.
 
 \subsection{Design Considerations}
 \label{sec:design-cons}
+
+\ben{need to refine this by a better wording. Also we need justification for each!}
+
+{\bf Area selection:} The head muscle's fundamental limitation imposes us to choose an area selection technique. However, there exists such trade-off between the effective size of the beam cursor and the necessity of doing disambiguation. The proper technique should be one that could do both.
+
+% the two visual feedback seems a bit random...
+{\bf Leverage visual feedback:} We consider two types of visual feedback. The first type comes from the environment and enables instantaneous visual cue for users to know his head-orientation. The second further helps any type of interaction by embedding rich content information in the near-eye display.
+% A calmer~\cite{weiser_coming_1997} approach is to locate visual feedback about selection targets in the environment, to prevent distraction and interruption. Such feedback should be delivered instantaneously, while users look around a room.
+
+{\bf Flexible communication:} Since the system enables interaction with the physical environment, it's important to provide communication between each end-node. With the advance in wireless communication, we can scatter the nodes in an indoor-environment for both testing and deployment.
+
+{\bf Adjustable angle:} We learned from the study about human's head orientation pointing that there is a certain bias and variance per person. To fit each person's line of sight, the system should enable adjustability for calibration.
+
+These design considerations find their expression in our selection of techniques in the following few subsections.
 
 \subsection{IR as beam cursor}
 \label{sec:ir-as-beam}

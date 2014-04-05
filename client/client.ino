@@ -94,6 +94,17 @@ void setup()
   Serial.print("random_mutiplier: ");
   Serial.println(random_mutiplier);
   Serial.println("ready!");
+
+  for (int i = 0; i < 3; ++i) {
+    digitalWrite(led_state_pin, HIGH);
+    digitalWrite(led_signal_pin, HIGH);
+    digitalWrite(led_target_pin, HIGH);
+    delay(100);
+    digitalWrite(led_state_pin, LOW);
+    digitalWrite(led_signal_pin, LOW);
+    digitalWrite(led_target_pin, LOW);
+    delay(100);
+  }
 }
 
 void loop()
