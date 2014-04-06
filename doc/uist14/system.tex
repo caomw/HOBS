@@ -15,7 +15,7 @@ To effectively enables the physical targeting based on user's head movement, and
 
 % A calmer~\cite{weiser_coming_1997} approach is to locate visual feedback about selection targets in the environment, to prevent distraction and interruption. Such feedback should be delivered instantaneously, while users look around a room.
 
-{\bf Flexible communication:} The system is for the interaction with the environment, therefore the communication among devices should be flexible. Especially there would be a consensus problem if the end-nodes are not agreeing on what the user is looking at. The communication would be necessary for resolving the inconsistency in such a distributed environment. Also such communication capability can make the system as a platform for other applications. 
+{\bf Flexible communication:} The system is for the interaction with the environment, therefore the communication among devices should be flexible. Especially there would be a consensus problem if the end-nodes are not agreeing on what the user is looking at. The communication would be necessary for resolving the inconsistency in such a distributed environment. Also providing a flexible communication capability can make the system as a platform for other applications. 
 
 {\bf Adjustable angle:} From our pilot study, we have learned that human's head orientation pointing is biased for each person. In order to align area selection technique, there should be ways to adjust or calibrate the covered area.
 
@@ -46,15 +46,28 @@ We use Arduino platform for the prototyping, and there is an easy-to-use IR libr
 
 \subsection{Environment LEDs and Head-up display}
 \label{sec:head-up-display}
-As we have argued for the visual feedback design considerations, the environment should provide instantaneous visual cue to respond to user's head orientation. This can be easily achieved with 1-bit LEDs on each devices that has an IR receiver. For the visual feedback that is persistent even when the user's head orientation has changed, we have considered a few COTS solutions that support the head-up display, and ended up with Google Glass because it's easy to program (it supports standard Android programming) and the device is also light-weight for everyday use. At the time of writing, we have Google Glass runs on Android 4.0.4 (software version: XE12). 
+As we have argued for the visual feedback design considerations, the environment should provide instantaneous visual cue to respond to user's head orientation. This can be easily achieved with 1-bit LEDs on each devices that has an IR receiver. For the visual feedback that is persistent even when the user's head orientation has changed, we have considered a few COTS solutions that support the head-up display, and ended up with Google Glass because it's easy to program (it supports standard Android programming) and the device is also light-weight for everyday use. At the time of writing, we have Google Glass running Android 4.0.4 (software version: XE12). 
 
 \subsection{Wireless Communication}
 \label{sec:wirel-comm}
-The IR can be only used for expressing the user's targeting intention, we need another data communication technique that is more reliable and flexible. This is not only necessary for our targeting experiement to transmit received IR signals and the IR intensity readings, but also useful for application development that can exchange arbitrary application-specific messages. We have considered WiFi, Bluetooth Low Energy (BLE) and 802.15.4 (ZigBee) radio. A detailed comparison is out of the scope of this paper, but we have chosen to use 802.15.4 radio, since it is designed for personal area network (PAN) communication, and there are both industrial activity to promote it \footnote{XBee: http://www.digi.com/xbee/} and academia research \cite{watteyne2012openwsn} to make it lower power and more suitable for IoT.
+
+There are many choices of wireless communication techniques that we could consider to accompany IR's directional targeting. WiFi, Bluetooth Low Energy (BLE) and 802.15.4 (ZigBee) radio are all candidates for such communications. A detailed comparison is out of the scope of this paper. For our prototype, we have chosen to use XBee ZB\footnote{XBee: http://www.digi.com/xbee/}(based on ZigBee protocol and 802.15.4 radio) for the mesh network because of the ease to program and integration to Arduino platform. The COTS adapter provides an easy-to-use interface where we could use either hardware serial pins or the software serial library to send and receive messages. 
+
+As we mentioned that the communication capability has to be included to resolve the consensus view of head orientation, we use the star topology -- the node which controls IR emission acts as the PAN coordinator. It collects the IR received signal strength (RSS) from each targets and runs a local algorithm to determine which one is the current target. 
+
+Using such an architecture for communication also makes the integration with Google Glass easier. For now, Google Glass is capable of WiFi and Bluetooth; so we have added a Bluetooth modem to establish connections with Google Glass. We use BlueSMiRF Silver (WRL-12577) for our prototype. 
 
 \subsection{3D Printed Adjustable Holder}
 \label{sec:3d-print-adjust}
-Since we have chosen to use IR for targeting, the holder where IR emitter resides can be designed for adjustment. We have designed a ball-joint model and 3D printed it. See Figure 1.
+To compensate for the bias of each person's line of sight with the IR emitter, we have designed the holder that can be easily attached onto Google Glass while we can adjust the beam angle flexibly.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.9\columnwidth]{figures/placeholder.pdf}
+\caption{we should replace this placeholder with Claire's design and printed version.}
+\label{fig:3d-holder}
+\end{figure}
+
 
 \subsection{Overall System}
 \label{sec:overall-system}
