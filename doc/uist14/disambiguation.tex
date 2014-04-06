@@ -1,7 +1,9 @@
 \section{Disambiguation Techniques}
 \label{sec:disamb-techn}
 
-For area selection technique, when multiple targets are within the range, the disambiguation is necessary. We propose three different ways of disambiguation solutions in this section. Initially our system leaves the disambiguation to the user \ben{cite our paper}. However, our studies showed that manual disambiguation is a time-consuming task, so we only consult manual action when the system cannot figure out itself. The automatic disambiguation are based on the observation that users tend to adjust their head orientation a bit when they found the target is wrong. So we achieve a more fine-grained targeting by exploiting the IR intensity and the change of IR readings, as well as the sensors on Google Glass.
+In our previous section we have described how we design and choose the COTS components for our prototype. However, for area selection technique, when multiple targets are within the range, the disambiguation is necessary. We could just leave this as a manual operation to the user; however, from previous studies \cite{Chen:EECS-2013-200} we have found that this becomes the bottleneck for seamless interaction in many cases. Therefore, we consider the problem of simplifying disambiguation in physical targeting contexts by incorporating multiple sources of sensors. 
+
+The first and most straightforward way is to use the signal strength of area selection technique. For IR, we have added IR light-to-voltage converter to read the absolute IR intensity. The second class of sensors are those available on wearable devices. Google Glass' motion sensors are the ones that we have used in our study. The automatic disambiguation will definitely save time, but leaving the option of manual switching targets will still be useful. But this doesn't necessarily mean the naive list browsing technique. We consider how the IR and motion sensors can helps us build a smarter list -- adjacent map -- when manual switching is performed. We talk about each technique in the following few subsections. 
 
 \subsection{Using IR Intensity}
 \label{sec:using-ir-intensity}

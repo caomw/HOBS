@@ -26,7 +26,7 @@ These design considerations find their expression in our selection of techniques
 
 For the directional area selection technique, we have chosen to use infrared (IR) for a couple of reasons.  
 
-First, the signal characteristics of IR makes it suitable for directional area selection. There are a wide range of viewing angles that we can choose (DigiKey offers IR emitters from $4^\circ$ to $240^\circ$, however, most are around $20^\circ$ of viewing angle). This leads to a cone shape-like area coverage and can be well-aligned with humna's line of sight. 
+First, the signal characteristics of IR makes it suitable for directional area selection. There are a wide range of viewing angles that we can choose (DigiKey offers IR emitters from $4^\circ$ to $240^\circ$, however, most are around $20^\circ$ of viewing angle). This leads to a cone shape-like area coverage and can be well-aligned with human's line of sight. 
 
 Second, for the disambiguation consideration, since the infrared illuminance falls off with respect to both the offset angle from the center and the distance to the emitter, even though the signal might cover multiple targets, using the intensity from the receivers can help disambiguation.  
 % for the 4 degree to 240 degree, I used information from http://www.digikey.com/product-search/en/optoelectronics/infrared-uv-visible-emitters/524328?k=IR
@@ -35,7 +35,7 @@ In addition, IR has been used for remote control for many years. The emitters an
 What's more, IR is immune to most interference sources. The ambient IR might influence the IR receivers' intensity reading, however with simple IR signal validation, the receiver is still safe. There might be issues for signal reflection, either bouncing from the ground to the target or bouncing back to the opposite direction. However, such visual feedback is not aligned with the user's attention so no further action from the user might be taken; or the genuine target could easily beat the false positive since the one with reflection tends to travel a longer distance, making the signal strength smaller.
 
 Therefore, we can attach an IR emitter to capture the head orientation and install some IR receivers in the environment for both signals detection and intensity reading. For our prototype, we have found some COTS components for IR. 
-The IR emitter is the one from OSRAM Opto Semiconductors Inc with manufacturer part number SFH 4545. From the datasheet, it has a view angle of $10^\circ$. Part of the reason we have chosen it is because the radiant intensity can quite high if we provide it with sufficient current flow (550mW/sr @ 100mA). We can then easily adjust it using a resistor to satisfy different demands. 
+The IR emitter is the one from OSRAM Opto Semiconductors Inc with manufacturer part number SFH 4545. From the data-sheet, it has a view angle of $10^\circ$. Part of the reason we have chosen it is because the radiant intensity can quite high if we provide it with sufficient current flow (550mW/sr @ 100mA). We can then easily adjust it using a resistor to satisfy different demands. 
 % transmitter webpage: http://www.digikey.com/product-search/en?x=0&y=0&lang=en&site=us&KeyWords=475-2919-ND
 For the IR receiver, we use 38.0kHz IR Receiver Modules from Vishay Semiconductor Opto Division (manufacturer part number TSOP38238). 
 % receiver webpage http://www.digikey.com/product-detail/en/TSOP38238/751-1227-ND/1681362
@@ -55,7 +55,7 @@ There are many choices of wireless communication techniques that we could consid
 
 As we mentioned that the communication capability has to be included to resolve the consensus view of head orientation, we use the star topology -- the node which controls IR emission acts as the PAN coordinator. It collects the IR received signal strength (RSS) from each targets and runs a local algorithm to determine which one is the current target. 
 
-Using such an architecture for communication also makes the integration with Google Glass easier. For now, Google Glass is capable of WiFi and Bluetooth; so we have added a Bluetooth modem to establish connections with Google Glass. We use BlueSMiRF Silver (WRL-12577) for our prototype. 
+Using such an architecture for communication also makes the integration with Google Glass easier. For now, Google Glass is only capable of WiFi and Bluetooth; so we have to add a Bluetooth modem to establish connections with Google Glass\footnote{This is a compromise now, and we are planning to migrate the entire system to BLE once Google upgrade the Glass software to Android 4.4+. The prototype now suffice our demand to run the head orientation study.}. We use BlueSMiRF Silver (WRL-12577) for our prototype. 
 
 \subsection{3D Printed Adjustable Holder}
 \label{sec:3d-print-adjust}
@@ -64,18 +64,23 @@ To compensate for the bias of each person's line of sight with the IR emitter, w
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.9\columnwidth]{figures/placeholder.pdf}
-\caption{we should replace this placeholder with Claire's design and printed version.}
+\caption{we should replace this place-holder with Claire's design and printed version.}
 \label{fig:3d-holder}
 \end{figure}
 
-
 \subsection{Overall System}
 \label{sec:overall-system}
-So far, we have described our choice separately, in this subsection we focus on our system architecture that stitches the components together. 
-Figure 2 is our overall architecture photo. Because we need to take command from Google Glass, we have used another microcontroller that speaks Bluetooth to communicate with the Google Glass. 
+So far we have been discussing separate components that fit our design considerations. To stitch them into a single system, we use the following architecture shown in Figure~\ref{fig:architecture}.
 
-%% show the figure here
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.9\columnwidth]{figures/architecture.pdf}
+\caption{In our system architecture, targeting is captured by IR signal but the confirmation and coordination is over 802.15.4. Google Glass communicates with the system through Bluetooth.}
+\label{fig:architecture}
+\end{figure}
 
+\ben{this paragraph needs refinement. Maybe a good idea is to use one single sentence to summarize the disambiguation and say we will talk about it in the next section.}
+In our system, the microcontroller at the Google Glass side (we will call it the master) takes charge of bridging the end nodes and the Glass. It constantly transmits IR signal no specific connection with any node has been established. When the node receives such signal, they validate the packet and send back IR intensity readings. The master may simply use the IR intensity changes to determine which is the intended targets, or pass the information to Google Glasss where the Glass combines both motion sensor readings with the IR signal intensity to disambiguate. We will leave the algorithm description in the next section. Once a decision has been made, such information will be sent back to the node and the visual feedback is provided to the user. The user is free to adjust during the targeting process, our algorithm will dynamically adjust to the user's head movement. Once the user confirms the targeting, he could easily tap the touchpad. Single tap only enables highlighting, targeting confirmation is done with a second tap. This is the last resort for the user to adjust targets. Since the disambiguation matters to the overall performance, we will focus on the discussion in the next section.
 
 %%% Local Variables: 
 %%% mode: latex
