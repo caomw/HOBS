@@ -1,8 +1,26 @@
-
 \section{Evaluation}
 \label{sec:evaluation}
 
-This section we present our work on the evaluation and user study.
+In this section, we evaluate our targeting system by benchmarking its performance with an user study. We first describe our design of the physical targeting study, followed by the results in different scenarios.
+
+\subsection{Apparatus}
+We deployed 10 wireless nodes in an indoor environment at various distance and density. Then the participant is asked to stand in a fixed position in the room and look down before the targeting request is made. We randomly generate a target and highlight it using a yellow LED, and then measure the amount of the time for a user to achieve a targeting transaction. 
+
+\subsection{Methodology}
+\label{sec:methodology}
+
+We break down the time for a complete target acquisition to the following pieces:
+$t_{total}=t_{locate}+t_{reorient}+t_{disambiguate}+t_{tap}$
+And during the study, we video-taped the participants' behavior and measure each pieces of the time. 
+
+In our previuos studies, we have made a comparison of using IR and Glass List UI. There we reach an conclusion that once the targets numbers have exceeded a certain value (6 in a single room), then list selection (using Google Glass List UI) will be worse than IR targeting. However, the average results there comes from cases where disambiguation is not needed and needed. And disambiguation is a time-consuming part. So in this paper we focus more study on the disambiguation techniques.
+
+\subsection{IR intensity based}
+
+\subsection{IR intensity together with Google Glass}
+
+\subsection{Manual disambiguation}
+
 
 
 %%% Local Variables: 
