@@ -1,37 +1,52 @@
 \section{System Design and Prototyping}
 \label{sec:syst-design-prot}
 
-\ben{This section is still far from my expectation, will refine a lot later! Now I am just laying down ideas.}
-
-Given the background study on using head orientation for targeting, we have designed and prototyped a low-cost system to study how it can be used in a real-world scenario. In this section, we will first briefly describe our design considerations and then for each considerations we propose commercial off-the-shelf (COTS) solutions that enable our prototyping.
+This section describes the design and implementation of our prototype system. We start by summarizing the design considerations in this head-orientation targeting, and for each consideration, we make the choice of commercial off-the-shelf (COTS) components. Afterwards, we conclude this section by a depiction of the overall system architecture that is used for both our study and future application development. 
 
 \subsection{Design Considerations}
 \label{sec:design-cons}
 
-\ben{need to refine this by a better wording. Also we need justification for each!}
+To effectively enables the physical targeting based on user's head movement, and build such a platform for applications, we have come up with the following design considerations and the justification for each.
 
-{\bf Area selection:} The head muscle's fundamental limitation imposes us to choose an area selection technique. However, there exists such trade-off between the effective size of the beam cursor and the necessity of doing disambiguation. The proper technique should be one that could do both.
+{\bf Directional area selection:} To be aligned with the user's head orientation, the sensing modality should be directional. Merely direction is not enough, from Section~\ref{sec:background}, the head muscle's fundamental limitation and Fitts' law imposes us to choose an area selection technique. However,  with a larger coverage area, there will be a higher chance for disambiguation. We should find the proper technique that achieves area selection while still providing ways for a more fine-grained resolution.
 
 % the two visual feedback seems a bit random...
-{\bf Leverage visual feedback:} We consider two types of visual feedback. The first type comes from the environment and enables instantaneous visual cue for users to know his head-orientation. The second further helps any type of interaction by embedding rich content information in the near-eye display.
+{\bf Leverage visual feedback:} Since the user cannot see his own head orientation, there should be some effective ways to provide feedback to the users. We consider two types of visual feedbacks. The first comes from the environment which enables instantaneous visual cue while the user is looking around. The second should remain unchanged even if the users' head orientation has changed; in such a way, further interactions are enabled without imposing the burden of staring. But such a display shouldn't distract the user's current line-of-sight attention -- which means a near-eye display is better than using a hand-held device. 
+
 % A calmer~\cite{weiser_coming_1997} approach is to locate visual feedback about selection targets in the environment, to prevent distraction and interruption. Such feedback should be delivered instantaneously, while users look around a room.
 
-{\bf Flexible communication:} Since the system enables interaction with the physical environment, it's important to provide communication between each end-node. With the advance in wireless communication, we can scatter the nodes in an indoor-environment for both testing and deployment.
+{\bf Flexible communication:} The system is for the interaction with the environment, therefore the communication among devices should be flexible. Especially there would be a consensus problem if the end-nodes are not agreeing on what the user is looking at. The communication would be necessary for resolving the inconsistency in such a distributed environment. Also such communication capability can make the system as a platform for other applications. 
 
-{\bf Adjustable angle:} We learned from the study about human's head orientation pointing that there is a certain bias and variance per person. To fit each person's line of sight, the system should enable adjust-ability for calibration.
+{\bf Adjustable angle:} From our pilot study, we have learned that human's head orientation pointing is biased for each person. In order to align area selection technique, there should be ways to adjust or calibrate the covered area.
 
 These design considerations find their expression in our selection of techniques in the following few subsections.
 
 \subsection{IR as beam cursor}
 \label{sec:ir-as-beam}
-\ben{will expand on each.}
-We choose IR as the proper hardware for the area selection beam for a couple of reasons. First, IR has been used in many home appliances for remote control. Both the emitter and receivers are fairly cheap to manufacture and integrated into devices which can be put in physical environment. Second, the signal characteristics of IR gives us a cone-shape coverage, which is ideal for area selection. While the intensity of IR signal can be easily read from a receiver, it also provides potentials for disambiguation when multiple devices fall in the reception area. Third, IR could be immune to most interference. The ambient could be annoying, but with a combination of IR signal validation, it's still safe. For multipath and reflection exist, the intensity reading can rule out them easily.
 
-Therefore, we can add IR emitter to the user and IR receiver in the environment to detect both IR signals and also the intensity of IR. For the visual feedback from the environment, we designed the system such that when they receive the IR signal and the intensity reading is the largest amongst the nodes that have received an valid signal, it lights up a LED for the beam cursor indication. 
+For the directional area selection technique, we have chosen to use infrared (IR) for a couple of reasons.  
 
-\subsection{Head-up Display with interaction capability}
+First, the signal characteristics of IR makes it suitable for directional area selection. There are a wide range of viewing angles that we can choose (DigiKey offers IR emitters from $4^\circ$ to $240^\circ$, however, most are around $20^\circ$ of viewing angle). This leads to a cone shape-like area coverage and can be well-aligned with humna's line of sight. 
+
+Second, for the disambiguation consideration, since the infrared illuminance falls off with respect to both the offset angle from the center and the distance to the emitter, even though the signal might cover multiple targets, using the intensity from the receivers can help disambiguation.  
+% for the 4 degree to 240 degree, I used information from http://www.digikey.com/product-search/en/optoelectronics/infrared-uv-visible-emitters/524328?k=IR
+
+In addition, IR has been used for remote control for many years. The emitters and receivers are fairly cheap to manufacture; and it's easy for integration with existing devices. 
+What's more, IR is immune to most interference sources. The ambient IR might influence the IR receivers' intensity reading, however with simple IR signal validation, the receiver is still safe. There might be issues for signal reflection, either bouncing from the ground to the target or bouncing back to the opposite direction. However, such visual feedback is not aligned with the user's attention so no further action from the user might be taken; or the genuine target could easily beat the false positive since the one with reflection tends to travel a longer distance, making the signal strength smaller.
+
+Therefore, we can attach an IR emitter to capture the head orientation and install some IR receivers in the environment for both signals detection and intensity reading. For our prototype, we have found some COTS components for IR. 
+The IR emitter is the one from OSRAM Opto Semiconductors Inc with manufacturer part number SFH 4545. From the datasheet, it has a view angle of $10^\circ$. Part of the reason we have chosen it is because the radiant intensity can quite high if we provide it with sufficient current flow (550mW/sr @ 100mA). We can then easily adjust it using a resistor to satisfy different demands. 
+% transmitter webpage: http://www.digikey.com/product-search/en?x=0&y=0&lang=en&site=us&KeyWords=475-2919-ND
+For the IR receiver, we use 38.0kHz IR Receiver Modules from Vishay Semiconductor Opto Division (manufacturer part number TSOP38238). 
+% receiver webpage http://www.digikey.com/product-detail/en/TSOP38238/751-1227-ND/1681362
+In order to read the IR intensity, we integrates another IR light-to-voltage converter from AMS-TAOS USA Inc (manufacturer part number TSL267-LF) which is pretty sensitive to IR irradiance. 
+% http://www.digikey.com/product-detail/en/TSL267-LF/TSL267-LF-ND/3095052
+
+We use Arduino platform for the prototyping, and there is an easy-to-use IR library\footnote{\url{https://github.com/shirriff/Arduino-IRremote}} where we can customize the IR signal for both transmission and reception. To read the IR intensity, an 10-bit ADC is attached to the output of TSL267-LF which gives a reading from 0 to 1023. 
+
+\subsection{Environment LEDs and Head-up display}
 \label{sec:head-up-display}
-As we argued for a rich interface, the head-up display (HUD) is an ideal solution to overlay content on top of the physical environment. We have considered a few COTS solutions (including a custom hardware solution, Goggle, Google Glass). And Google Glass has become our choice because it's desigend for everyday use, capable for a rich set of gesture and voice commands, and the head-up display is easy to use and program. 
+As we have argued for the visual feedback design considerations, the environment should provide instantaneous visual cue to respond to user's head orientation. This can be easily achieved with 1-bit LEDs on each devices that has an IR receiver. For the visual feedback that is persistent even when the user's head orientation has changed, we have considered a few COTS solutions that support the head-up display, and ended up with Google Glass because it's easy to program (it supports standard Android programming) and the device is also light-weight for everyday use. At the time of writing, we have Google Glass runs on Android 4.0.4 (software version: XE12). 
 
 \subsection{Wireless Communication}
 \label{sec:wirel-comm}
@@ -47,8 +62,6 @@ So far, we have described our choice separately, in this subsection we focus on 
 Figure 2 is our overall architecture photo. Because we need to take command from Google Glass, we have used another microcontroller that speaks Bluetooth to communicate with the Google Glass. 
 
 %% show the figure here
-
-
 
 
 %%% Local Variables: 
