@@ -37,6 +37,11 @@ IRsend irsend;
 const int led_pin = 8;
 const int ir_pin = 9;
 
+#define MAXIMUM_TARGETS 30
+
+// maybe we should do this, with smoothing
+int intensity_array[MAXIMUM_TARGETS] = {0};
+
 // variables
 int ir_rssi_max = 0;
 int ir_current_rssi = 0;
@@ -46,9 +51,9 @@ bool is_connected = false;
 char message[20];
 unsigned long start_time;
 boolean isWaitingReply;
-char XBeeReturnIDs[20];
-int XBeeReturnCount;
+char IRReplies[50];
 boolean ir_bcast_mode = true;
+boolean xbee_bcast_mode = true;
 unsigned long ir_time;
 unsigned long visual_cue_time;
 unsigned long keep_history_time;
@@ -78,6 +83,15 @@ void setup()
   visual_cue_time = millis();
   keep_history_time = millis();
   ir_time = millis();
+  memset(IRReplies, 0, 50);
+
+  for (int i = 0; i < 3; ++i) {
+    digitalWrite(led_pin, HIGH);
+    delay(100);
+    digitalWrite(led_pin, LOW);
+    delay(100);
+  }
+
 }
 
 void loop() {
@@ -87,27 +101,42 @@ void loop() {
     if(millis() - ir_time > ir_cycle) {
       // -1 (0xFFFF) indicates for broacast which is different than normal session id
       irsend.sendSony(0xFFFF,16);
+      for (int i = 0; i < MAXIMUM_TARGETS; ++i)
+	intensity_array[i] = 0.8 * intensity_array[i];
+
       ir_time = millis();
     }
+    /* if (millis() - keep_history_time > keep_history_cycle) { */
+    /*   print_intensity_arrays(intensity_array, MAXIMUM_TARGETS); */
+    /* } */
     if(millis() - visual_cue_time > visual_cue_cycle) {
-      // before sending out, we choose to see the last largest readings
-      int current_selected = atoi(current_id);
-      if (current_selected != 0) {
-	XBee.write(current_id);
-	XBee.write("H");
-	XBee.write("XXX");
-	XBee.println("XXX");
-	visual_cue_time = millis();
-      }
-    }
+      // before sending out, we choose to see the largest
+      int largest_intensity = 0;
+      int largest_id = 0;
+      for (int i = 1; i < MAXIMUM_TARGETS; ++i)
+	if (intensity_array[i] > largest_intensity) {
+	  largest_intensity = intensity_array[i];
+	  largest_id = i;
+	}
+      
+      DEBUG_PRINT("sending XBee to ");
+      DEBUG_PRINT(largest_id);
+      DEBUG_PRINT(" with intensity: ");
+      DEBUG_PRINTLN(largest_intensity);
 
-    if (millis() - keep_history_time > keep_history_cycle) {
-	current_id[0] = '0';
-	current_id[1] = '0';
-	ir_current_rssi = 0;
-	ir_reply_count = 0;
-	ir_rssi_max = 0;
-	keep_history_time = millis();
+      XBee.write("H");
+      if (largest_id < 10) {
+	XBee.write('0');
+	char id = '0' + largest_id;
+	XBee.println(id);
+      }
+      else {
+	char id = '0' + largest_id/10;
+	XBee.write(id);
+	id = '0' + largest_id%10;
+	XBee.write(id);
+      }
+      visual_cue_time = millis();
     }
 
     if (XBee.available()) {
@@ -115,9 +144,16 @@ void loop() {
       while (XBee.available()) {
 	readStringfromSerial(&XBee, message, false);
 	DEBUG_PRINTLN(message);
+
+	message[2] = '\0';
+	int id = atoi(message);
+	intensity_array[id] = 0.75 * intensity_array[id]  + 0.25 * atoi(message+3);
+	
 	// for now the message could be defined as id + "x" + value
 	// we parse the message and update the queue
-
+	strcat(IRReplies, ":");
+	strcat(IRReplies, message);
+		
 	ir_current_rssi = atoi(message+3);
 
 	if (ir_current_rssi > ir_rssi_max) {
@@ -130,28 +166,34 @@ void loop() {
     }
     if (BT.available()) {
       delay(10);
-      Serial.print("[BT]: ");
+      Serial.print("[fromBT]: ");
       readStringfromSerial(&BT, message, true);
       Serial.println(message);
       // if it's LIST command, then list all available devices by sending IR
       if ( message[0] == 'F' && message[1] == 'F' && 
 	   !(current_id[0] == '0' && current_id[1] == '0') ) {
 	// return current_id to BT and set up connection to the client
-	DEBUG_PRINT("sending back ID: ");
-	DEBUG_PRINTLN(current_id);
-	BT.println(current_id);
-	XBee.write(current_id);
-	XBee.write("C"); // click event
-	XBee.write("XXX");
-	XBee.println("XXX");
-	
+
+	Serial.print("[toBT]: ");
+	print_intensity_arrays(&Serial, intensity_array, MAXIMUM_TARGETS);
+	print_intensity_arrays(&BT, intensity_array, MAXIMUM_TARGETS);
+
+      } else if ( message[0]== 'H') {
+	// XBee.write(current_id);
+	XBee.println(message); // hover event
+	Serial.println(message); // hover
+      }
+      else if ( message[0]== 'C') {
+	// XBee.write(current_id);
+	XBee.println(message); // click event
+
 	is_connected = true;
 	ir_bcast_mode = false;
       }
-    }
 
+    }
   }
-  else { // if(ir_bcast_mode){
+  else {    // if(ir_bcast_mode) 
     // this is the place when we only have a single connection with one device
     // TODO: implement later
     if (BT.available()) {
@@ -159,8 +201,15 @@ void loop() {
       Serial.print("[BT]: ");
       readStringfromSerial(&BT, message, true);
       Serial.println(message);
-      // if it's LIST command, then list all available devices by sending IR
-      if ( message[0] == 'D') {
+
+      if ( message[0]== 'H') {
+	XBee.println(message); // hover event
+	Serial.write(message);
+      } else if ( message[0]== 'C') {
+	XBee.println(message); // click event
+	is_connected = true;
+      }
+      else if ( message[0] == 'D') {
 	// return current_id to BT and set up connection to the client
 	DEBUG_PRINT("disconnect the clients");
 	DEBUG_PRINTLN(current_id);
@@ -215,4 +264,19 @@ int  readStringfromSerial (HardwareSerial *SS, char *strArray, bool debug) {
     DEBUG_PRINTLN(i);
   }
   return i;
+}
+
+void print_intensity_arrays(HardwareSerial *HS, int array[], int n) {
+  boolean new_line = false;
+  for (int i = 0; i < n; ++i) {
+    if (array[i] > 30) {
+      (*HS).print(i);
+      (*HS).print(":");
+      (*HS).print(array[i]);
+      (*HS).print(", ");
+      new_line = true;
+    }
+  }
+  if (new_line) 
+    (*HS).println();
 }

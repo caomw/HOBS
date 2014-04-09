@@ -59,6 +59,9 @@ int bucket = 0;
 #define statusPending 1
 #define statusOn 2
 
+
+char message[20];
+
 // hard coded appliance IDs
 const char deviceTV[3] = "12";
 const char deviceMusic[3] = "13";
@@ -183,155 +186,46 @@ void loop()
     }
   } 
 
-  if(signal_response){
-    if(millis() - signal_time > signal_threshold){
-      signal_response = false;
-      digitalWrite(led_signal_pin, LOW);
-    }
-  }
-       
+  /* if(signal_response){ */
+  /*   if(millis() - signal_time > signal_threshold){ */
+  /*     signal_response = false; */
+  /*     digitalWrite(led_signal_pin, LOW); */
+  /*   } */
+  /* } */
+
+  
   if (XBee.available()) {
     delay(5);
-    struct XBeePacket p = readXBeePacket(&XBee);
-    printXBeePacket(p);
-    DEBUG_TAGGING("id: ", p.id);
-    DEBUG_TAGGING(", func: ", p.func);
-    DEBUG_TAGGING(", var: ", p.var);
-    DEBUG_TAGGING(", data: ", p.data);
-    DEBUG_TAGGING("", "\n");
+    readStringfromSerial(&XBee, message, true);
     
     // the led only lights up when it receives commands from the master
-    if ( strcmp(p.func, "H") == 0 ) {   // hover
+    if ( message[0] == 'H') {   // hover
       // turn on LED
-      if (strcmp(p.id, deviceId) == 0) {
-	digitalWrite(led_signal_pin, HIGH);
+      if (message[1] == deviceId[0] && message[2] == deviceId[1]) {
+  	digitalWrite(led_signal_pin, HIGH);
+	digitalWrite(led_state_pin, LOW);
       }
       else {
-	digitalWrite(led_signal_pin, LOW);
+  	digitalWrite(led_signal_pin, LOW);
       }
     }
 
-    else if ( strcmp(p.func, "C") == 0 ) {   // click
+    // the led only lights up when it receives commands from the master
+    else if ( message[0] == 'C') {   // control
       // turn on LED
-      if (strcmp(p.id, deviceId) == 0) {
+      if (message[1] == deviceId[0] && message[2] == deviceId[1]) {
 	digitalWrite(led_state_pin, HIGH);
+	digitalWrite(led_signal_pin, LOW);
       }
       else {
 	digitalWrite(led_state_pin, LOW);
       }
     }
 
-    else if ( strcmp(p.func, "D") == 0 ) {   // click
-      // turn on LED
+    else if ( message[0] == 'D') {   // click
+      // turn off LED
       digitalWrite(led_state_pin, LOW);
-    }
-
-    else if ( strcmp(p.id, "FF") == 0 ) {
-      // broadcast message
-      sendBackDeviceID();
-    }
-    else if(strcmp(p.var, "MOD") == 0) {
-      if(strcmp(p.data, "001") == 0) {
-        //EXP IR MODE
-        exp_mode = MODE_IR;
-      } else if(strcmp(p.data, "002") == 0) {
-        //EXP list MODE
-        exp_mode = MODE_LIST;
-      }
-    }
-    else if(strcmp(p.var, "SEL") == 0) {
-      // if it's selection related, process in this level
-      DEBUG_PRINTLN("selection msg received! ");
-      
-      if(strcmp(p.data, " ON") == 0 || strcmp(p.data, "AON") == 0) {
-        //one is selected => turn on led
-        //the rest => turn off led
-        //" ON" means selected manually by user
-        //"AON" means only 1 client responded so auto on
-        // if(atoi(p.id) == atoi(deviceId)) {
-        if(strcmp(p.id, deviceId) == 0) {
-          digitalWrite(led_state_pin, HIGH);  
-
-          //turn off target led if selected correctly
-          digitalWrite(led_target_pin, LOW); 
-          replyStatus();
-        } else {
-          digitalWrite(led_state_pin, LOW);  
-        }
-        statePending = false;
-
-      } else if(strcmp(p.data, "OFF") == 0 || strcmp(p.data, "CAN") == 0 ) {
-        //turn off all the led just in case
-
-        digitalWrite(led_state_pin, LOW);
-        statePending = false;
-
-      } else if(strcmp(p.data, "080") == 0 || strcmp(p.data, "1st") == 0) {
-        //the one is candidate => blink fast
-        //1st means selected by system as default candidate
-        //080 means switched by user
-        //do the same thing but has different meaning in terms of logging
-        DEBUG_TAGGING("my id: ", atoi(deviceId));
-        DEBUG_TAGGING(", select id: ", atoi(p.id));
-        DEBUG_TAGGING(", equal: ", atoi(deviceId)==atoi(p.id));
-        DEBUG_TAGGING("", "");
-
-        if(exp_mode == MODE_IR) {
-          if(statePending) {  
-            //only change led if it's in pending (is one of the candidates)
-            //blink at low frequency
-            if(atoi(p.id) == atoi(deviceId)) {
-              
-              blinkShort = false;
-            } else {
-              blinkShort = true;  
-              digitalWrite(led_state_pin, HIGH);
-            }  
-          }
-        } else {
-            //MODE_LIST
-            //only hovered is blinking (fast), all the others doesn't blink
-            if(atoi(p.id) == atoi(deviceId)) {
-              
-              statePending = true;
-              blinkShort = false;
-                
-            } else {
-              statePending = false;
-              blinkShort = true;
-              digitalWrite(led_state_pin, LOW);
-              //in case it happened to be on at the moment
-            }
-
-        }
-        
-      } else if(strcmp(p.data, "TAR") == 0) {
-          if(strcmp(p.id, deviceId) == 0) {
-            //turn on target light and return ack
-            DEBUG_TAGGING("Target received", "");
-            sendXBeePacketFromRaw(&XBee, deviceId, "A", "SEL", "TAR");
-            digitalWrite(led_target_pin, HIGH);
-          } else {
-            digitalWrite(led_target_pin, LOW);
-          }
-        
-
-        
-
-      } 
-
-    }
-    else if (atoi(p.id) == atoi(deviceId)) {
-      
-      // pass this message to the function of client
-      if(strcmp(deviceId, deviceTV) == 0
-        || strcmp(deviceId, deviceMusic) == 0) {
-        laptopBridging(p);
-      } else if(strcmp(deviceId, deviceLamp) == 0
-        || strcmp(deviceId, deviceFan) == 0) {
-        powerClient(p);
-
-      }
+      digitalWrite(led_signal_pin, LOW);
     }
   }
 }
@@ -470,4 +364,26 @@ void laptopBridging(struct XBeePacket p) {
   // } else {
   //   // sendXBeePacketFromRaw(&XBee, deviceId, "A", p.var, p.data);
   // }   
+}
+
+int readStringfromSerial (SoftwareSerial *SS, char *strArray, bool debug) {
+  int i = 0;
+  while ((*SS).available() && i < 20) {
+    strArray[i] = (*SS).read();
+    if (strArray[i] == '\n') {
+      break;
+    }
+    i++;
+  }
+  strArray[i] = '\0';
+  if (strArray[i-1] == '\n') {
+    strArray[i-1] = '\0';
+  }
+  if (debug) {
+    DEBUG_PRINT("read message: ");
+    DEBUG_PRINT(strArray);
+    DEBUG_PRINT("  count: ");
+    DEBUG_PRINTLN(i);
+  }
+  return i;
 }
