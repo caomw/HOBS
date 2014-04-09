@@ -203,11 +203,11 @@ void loop()
       // turn on LED
       if (message[1] == deviceId[0] && message[2] == deviceId[1]) {
   	digitalWrite(led_signal_pin, HIGH);
-	digitalWrite(led_state_pin, LOW);
       }
       else {
   	digitalWrite(led_signal_pin, LOW);
       }
+      digitalWrite(led_state_pin, LOW);
     }
 
     // the led only lights up when it receives commands from the master
@@ -215,11 +215,11 @@ void loop()
       // turn on LED
       if (message[1] == deviceId[0] && message[2] == deviceId[1]) {
 	digitalWrite(led_state_pin, HIGH);
-	digitalWrite(led_signal_pin, LOW);
       }
       else {
 	digitalWrite(led_state_pin, LOW);
       }
+      digitalWrite(led_signal_pin, LOW);
     }
 
     else if ( message[0] == 'D') {   // click

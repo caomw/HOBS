@@ -53,7 +53,6 @@ unsigned long start_time;
 boolean isWaitingReply;
 char IRReplies[50];
 boolean ir_bcast_mode = true;
-boolean xbee_bcast_mode = true;
 unsigned long ir_time;
 unsigned long visual_cue_time;
 unsigned long keep_history_time;
@@ -62,6 +61,8 @@ unsigned int visual_cue_cycle = 300;  // how frequently update visual cue
 unsigned int keep_history_cycle = 800;  // how frequently update visual cue
 unsigned int ir_response_threshold = 800;
 unsigned int ir_reply_count = 0;
+
+boolean is_control_from_glass = false;
 
 void setup()
 {
@@ -102,7 +103,7 @@ void loop() {
       // -1 (0xFFFF) indicates for broacast which is different than normal session id
       irsend.sendSony(0xFFFF,16);
       for (int i = 0; i < MAXIMUM_TARGETS; ++i)
-	intensity_array[i] = 0.8 * intensity_array[i];
+	intensity_array[i] = 0.9 * intensity_array[i];
 
       ir_time = millis();
     }
@@ -119,22 +120,25 @@ void loop() {
 	  largest_id = i;
 	}
       
-      DEBUG_PRINT("sending XBee to ");
-      DEBUG_PRINT(largest_id);
-      DEBUG_PRINT(" with intensity: ");
-      DEBUG_PRINTLN(largest_intensity);
+      if (largest_intensity > 20) {
+	
+	DEBUG_PRINT("sending XBee to ");
+	DEBUG_PRINT(largest_id);
+	DEBUG_PRINT(" with intensity: ");
+	DEBUG_PRINTLN(largest_intensity);
 
-      XBee.write("H");
-      if (largest_id < 10) {
-	XBee.write('0');
-	char id = '0' + largest_id;
-	XBee.println(id);
-      }
-      else {
-	char id = '0' + largest_id/10;
-	XBee.write(id);
-	id = '0' + largest_id%10;
-	XBee.write(id);
+	XBee.write("H");
+	if (largest_id < 10) {
+	  XBee.write('0');
+	  char id = '0' + largest_id;
+	  XBee.println(id);
+	}
+	else {
+	  char id = '0' + largest_id/10;
+	  XBee.write(id);
+	  id = '0' + largest_id%10;
+	  XBee.write(id);
+	}
       }
       visual_cue_time = millis();
     }
@@ -145,15 +149,12 @@ void loop() {
 	readStringfromSerial(&XBee, message, false);
 	DEBUG_PRINTLN(message);
 
-	message[2] = '\0';
-	int id = atoi(message);
-	intensity_array[id] = 0.75 * intensity_array[id]  + 0.25 * atoi(message+3);
-	
 	// for now the message could be defined as id + "x" + value
 	// we parse the message and update the queue
-	strcat(IRReplies, ":");
-	strcat(IRReplies, message);
-		
+	message[2] = '\0';
+	int id = atoi(message);
+	intensity_array[id] = 0.6 * intensity_array[id]  + 0.4 * atoi(message+3);
+	
 	ir_current_rssi = atoi(message+3);
 
 	if (ir_current_rssi > ir_rssi_max) {
@@ -179,14 +180,16 @@ void loop() {
 	print_intensity_arrays(&BT, intensity_array, MAXIMUM_TARGETS);
 
       } else if ( message[0]== 'H') {
-	// XBee.write(current_id);
+	XBee.println(message); // hover event
+	delay(10);
 	XBee.println(message); // hover event
 	Serial.println(message); // hover
+	ir_bcast_mode = false;
       }
       else if ( message[0]== 'C') {
-	// XBee.write(current_id);
 	XBee.println(message); // click event
-
+	delay(10);
+	XBee.println(message); // click event
 	is_connected = true;
 	ir_bcast_mode = false;
       }
@@ -194,8 +197,6 @@ void loop() {
     }
   }
   else {    // if(ir_bcast_mode) 
-    // this is the place when we only have a single connection with one device
-    // TODO: implement later
     if (BT.available()) {
       delay(10);
       Serial.print("[BT]: ");
@@ -204,8 +205,12 @@ void loop() {
 
       if ( message[0]== 'H') {
 	XBee.println(message); // hover event
+	delay(10);
+	XBee.println(message); // hover event
 	Serial.write(message);
       } else if ( message[0]== 'C') {
+	XBee.println(message); // click event
+	delay(10);
 	XBee.println(message); // click event
 	is_connected = true;
       }
@@ -268,7 +273,7 @@ int  readStringfromSerial (HardwareSerial *SS, char *strArray, bool debug) {
 
 void print_intensity_arrays(HardwareSerial *HS, int array[], int n) {
   boolean new_line = false;
-  for (int i = 0; i < n; ++i) {
+  for (int i = 1; i < n; ++i) {
     if (array[i] > 30) {
       (*HS).print(i);
       (*HS).print(":");
