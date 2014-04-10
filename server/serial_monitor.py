@@ -77,8 +77,6 @@ while True:
     sys.stdout.write(line)
     if len(line.strip()) > 0 and is_osc_on:
       try:
-        osc_send(line[0:2], int(line[3:])/1024.0)
+        osc_send(line[0], int(line[2:])/1024.0)
       except ValueError:
         pass
-
-        
