@@ -220,11 +220,26 @@ void loop()
 	digitalWrite(led_state_pin, LOW);
       }
       digitalWrite(led_signal_pin, LOW);
+      digitalWrite(led_target_pin, LOW);
+    }
+
+    // the led only lights up when it receives commands from the master
+    else if ( message[0] == 'L') {   // light up for targeting
+      // turn on LED
+      if (message[1] == deviceId[0] && message[2] == deviceId[1]) {
+	digitalWrite(led_target_pin, HIGH);
+      }
+      else {
+	digitalWrite(led_target_pin, LOW);
+      }
+      digitalWrite(led_signal_pin, LOW);
+      digitalWrite(led_state_pin, LOW);
     }
 
     else if ( message[0] == 'D') {   // click
       // turn off LED
       digitalWrite(led_state_pin, LOW);
+      digitalWrite(led_target_pin, LOW);
       digitalWrite(led_signal_pin, LOW);
     }
   }

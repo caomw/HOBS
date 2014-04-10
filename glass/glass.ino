@@ -92,6 +92,7 @@ void setup()
     digitalWrite(led_pin, LOW);
     delay(100);
   }
+  XBee.println("D");
 
 }
 
@@ -120,7 +121,7 @@ void loop() {
 	  largest_id = i;
 	}
       
-      if (largest_intensity > 20) {
+      if (largest_intensity > 10) {
 	
 	DEBUG_PRINT("sending XBee to ");
 	DEBUG_PRINT(largest_id);
@@ -140,6 +141,10 @@ void loop() {
 	  XBee.write(id);
 	}
       }
+      else {
+	XBee.println("H00"); // hover nothing
+      }
+
       visual_cue_time = millis();
     }
 
@@ -153,7 +158,7 @@ void loop() {
 	// we parse the message and update the queue
 	message[2] = '\0';
 	int id = atoi(message);
-	intensity_array[id] = 0.6 * intensity_array[id]  + 0.4 * atoi(message+3);
+	intensity_array[id] = 0.1 * intensity_array[id]  + 0.9 * atoi(message+3);
 	
 	ir_current_rssi = atoi(message+3);
 
@@ -219,11 +224,7 @@ void loop() {
 	DEBUG_PRINT("disconnect the clients");
 	DEBUG_PRINTLN(current_id);
 	// send out disconnection message to all the nodes
-	XBee.write("00");
 	XBee.write("D");
-	XBee.write("XXX");
-	XBee.println("XXX");
-
 	is_connected = false;
 	ir_bcast_mode = true;
       }
@@ -274,7 +275,7 @@ int  readStringfromSerial (HardwareSerial *SS, char *strArray, bool debug) {
 void print_intensity_arrays(HardwareSerial *HS, int array[], int n) {
   boolean new_line = false;
   for (int i = 1; i < n; ++i) {
-    if (array[i] > 30) {
+    if (array[i] > 10) {
       (*HS).print(i);
       (*HS).print(":");
       (*HS).print(array[i]);
