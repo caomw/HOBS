@@ -25,10 +25,10 @@
 
 SoftwareSerial XBee(3,2); // RX, TX
 
-const int led_state_pin = 13;
+const int led_state_pin = 11;
 const int led_signal_pin = 10;
 const int control_pin = 12;
-const int led_target_pin = 11;
+const int led_target_pin = 13;
 const int tsl267_pin = 5;
 const int ir_rcv_pin = 8;
 
@@ -51,7 +51,7 @@ unsigned long start_time;
 unsigned long end_time;
 unsigned long toggle_time;
 unsigned long signal_time;
-unsigned long signal_threshold = 300;
+unsigned long signal_threshold = 310;
 unsigned long pendingThreshold = 10000;
 int random_mutiplier = 15;
 int bucket = 0;
@@ -75,6 +75,7 @@ boolean signal_response = false;
 const int MODE_IR = 1;
 const int MODE_LIST = 2;
 int exp_mode = MODE_IR;
+boolean notMe = false;
 
 void setup()  
 {
@@ -136,11 +137,11 @@ void loop()
       // digitalWrite(led_signal_pin, HIGH);
       // think about how to do the scheduling such that there is no conflict
       
-      if (ir_rssi_increase > 100) {
+      if (ir_rssi_increase > 50) {
 	XBee.println(deviceId + String("i") + String(ir_rssi_last_max));
       }
-      else if (ir_rssi_increase < -100) {
-	delay(30);
+      else if (ir_rssi_increase < -50) {
+	delay(100);
 	XBee.println(deviceId + String("d") + String(ir_rssi_last_max));
       }
       else {
@@ -148,8 +149,12 @@ void loop()
 	XBee.println(deviceId + String("u") + String(ir_rssi_last_max));
       }
 
+      // turn on LED
       signal_time = millis();
+      digitalWrite(led_signal_pin, HIGH);
       signal_response = true;
+
+
     } else if(results.value <= 0x32 && results.value > 0){
       // limit the session ID to be a random number between 0~50
       sendBackDeviceID();
@@ -162,36 +167,12 @@ void loop()
     irrecv.resume();    
   }
 
-  //blinking when multiple candidates
-  if(statePending) {
-    end_time = millis();
-
-    if(end_time - toggle_time > ledStateInterval) {
-      // if (blinkShort) {
-      //   if (digitalRead(led_state_pin)) {
-      //     digitalWrite(led_state_pin, LOW);
-      //     bucket = 0;
-      //   }
-      //   else if (bucket == blinkShort_ratio)
-      //     digitalWrite(led_state_pin, HIGH);
-      //   else
-      //     bucket++;
-      // }
-      if(!blinkShort) {
-        digitalToggle(led_state_pin);
-      } else{
-        digitalWrite(led_state_pin, HIGH);  
-      }
-      toggle_time = millis();
+  if(signal_response){
+    if(millis() - signal_time > signal_threshold){
+      digitalWrite(led_signal_pin, LOW);
+      signal_response = false;
     }
-  } 
-
-  /* if(signal_response){ */
-  /*   if(millis() - signal_time > signal_threshold){ */
-  /*     signal_response = false; */
-  /*     digitalWrite(led_signal_pin, LOW); */
-  /*   } */
-  /* } */
+  }
 
   
   if (XBee.available()) {
@@ -200,14 +181,16 @@ void loop()
     
     // the led only lights up when it receives commands from the master
     if ( message[0] == 'H') {   // hover
+      digitalWrite(led_state_pin, LOW);
       // turn on LED
       if (message[1] == deviceId[0] && message[2] == deviceId[1]) {
   	digitalWrite(led_signal_pin, HIGH);
+	signal_response = false;
       }
       else {
   	digitalWrite(led_signal_pin, LOW);
+	delay(100);
       }
-      digitalWrite(led_state_pin, LOW);
     }
 
     // the led only lights up when it receives commands from the master
@@ -236,7 +219,7 @@ void loop()
       digitalWrite(led_state_pin, LOW);
     }
 
-    else if ( message[0] == 'D') {   // click
+    else if ( message[0] == 'D') {   // disconnect, reset
       // turn off LED
       digitalWrite(led_state_pin, LOW);
       digitalWrite(led_target_pin, LOW);

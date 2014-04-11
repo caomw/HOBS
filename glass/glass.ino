@@ -19,7 +19,7 @@
 
 #ifdef DEBUG
   #define DEBUG_PRINT(x)  Serial.print(x)
-  #define DEBUG_PRINTLN(x)  Serial.println(x)
+  #define           DEBUG_PRINTLN(x)  Serial.println(x)
   #define DEBUG_TAGGING(x, y)  Serial.print(x); Serial.println(y)
 #else
   #define DEBUG_PRINT(x)
@@ -104,8 +104,7 @@ void loop() {
       // -1 (0xFFFF) indicates for broacast which is different than normal session id
       irsend.sendSony(0xFFFF,16);
       for (int i = 0; i < MAXIMUM_TARGETS; ++i)
-	intensity_array[i] = 0.9 * intensity_array[i];
-
+	intensity_array[i] = 0.8 * intensity_array[i];
       ir_time = millis();
     }
     /* if (millis() - keep_history_time > keep_history_cycle) { */
@@ -121,8 +120,7 @@ void loop() {
 	  largest_id = i;
 	}
       
-      if (largest_intensity > 10) {
-	
+      if (largest_intensity > 10) {	
 	DEBUG_PRINT("sending XBee to ");
 	DEBUG_PRINT(largest_id);
 	DEBUG_PRINT(" with intensity: ");
@@ -181,7 +179,7 @@ void loop() {
 	// return current_id to BT and set up connection to the client
 
 	Serial.print("[toBT]: ");
-	print_intensity_arrays(&Serial, intensity_array, MAXIMUM_TARGETS);
+	// print_intensity_arrays(&Serial, intensity_array, MAXIMUM_TARGETS);
 	print_intensity_arrays(&BT, intensity_array, MAXIMUM_TARGETS);
 
       } else if ( message[0]== 'H') {
@@ -218,8 +216,7 @@ void loop() {
 	delay(10);
 	XBee.println(message); // click event
 	is_connected = true;
-      }
-      else if ( message[0] == 'D') {
+      } else if ( message[0] == 'D') {
 	// return current_id to BT and set up connection to the client
 	DEBUG_PRINT("disconnect the clients");
 	DEBUG_PRINTLN(current_id);
@@ -230,7 +227,11 @@ void loop() {
       }
     }
   }
-
+  if (Serial.available()) {
+    if (Serial.read() == 'R') {
+      ir_bcast_mode = true;
+    }
+  }
 }
 
 boolean isPacketValid(char *message) {
@@ -274,8 +275,14 @@ int  readStringfromSerial (HardwareSerial *SS, char *strArray, bool debug) {
 
 void print_intensity_arrays(HardwareSerial *HS, int array[], int n) {
   boolean new_line = false;
+  int max = 0;
   for (int i = 1; i < n; ++i) {
-    if (array[i] > 10) {
+    if (array[i] > max) {
+      max = array[i];
+    }
+  }
+  for (int i = 1; i < n; ++i) {
+    if (array[i] > 10 && array[i] > max / 2) {
       (*HS).print(i);
       (*HS).print(":");
       (*HS).print(array[i]);
