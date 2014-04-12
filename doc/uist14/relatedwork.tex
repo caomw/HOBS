@@ -1,17 +1,15 @@
 %!TEX root = uist14.tex
 \section{Background and Related Work}
+Our approach is related to head and eye-controlled interfaces, selection techniques, and prior work on hardware devices for pointing in physical spaces.
 \subsection{Head and Eye Input}
-Head movement has long been used for virtual camera control in VR applications~\cite{pausch_user_1993} and as an assitive input technology for cursor control of desktop applications~\cite{}. Head joysticks have been evaluated using Fitts' law and \bjoern{what did they find?} However, 
-Card, summarizing other work, shows that neck muscles are a poor muscle group for pointing in general: neck muscles only have a bandwidth of about $4.2bits/s$ (compared to $23bits/s$ of wrist muscles used by a standard mouse)~\cite{Card:1991:MAD:123078.128726}. 
+Head movement has long been used for virtual camera control in VR applications~\cite{pausch_user_1993} and as an assitive input technology for cursor control of desktop applications~\cite{radwin1990method}. However,
+Card, summarizing other work, shows that neck muscles are a poor muscle group for pointing in general: neck muscles only have a bandwidth of about $4.2bits/s$ (compared to $23bits/s$ of wrist muscles used by a standard mouse~\cite{Card:1991:MAD:123078.128726}. This prior work often focused on used head orientation for control of graphical interfaces; in contrast, we apply this modality to selection in physical spaces, where users can also move around.
 
-Contrast: we're not working on GUI tasks, but on identifyign and selecting ubicomp objects in physical spaces.
-
-Gaze control of existing graphical user intefaces~\cite{kumar2007eyepoint}. There are also wearable gaze trackers~\cite{SMI} -- but while these can provide a concrete point in space where a user is looking, turning this information into a selection information requires either a fixed absolute map of each space with known location and orientation of the user, or... Our system works through point-to-point IR communication and does not require any a priori knowledge of where objects are located.
-
-Our work is closer in spirit to Selker's headworn system~\cite{Selker:2001:EGE:634067.634176}.
+Researchers have also developed methods for gaze control of existing graphical user intefaces~\cite{kumar2007eyepoint}. While there are wearable gaze trackers~\cite{bulling2009wearable}, turning information about a concrete point in space where a user is looking into a selection requires either a map of each space with known location and orientation of the user. Our system works through point-to-point IR communication and does not require any a priori knowledge of where objects are located. An alternative would be to equip all objects of interest in the environment with cameras that watch the user~\cite{smith2013gaze}, though such an approach would be computationally expensive and may not work at greater distances.
+%Our work is closer in spirit to Selker's headworn system~\cite{Selker:2001:EGE:634067.634176}.
 
 \subsection{Area Cursors}
-A central hypothesis of this paper is that the area selection paradigm is well matched to head orientation input.
+A central hypothesis of this paper is that the area selection paradigm is well matched to head orientation input. In area selection cursors in graphical user interfaces, users do X and then Y.
 \bjoern{Need a discussion of area cursors~\cite{kabbash1995prince,worden1997making,Findlater-uist2010}.}
 
 \subsection{Pointing in physical spaces}
