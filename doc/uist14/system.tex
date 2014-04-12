@@ -1,3 +1,20 @@
+%!TEX root = uist14.tex
+
+\bjoern{The design and prototyping sections are very thorough, but too long. If we want to submit a shorter paper we need a more concise description. We generally don't need to describe the sequence of steps we took to prototype something, just the final solution and the motivation for each decision. If I wanted to describe the whole system on one page, i'd probably structure it as follows:}
+\section{Interaction technique description}
+One paragraph about how the technique works from the user's perspective.
+\section{Implementation: IR-based Head-Orientation}
+\subsection{Head-worn emitter}
+Our selection technique adds an IR emitter to a wearable device frame in line with the wearer's saggital (font-to-back) plane (see Figure). IR is a suitable technology because it is directional. The angle of emittance leads to a cone-shaped area coverage. Many different emitter angles are commercially manufactured; we use $x^circ$, which yields a selection area of diameter Y at distance Z (part number XXXX).
+We attach the IR emitter to the frame with a repositionable 3D-printed mount that can account for individual differences in head shape (users adjust the mount so the emitter points directly forward, level to the ground.)
+
+\subsection{Target receivers}
+Each selectable target is equipped with IR receivers. We are interested in sensing two things: 1) IR communication and 2) IR intensity. Common IR receivers have automatic gain control built in and hide received signal strength. We therefore add an IR intensity sensor. In a commercial application, a single sensor that both decodes and reports RSSI could be designed.
+\subsubsection{Visual feedback}
+...
+\subsection{Wireless communication}
+(describe that we only use IR initially, then jump to RF-based communication.)
+
 \section{System Design and Prototyping}
 \label{sec:syst-design-prot}
 
