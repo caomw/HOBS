@@ -5,7 +5,7 @@ With our first study, we have learned that with {\em coarse selection}, we can r
 From Figure~\ref{fig:selection-time}B, the average results when disambiguation is involved is significantly increase. We challenge ourselves that ``can we do a better job in a dense environment?''
 
 Previously we are only using IR reception as a signal for potential target identification. It's a binary result indicating that whether a target has received IR signal or not. But actually the IR intensity at the receiver side can provide more information than just the binary reception. The illuminance falls when the distance increases as well as when the angle inceases.
-We have emprically measured the intensity distribution at the receiver side, and it's shown in Figure~\ref{fig:measurement}.
+We have emprically measured the intensity distribution at the receiver side, and it's shown in Figure~\ref{fig:measurement}. \ben{still working on it, not sure how much value we will get out of it. Seems useful to support the argument of the benefit though.}
 
 \begin{figure}[t]
 \centering
@@ -13,6 +13,16 @@ We have emprically measured the intensity distribution at the receiver side, and
 \caption{placeholder for emperical measurement.}
 \label{fig:measurement}
 \end{figure}
+
+From the measurement above we learned that the angluar difference has a large effect on the intensity readings. In order to make use of the intensity, we have designed and 3D printed a repositional IR holder that can be clipped onto Glass. Then for different users, they can adjust it to align with their line of sight. \ben{need to mention in iteration 1 about the crappy tape}. 
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.9\columnwidth]{figures/tube_from_top.jpg}
+\caption{The repositional IR holder.}
+\label{fig:measurement}
+\end{figure}
+
 
 
 The intensity information is used in two ways:
