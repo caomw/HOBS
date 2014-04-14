@@ -19,17 +19,16 @@ Past research has introduced techniques of augmenting hand-held mobile devices w
 %% introducing head-worn computing and head orientation
 Emerging head-worn computing devices have the potential to overcome some of these limitations: because they are worn, they do not require retrieval; they may enable hands-free or uni-manual interactions; and they offer near-eye or see-through displays to present information adjacent to physical objects in the wearer's field of view. We thus investigate the research question how such computing devices may be used for selection of physical targets in space.
 
-Because they are head-worn, such devices can naturally exploit the user's head orientation, an important, but also imprecise indicator of the user's locus of attention: it contains the general direction, but not the particular point of focus. While gaze tracking could provide further information about a user's focus, when operating in unconstrained environments, translating gaze information into identification and selection of an object is an open problem.
-We therefore study how to leverage head-orientation alone for target selection in physical spaces. 
+Because they are head-worn, such devices can naturally exploit the user's head orientation, an important, but also imprecise indicator of the user's locus of attention: it contains the general direction, but not the particular point of focus. While gaze tracking could provide further information about a user's focus, wearable gaze tracking cannot by itself reliably determine the identity of objects in focus. Equipping all devices with stationary gaze trackers is possible~\cite{vertegaal2005media} but much costlier than our approach. We therefore study how to leverage head-orientation alone for target selection in physical spaces. 
 
 The imprecision of human head movement suggests adapting area cursor techniques known from assistive devices~\cite{kabbash1995prince,worden1997making,findlater2010enhanced}. Such techniques employ a two-step selection process: {\em coarse} selection of an area of interest, followed by {\em refinement} to select a target within that region.
 
-We propose an area-selection technique that can be readily implemented with small hardware changes to emerging wearable devices. We augment Google Glass\footnote{\url{http://www.google.com/glass/start/}} to enable (IR) communication between Glass and target appliances. The cone shape of light emitted by an IR LED (a diameter of 60-120cm and distance up to 6m) provides the {\em coarse} selection area. To {\em refine} selection when multiple targets have received IR signals, we introduce three different disambiguation techniques. First, targets compare received IR signal intensity to make a default selection among signal recipients. Second, we use IR intensity changes from head movement to switch between signal recipients when a user explicitly enters a refinement quasi-mode. Third, we always leave the option of manually changing the current targets through explicit list navigation.
+In this paper, we describe the iterative development and evaluation of an area-selection technique that can be readily implemented with small hardware changes to emerging wearable devices. We augment Google Glass\footnote{\url{http://www.google.com/glass/start/}} to enable (IR) communication between Glass and target appliances. The cone shape of light emitted by an IR LED (a diameter of 60-120cm and distance up to 6m) provides the {\em coarse} selection area. To {\em refine} selection when multiple targets have received IR signals, we first introduce a manual technique where users select a candidate device using a graphical interface on their wearable device.  We then conduct a study with $14$ participants that compares acquisition times for physical targets in a room for our technique and an alternative list selection interface. We find that target acquisition through head orientation is preferred by users and is faster than list selection, given the constraints of linear input using a head-worn touch controller. 
+
+Noting that the refinement UI significantly slowed interaction times in this study, we contribute an improved refinement technique in which target objects compare received IR signal intensity. This intensity is both used to make a default selection, and to order the fallback manual UI list\bjoern{rephrase}. A second study with $n$ participants shows that IR-intensity disambiguation successfully reduces list navigation for refinement and speeds up selection when compared to the naive technique from the first study.
+
+A shortcoming discovered in the second study is that participants dislike switching between focusing on targets in the world and graphics on their near-eye display during the selection process. We solve this problem by inferring a spatial data structure of target locations using Glass' orientation sensors and allow small head tilt motions to move selections during the refinement stage (e.g., nod down to select next target down, turn right to select next target on the right).
 %% three ways
-
-We also contribute empirical data on the system performance, usability, and user experience of head-orientation targeting and device control. We first report measurements of range and beam characteristics of our controller. We then conduct a study with $14$ participants that compares acquisition times for physical targets in a room for our technique and an alternative list selection interface. We find that target acquisition through head orientation is preferred by users and is faster than list selection, given the constraints of linear input using a head-worn touch controller. 
-We then quantify the additional benefit of using IR-intensity disambiguation \bjoern{and find XYZ.}. \bjoern{Say something about the inferred map if we get around to it}.
-
 %---
 We also demonstrate and example application of our technique for a remote control of smart appliances: a user looks at the appliance she wishes to control and confirms selection by tapping - an appliance-specific user interface is then shown on the user's near-eye display.
 
@@ -38,12 +37,12 @@ We also demonstrate and example application of our technique for a remote contro
 
 
 %% Contribution
-In summary, this paper makes the following contributions:
-\begin{itemize}
-\item We design and implement a novel head-orientation based selection technique for physical targets based on IR communication. We introduce disambiguation techniques to address the inherent imprecision of head orientation.
-\item We present evaluations that compare head orientation targeting to list selection and quantify the benefits of automatic disambiguation.
-\item We demonstrate a home appliance remote control application built on top of our selection technique.
-\end{itemize}
+%In summary, this paper makes the following contributions:
+%\begin{itemize}
+%\item We design and implement a novel head-orientation based selection technique for physical targets based on IR communication. We introduce disambiguation techniques to address the inherent imprecision of head orientation. 
+%\item We present evaluations that compare head orientation targeting to list selection and quantify the benefits of automatic disambiguation.
+%\item We demonstrate a home appliance remote control application built on top of our selection technique.
+%\end{itemize}
 
 %\ben{Having problem fixing the reference}.\bjoern{skip this - we want to be brief.}
 %In the remainder of this paper, we will first describe the related works in physical selection and targeting. Given that we focus our scope on head orientation, in Section~\ref{sec:background} we will briefly review human's neck ergonomics as the background for head orientation. In Section~\ref{sec:syst-design-prot}, we then present our system designed for the study of head orientation based selection. The prototype is also what we have used for building the example applications. The disambiguation techniques are discussed in Section~\ref{sec:disamb-techn}, which is followed by the study and evaluation in Section~\ref{sec:evaluation}. To further show the usefulness of having such head orientation-based selection, we describe the enabled applications in Section~\ref{sec:applications}, with detailed implementation about the ``universal remote control'' application. The discussion and conclusion are in Section~\ref{sec:discussion} and Section~\ref{sec:conclusion} respectively. 

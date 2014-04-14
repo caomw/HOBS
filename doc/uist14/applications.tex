@@ -1,12 +1,15 @@
-\section{Applications}
+%!TEX root = uist14.tex
+\section{Application Example: Universal Remote Control}
 \label{sec:applications}
 
-In this section we describe four possible applications that can be built on top of the head orientation-based selection. We focus our discussion on {\em GlassRemote} -- a universal remote control application.
+%In this section we describe four possible applications that can be built on top of the head orientation-based selection. We focus our discussion on {\em GlassRemote} -- a universal remote control application.
 
-\subsection{GlassRemote}
-\label{sec:univ-remote-contr}
+%\subsection{GlassRemote}
+%\label{sec:univ-remote-contr}
 
-We extended the head-orientation targeting and existing hardware platform to achieve a universal remote control functionality in smart home scenario (we have a prior study archived in \cite{Chen:EECS-2013-200}). The motivation is to solve two challenges that exist in current list-based solutions -- {\em naming} and {\em scoping}. First, assigning clear names is non-trivial. Especially in shared spaces, the person trying to control the device might not be the one that named it - e.g., while an office building manager may know what ``Light 4 in area E'' corresponds to, an occupant may not. Second, without a method of scoping selection to automatically filter non-relevant devices, paging though long lists of names or navigating hierarchies becomes potentially more cumbersome than the physical action that the ``convenient'' software solution was meant to replace. Our head-orientation based interaction elegently solves these two problems.
+We extended the head-orientation targeting and existing hardware platform to achieve a universal remote control functionality in smart home scenario. The motivation is to solve two challenges that exist in current list-based solutions -- {\em naming} and {\em scoping}. First, assigning clear names is non-trivial. Especially in shared spaces, the person trying to control the device might not be the one that named it - e.g., while an office building manager may know what ``Light 4 in area E'' corresponds to, an occupant may not. Second, without a method of scoping selection to automatically filter non-relevant devices, paging though long lists of names or navigating hierarchies becomes potentially more cumbersome than the physical action that the ``convenient'' software solution was meant to replace. Our head-orientation based interaction elegently solves these two problems.
+
+\bjoern{you need to tell us more about how the interaction works - namely, that you pull the user interface for an appliance onto the near-eye display. This may not be obvious.}
 
 To assess the usability of such applications when the novel interaction scheme is added, we have created a few smart appliances (including a fan, a lamp and a TV) and asked 14 participants to work through a concrete smart home scenario. The fan and lamp are relatively dumb and only support turning-on and turning-off. The smart TV provides control capability of switching the channels and adjust the volumn, as well as pause/play. For the smart home scenario, the participant has been asked to perform a series of actions that swtich the targets and control them. We then report some of the results to strength our motivation for the head-orientation interaction.
 
@@ -15,21 +18,24 @@ Durign the study, all participants have successfully completed the list of tasks
 %% I feel like we should mention a bit about the interaction complexity. But that's a bit out of the scope of this paper.
 %% Participants rated the ease of control of particular appliances differently. Ease of use ratings were higher for the lamp and fan which had simple, discrete on/off actions, and lower for the more complex movie player (see Figure~\ref{fig:smarthome-likert}). Multiple participants remarked that the difficulty was based on the affordances of Glass: \studyquote{Most of the difficulty I had with Glass came from having to navigate the interface on the tiny screen with the touch pad}. The screen size and (largely) 1D input put a limit on the complexity of interfaces that can be presented. As one participant remarked: \studyquote{[The media player] does not seem to be more efficient than a tablet device.} The difficulty can also partly be ascribed to our interaction design, which required one finger swipes to switch between parameters and two finger gestures for adjusting parameters --- it was hard for users to exert fine control over two-finger swipes. In addition, users did not always remember these mappings as they are not yet part of a standard gesture vocabulary.
 
-\subsection{Attention Tracking}
-\label{sec:attention-tracking}
+\bjoern{since length will be an issue, let's just focus on glass remote and skip the others?}
+Additional applications such as attention tracking or indoor position and orientation estimation of a wearer based on our technique are conceivable; we leave them to future work.
 
-The second tier of applications enabled by our system is an implicit use of users' head orientation. One sample application is to obtain a personal statistics. Nowadays, we are surrounded by all sorts of screens, and many people's job requires them to stare at the monitors for the whole day. 
+%\subsection{Attention Tracking}
+%\label{sec:attention-tracking}
+
+%The second tier of applications enabled by our system is an implicit use of users' head orientation. One sample application is to obtain a personal statistics. Nowadays, we are surrounded by all sorts of screens, and many people's job requires them to stare at the monitors for the whole day. 
 % citation needed, take a look at this one: E-Readers and Visual Fatigue, http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3873942/
-Knowing how much time you have spent in front of the screen is definitely useful, and the application can be built to remind the user to take a break whenever a certain time threshold is reached.
+%Knowing how much time you have spent in front of the screen is definitely useful, and the application can be built to remind the user to take a break whenever a certain time threshold is reached.
 
 %% We might be lacking evidence, but let me just write down the draft first.
-Our system enables a flexible and easy-to-use tracking of users' attention without knowing the map. Therefore, it's suitable to be deployed in large museums (even when the exihibits positions are adjusted constantly). Then such attention tracking will facillitate many social science studies. Previous solutions are either using RFID \cite{Hsi:2005:REV:1081992.1082021} or video taping % this is a cv of Adam who has worked on video analysis http://www.exploratorium.edu/vre/cvs/ak_cv.pdf. 
-However, head orientation is a better approximation of attention rather than proximity. By placing our tracking devices in the environment, we can easily get a more accurate profiling of users intention.
+%Our system enables a flexible and easy-to-use tracking of users' attention without knowing the map. Therefore, it's suitable to be deployed in large museums (even when the exihibits positions are adjusted constantly). Then such attention tracking will facillitate many social science studies. Previous solutions are either using RFID \cite{Hsi:2005:REV:1081992.1082021} or video taping % this is a cv of Adam who has worked on video analysis http://www.exploratorium.edu/vre/cvs/ak_cv.pdf. 
+%However, head orientation is a better approximation of attention rather than proximity. By placing our tracking devices in the environment, we can easily get a more accurate profiling of users intention.
 
-\subsection{Indoor Positioning}
-\label{sec:indoor-positioning}
+%\subsection{Indoor Positioning}
+%\label{sec:indoor-positioning}
 
-There is one category of indoor positioning which is based on angle of arrival. Traditional approaches on indoor positioning are based on fingerprinting or triangulation, which is known to be bad due to multi-path effect for indoor environment. With our system, using the adjacent mapping calibration we can figure out the position of the targets in a room, and then based on a new sample, we can estimate a user's position with some simple math.
+%There is one category of indoor positioning which is based on angle of arrival. Traditional approaches on indoor positioning are based on fingerprinting or triangulation, which is known to be bad due to multi-path effect for indoor environment. With our system, using the adjacent mapping calibration we can figure out the position of the targets in a room, and then based on a new sample, we can estimate a user's position with some simple math.
 
 
 
