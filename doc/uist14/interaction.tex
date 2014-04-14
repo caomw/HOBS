@@ -1,13 +1,13 @@
 
 \section{Interaction Models}
 
-In this section, we first describe how head orientation-based interaction works from the users' point of view (Figure~\ref{fig:interaction}).
+In this section, we describe how head orientation-based interaction works from the users' point of views (Figure~\ref{fig:interaction}). \sean{do we want to just use the term Glass or explains that it stands for any head-worn computing devices?}
 
-{\bf Scan:} The user first scans the environment to locate the position of the target. During this stage, Glass will constantly sends out IR signal, and the target offers immediate feedback when it receives the IR. 
+{\bf Scan:} The user first scans the environment to locate the position of the target. During this stage, Glass constantly sends out IR signals, and the target offers immediate feedback when it receives the signal. 
 
-{\bf Coarse Selection:} The user confirms his desire to connect to a target by tapping on the Glass touchpad. At this time, Glass collects the replies from targets about the IR signal reception. If there is only a single target in IR range, then it's considered as a successful selection. However, in a relative dense environment where multiple targets are within range, the user needs to perform a fine selection.
+{\bf Coarse Selection:} The user confirms his desire to connect to a target by tapping on the Glass touchpad. Glass collects the responses from targets regarding their IR signal reception. If there is only one single target in IR range, then it's automatically connected and the selection process is completed. However, in a relative dense environment where multiple targets are within range, the user needs to perform a fine selection.
 
-{\bf Fine selection:} When disambiguation is needed, the user needs to make an explicit selection among the targets that within his view range. There are multiple ways to achieve it -- either from Glass touchpad that controls a UI list or using the head motion sensor on Glass. We will leave a thorough and complete discussion later. Once the user confirms the current selection, he could tap to complete the acquisition. Since this part is effectively disambiguate among potential targets, we will also use {\em disambiguation} to refer to this stage.
+{\bf Fine selection:} When disambiguation is needed, the user needs to make an explicit selection among the targets that within his view range. There are multiple ways to achieve it -- either from Glass touchpad that controls a GUI list or using the head motion sensor on Glass. We will provide a thorough and complete discussion later in the paper. Once the user confirms the current selection, he could tap to complete the fine selection process. Since the purpose of this stage is to effectively disambiguate among potential targets, we will also use {\em disambiguation} to refer to this stage.
 
 \begin{figure}[t!]
 \centering
@@ -21,7 +21,7 @@ From the flow of interaction, we learned that the overall target acquisition tim
 t_{total}=t_{scan}+t_{coarse}+t_{disambiguation}
 \end{equation}
 
-Our goal of this paper is to minimize the overall target selection time. In the following few sections, we will describe our iterative design process during which we have explored the design space. 
+Our goal of this paper is to minimize the overall target selection time. In the following few sections, we will describe our iterative design process during which we have explored the design space.
 
 %%% Local Variables: 
 %%% mode: latex
