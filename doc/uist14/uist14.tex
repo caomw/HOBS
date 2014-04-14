@@ -19,6 +19,7 @@
 
 % Load basic packages
 \usepackage{balance}  % to better equalize the last page
+\usepackage{caption}
 \usepackage{graphics} % for EPS, load graphicx instead
 \usepackage{times}    % comment if you want LaTeX's default font
 \usepackage{url}      % llt: nicely formatted URLs
@@ -97,6 +98,17 @@ breaklinks=true,
   }
 }
 
+
+\teaser{
+  \centering
+  \captionsetup{justification=centering}
+  \includegraphics[width=\textwidth]{figures/new_teaser.pdf}
+  \caption{\ben{needs further refinement of this image. It's in Figures/figures.key.} Illustration of head-orientation based targeting and an example application -- Universal Remote Control.}
+  \label{fig:teaser}
+}
+
+%% the third part of the teaser: An example application of head-orientation targeting: Using an augmented head-worn device (1), users can control smart home appliances (2) by looking at them. A near-eye display then shows an appliance control UI (3), which users navigate through multitouch gestures.}
+
 \maketitle
 
 \begin{abstract}
@@ -114,14 +126,14 @@ breaklinks=true,
 
 \input{intro}
 \input{relatedwork}
-%\input{background}
-\input{system1}
-\input{study1}
-\input{system2}
-\input{study2}
-\input{system3}
+\input{interaction}
+\input{iteration1}
+\input{iteration2}
+\input{iteration3}
 %\input{disambiguation}
 %\input{evaluation}
+
+%% the rest of the paper seems to be fine; it's mainly the texts
 \input{applications}
 \input{discussion}
 \input{conclusion}

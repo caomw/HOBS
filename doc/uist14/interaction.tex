@@ -1,0 +1,29 @@
+
+\section{Interaction Models}
+
+In this section, we first describe how head orientation-based interaction works from the users' point of view (Figure~\ref{fig:intearaction}).
+
+{\bf Scan:} The user first scans the environment to locate the position of the target. During this stage, Glass will constantly sends out IR signal, and the target offers immediate feedback when it receives the IR. 
+
+{\bf Coarse Selection:} The user confirms his desire to connect to a target by tapping on the Glass touchpad. At this time, Glass collects the replies from targets about the IR signal reception. If there is only a single target in IR range, then it's considered as a successful selection. However, in a relative dense environment where multiple targets are within range, the user needs to perform a fine selection.
+
+{\bf Fine selection:} When disambiguation is needed, the user needs to make an explicit selection among the targets that within his view range. There are multiple ways to achieve it -- either from Glass touchpad that controls a UI list or using the head motion sensor on Glass. We will leave a thorough and complete discussion later. Once the user confirms the current selection, he could tap to complete the acquisition. Since this part is effectively disambiguate among potential targets, we will also use {\em disambiguation} to refer to this stage.
+
+\begin{figure}[t!]
+\centering
+\includegraphics[width=\columnwidth]{figures/interactionModel.pdf}
+\caption{Four different states during the head-orientation targeting.}
+\label{fig:interaction}
+\end{figure}
+
+From the flow of interaction, we learned that the overall target acquisition time can be broken down into the following pieces:
+\begin{equation}
+t_{total}=t_{scan}+t_{coarse}+t_{disambiguation}
+\end{equation}
+
+Our goal of this paper is to minimize the overall target selection time. In the following few sections, we will describe our iterative design process during which we have explored the design space. 
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "uist14"
+%%% End: 
