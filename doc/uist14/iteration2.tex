@@ -1,11 +1,12 @@
 \section{Iteration 2: Binary IR vs. Valued IR}
+\sean{the term Binary IR and Valued IR can be refined.}
+\subsection{Problem Statement and Goal}
+With our first study, we learn that using IR to perform {\em coarse selection} can reduce the overall target selection time. A major reason for the improvement is because disambiguation is only needed 10\% of the time. 
+%because in many cases there will be only one target in range and fine selection is not needed, and in cases where it’s needed, the list length has been effectively reduced. 
+However, if the environment becomes denser, more disambiguation will be needed. And learning from Figure~\ref{fig:selection-time}B, we know the average results when disambiguation is involved is significantly increased. Hence our next research question becomes ``can we improve selection time in a dense environment?''
 
-With our first study, we have learned that with {\em coarse selection}, we can reduce the overall target selection time because in many cases there will be only one target in range and {\em fine selection} is not needed, and in cases where it's needed, the list length has been effectively reduced. However, in a dense environment, there could be more cases when disambiguation is needed. 
-
-From Figure~\ref{fig:selection-time}B, the average results when disambiguation is involved is significantly increase. We challenge ourselves that ``can we do a better job in a dense environment?''
-
-Previously we are only using IR reception as a signal for potential target identification. It's a binary result indicating that whether a target has received IR signal or not. But actually the IR intensity at the receiver side can provide more information than just the binary reception. The illuminance falls when the distance increases as well as when the angle inceases.
-We have emprically measured the intensity distribution at the receiver side, and it's shown in Figure~\ref{fig:measurement}. \ben{still working on it, not sure how much value we will get out of it. Seems useful to support the argument of the benefit though.}
+\subsection{Technique}
+Previously we only used IR reception as a signal for identifying potential targets. It's a binary value indicating whether a target has received IR signal or not. To further capture the user's attention, we believe that IR intensity at the receiver side can provide more information. The IR intensity falls when the distance between IR emitter and receiver increases as well as when the receiving angle increases. We have empirically measured the intensity distribution at the receiver side, and it's shown in Figure~\ref{fig:measurement}. \ben{still working on it, not sure how much value we will get out of it. Seems useful to support the argument of the benefit though.}
 
 \begin{figure}[t]
 \centering
@@ -14,7 +15,7 @@ We have emprically measured the intensity distribution at the receiver side, and
 \label{fig:measurement}
 \end{figure}
 
-From the measurement above we learned that the angluar difference has a large effect on the intensity readings. In order to make use of the intensity, we have designed and 3D printed a repositional IR holder that can be clipped onto Glass. Then for different users, they can adjust it to align with their line of sight. \ben{need to mention in iteration 1 about the crappy tape}. 
+From the measurement above we learned that the angular difference has a large effect on the intensity readings. In order to utilize the intensity, we have designed and 3D printed a repositional IR holder that can be clipped onto Glass. Thus, different users can adjust the emitter to align with their line of sight. \ben{need to mention in iteration 1 about the crappy tape}. 
 
 \begin{figure}[t]
 \centering
@@ -27,13 +28,11 @@ From the measurement above we learned that the angluar difference has a large ef
 
 The intensity information is used in two ways:
 \begin{enumerate}
-\item When multiple targets have received IR signal and reported the intensity readings, we discard those whose intensities are significantly lower than the largest reading\footnote{In our current implementation, we empirically set it to be half, which is frequently used because it indicates a 3dB loss in the signal strength.}. In this case, when Binary IR doens't need disambiguation, the new design still doesn't need it. When the environment turns denser, the new design can filter some peripheral targets out, making the chances of entering disambiguation lower.
-\item When disambiguation is still needed, we use the IR intensity as an indication of likelihood to sort the list. This will help us reduce the $t_{disambiguation}$ significantly if the first one appears matches the actual target. Given the imprecision of head orientation, this can hardly be always perfect.
+\item When multiple targets have received IR signal and reported the intensity readings, we discard those whose intensities are significantly lower than the largest reading\footnote{In our current implementation, we empirically set it to be half, which is frequently used because it indicates a 3dB loss in the signal strength.}. Therefore, when there is only one target within line of sight, the IR intensity approach has the same behavior as the previous iteration - no disambiguation is needed. When the environment turns denser, the new design can filter some peripheral targets out, making the chances of entering disambiguation lower.
+\item When disambiguation is still needed, meaning that multiple targets have relatively close intensity values, the system sorts the disambiguation list according to the IR intensity, from strongest to weakest. This will help us reduce the $t_{disambiguation}$ significantly if the first one appears matches the actual target.
 \end{enumerate}
 
-Though apparently with more information, we should be able to reduce the selection time. But the question we seek to answer is to further quantify such gain. We then performed another user study to compare the {\em Binary IR} and {\em Valued IR} designs.
-
-For this study, since we are aiming at a denser environment, though we keep the node number to 10, but the environment setup has changed (see Figure~\ref{fig:study-layout2}). In total, we have XX users for this study \ben{more information about users later.} Each user performs the target acquisition study 30 times for each condition. Again half of them perform {\em Binary IR} first and the other half {\em Valued IR} first.
+We seek to quantify the improvement of such design and performed another user study to compare the {\em Binary IR} and {\em Valued IR} approaches. For this study, we aim to discover the performances at a denser environment. Thus, we take the 10 nodes and set it up in a smaller area (see Figure~\ref{fig:study-layout2}). In total, we have XX users for this study \ben{more information about users later.} Each user performs the target acquisition study 30 times for each approach. Similarly, half of them perform {\em Binary IR} first and the other half {\em Valued IR} first.
 
 \begin{figure}[t]
 \centering
@@ -42,10 +41,11 @@ For this study, since we are aiming at a denser environment, though we keep the 
 \label{fig:study-layout2}
 \end{figure}
 
-We then summarize the result of this study. 
+\subsection{Evaluation}
+Below is a summary of the study result.
 \begin{enumerate}
-\item Among the 150 trials in {\em Binary IR} condition, there are 104 times when disambiguation is needed. In {\em Valued IR} condition, only 65 out of 150 trials need disambiguation. We perform a Chi-square test on this result and the result is $\chi^2(1) = 20.611$, $p < 0.0001$. \ben{not sure about the degree of freedom being 1 here, will check later.} This demonstrates that the first intensity gain is from the reduction of chances when disambiguation is needed.
-\item In the cases when disambiguation is needed, the {\em Valued IR} will sort the list based on the intensity reading. Indeed, out of the 65 times when disambiguation is involved, there are 38 (roughly 58\%) are right for {\em Valued IR}. However, for {\em Binary IR}, only 37 out of 104 (~35\%) are right. Again a Chi-square test demonstrates the statistical differences (with $\chi^2(1) = 8.487$, $p = 0.0036$. 
+\item Among the 150 trials in {\em Binary IR} condition, there are 104 times when disambiguation is needed. In {\em Valued IR} condition, only 65 out of 150 trials need disambiguation. We perform a Chi-square test on this result and the result is $\chi^2(1) = 20.611$, $p < 0.0001$. \ben{not sure about the degree of freedom being 1 here, will check later.} This demonstrates that the new approach successfully reduces the chances where disambiguation is needed.
+\item In the cases when disambiguation is inevitable, the {\em Valued IR} will sort the list based on the intensity reading. As a result, out of the 65 times when disambiguation is involved, {\em Valued IR} sorts the desired target as the first one in the list 38 times (roughly 58\%). In comparison, for {\em Binary IR}, only 37 out of 104 (~35\%) times can the user find the desired target first in the list. Again a Chi-square test demonstrates the statistical differences (with $\chi^2(1) = 8.487$, $p = 0.0036$. 
 \end{enumerate}
 
 Such gain can be seen from Figure~\ref{fig:study2} where the overall target acquisition time is obtained. The average time is 4.32 seconds and 3.71 second for {\em Binary IR} and {\em Valued IR}, respectively; and a t-test shows that they are also significantly different $t(282)=2.0922$, $p=0.03$.
@@ -57,7 +57,7 @@ Such gain can be seen from Figure~\ref{fig:study2} where the overall target acqu
 \label{fig:study2}
 \end{figure}
 
-However, one side effect that we have abserved in this approach is that the {\em Valued IR} sometimes eliminates the right target during the filter stage. The rate is not that high (16 out of 150 cases, ~90\%), but this is the price to pay for a quicker average in this smarter system.
+However, one side effect that we have observed in this approach is that the {\em Valued IR} sometimes eliminates the desired target during the {\em coarse selection} stage. The rate is not high (16 out of 150 cases, ~10\%), but this is the trade-off for the overall faster acquisition time.
 
 %%% Local Variables: 
 %%% mode: latex
