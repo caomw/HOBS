@@ -1,26 +1,30 @@
-\section{Iteration 3: Head motion for disambiguation}
+%!TEX root = uist14.tex
+\section{Iteration 3: Head motion refinement}
 \label{sec:iteration-3:-head}
 \subsection{Problem Statement and Goal}
-Though our {\em Valued IR} system already performs well (with 3.71 seconds on average in a relative dense environment), head-orientation information is only used during the {\em coarse selection} stage. In the {\em fine selection} phase, we rely solely on the near-eye display. This has two problems: First, we are projecting a high dimension distribution to a 1-dimension list. Second, this requires the user to switch their focus back and forth between the physical world and the display. This issue motivated us to design an approach that also utilizes orientation information during the {\em fine selection} stage, so that there would be a more direct mapping between the user's gestures and target selection.
+Both{\em Naive IR} and {\em Intensity IR} rely on list navigation on the near-eye display for the refinement step. This has two problems: First, a spatial layout of target is compressed into a uni-dimensional list. List navigation commands thus have poor spatial mapping. Second, our techniques require the user to switch their focus back and forth between the physical world and the display. This issue motivated us to design an approach that also utilizes orientation information during the {\em refinement} stage, to provide a more direct mapping between the user's actions and target selection.
 
 In our third iteration, we ask the question ``can we build a system purely using head orientation and visual feedback from the environment for target selection?''
 
 \subsection{Technique}
-The motion sensors (including gyroscope, magnetometer and accelerometer) on the head-worn device can help us determine the orientation of users' head. However, this absolute orientation cannot be directly used in any indoor environment as the user may change his location \achal{Should we use gender neutral language?}. However, as long as the targets are spread around the periphery, their relative orientation doesn't change. This key observation inspires us to investigate a hybrid solution with IR and sensors on Glass.
+The motion sensors (including gyroscope, magnetometer and accelerometer) on the head-worn device can help us determine the orientation of a user's head. However, this absolute orientation cannot be directly used in any indoor environment as the user may change their location \achal{Should we use gender neutral language?}\bjoern{yes. just did in the previous sentence}. However, as long as the targets are spread around the periphery, their relative orientation doesn't change. This key observation inspires us to investigate a hybrid solution with IR and orientation sensors on Glass.
 
-There are two phases to this technique: learning the relative orientations and intelligently suggesting targets during disambiguation.
+There are two phases to this technique: learning the relative orientations or targets in a room and intelligently suggesting targets during disambiguation.
 
 In the first stage, the user orients his head towards each device, and the system saves the absolute orientations of each device. Once the user has added all devices, these orientations are saved for future use. It is still possible to add new devices at any point without running the entire calibration step, as the system will simply store the absolute orientation of the new device.
 
 During the second stage, when the user wants to use his head-motion for disambiguation, he will put his finger on the touchpad to enter a quasi-mode.  This gesture is inspired by observing users who tend to adjust their glasses for closer inspection.
 
-In this mode, only one device has a solid indicator light on at a time. The user can then tilt in the direction of the device he wishes to switch to. We calculate the direction of movement using a low-passed history of orientations, and look for devices that lay in that direction. Once a new device is selected, the frame of reference changes, and the user can repeat the process. Note that in reality, this is a completely smooth operation: it is possible to switch between multiple devices in one continuous motion. This is achieved by automatically adjusting the frame of reference to the currently lit device, but also creating a ``sticky" threshold so that the user is not constantly jumping between devices.
+In this mode, only one device has a solid indicator light on at a time. \bjoern{revisit prior sentence - there's a problem in the current technique in that the user doesn't know which targets are in the refinement set and which aren't.} The user can then tilt in the direction of the device he wishes to switch to. We calculate the direction of movement using a low-pass-filtered history of orientations, and look for devices that lie in that direction. Once a new device is selected, the frame of reference changes, and the user can repeat the process. Note that in reality, this is a completely smooth operation: it is possible to switch between multiple devices in one continuous motion. This is achieved by automatically adjusting the frame of reference to the currently lit device, but also creating a ``sticky" threshold so that the user is not constantly jumping between devices. \bjoern{This is called hysteresis or double thresholding.}
+
+
+\bjoern{how well will this work if the user shifts position within a room?}
 
 \achal{Not sure if there should be a conclusion of some sort here.}
 
 \subsection{Evaluation}
 \ben{We then need evaluation results here, quantitative and qualitative.}
-
+\bjoern{got to here in my pass}
 
 
 % %!TEX root = uist14.tex

@@ -1,12 +1,17 @@
 %!TEX root = uist14.tex
 
-\section{Iteration 1: IR vs. List}
+\section{Iteration 1: Naive IR}
 \subsection{Problem Statement and Goal}
-Our system design uses IR as the beam cursor for physical target acquisition because the area coarse selection filters out the targets outside of the user's view range. This help during the fine selection time because there is a smaller set of targets to select from. The opposite is to have a complete list of all targets when there is no coarse selection and the disambiguation is always needed. This brought up the first question that we asked ourselves -- {\em how much does using IR help in reducing the selection time}. To answer that question and quantify the benefit of having IR for the coarse selection, we carried out our first target acquisition study which compares the {\em IR selection} and {\em list selection}.  
+Our initial research question is: {\em Can IR-based targeting reduce the selection time compared to UI list navigation on a head-worn device?} 
 
 \subsection{Technique}
+In our first implementation, we use IR for scanning as described in the previous section. For the refinement technique, we simply show a list of the subset of targets that have received IR signals on the Glass display and let users swipe to select from that list and tap to confirm.
 
-We deployed 10 wireless nodes in an indoor environment (Figure~\ref{fig:targeting-study-layout}). Each of them has a number as ID and a letter representing the name. There are 14 participants from our institution for this study. 13 had never used Glass before, therefore we offered a Google Glass crash course before the experiment for them to get familiar with Glass gestures. 4 of them wore prescription glasses, which may have affected their task performance as wearing glasses beneath Glass makes it more cumbersome to secure the position of Glass and to adjust the screen to the optimal angle. 
+A natural point of comparison is an interface that does not use any orientation information - it always shows 
+a complete list of all targets. We implemented a list view where users swiped forwards and backwards on the Glass touchpad to navigate incrementally through the list. To quantify the benefit of using IR for the scanning step, we carried out a target acquisition study which compares the {\em Naive IR selection} and {\em list selection}.  
+
+\subsection{Method}
+We deployed 10 wireless nodes in an indoor environment (Figure~\ref{fig:targeting-study-layout}). Each of them has a number as ID and a letter representing the name. We recruited 14 participants from our institution for this study. 13 had never used Glass before, so we offered a Google Glass tutorial before the experiment for them to get familiar with Glass gestures. Four participants wore prescription glasses, which may have affected their task performance as wearing glasses beneath Glass makes it more cumbersome to secure the position of Glass and to adjust the screen to the optimal angle. In this study, the IR LED was fixed and not repositionable as shown in Figure~\ref{fig:glass}.
 
 \begin{figure}[t]
 \centering
@@ -15,7 +20,7 @@ We deployed 10 wireless nodes in an indoor environment (Figure~\ref{fig:targetin
 \label{fig:targeting-study-layout}
 \end{figure}
 
-In the within-subject study, half of them performed {\em IR selection} first and the other half did {\em list selection} first. For each selection condition, we conducted 15 target selection by randomly choosing from all the targets. During the study, we measure the {\bf target acquisition time} for each target selection, and afterwards, participants were asked to complete a survey that elicited answers to Likert-scale questions as well as open-ended answers about their experience.
+In the within-subject study, half of the participants performed {\em IR selection} first and the other half used {\em list selection} first. For each selection condition, we conducted 15 target selection by randomly choosing from all the targets. During the study, we measure the {\bf target acquisition time} for each target selection. Afterwards, participants were asked to complete a survey that elicited answers to Likert-scale questions as well as open-ended answers about their experience.
 
 %% remove this for now
 %% Our measurements suggest that IR communication can be targeted to an area about 60-120cm in diameter, up to 5m in front of the user. These values are a reasonable match for selecting targets in a room-size environment. A wider beam would lead to an increased chance of multiple appliances receiving IR signals simultaneously. A narrower beam will make targeting more challenging, given the precision constraints of human head movement.
@@ -27,12 +32,11 @@ In the within-subject study, half of them performed {\em IR selection} first and
 \label{fig:selection-time}
 \end{figure}
 
-\subsection{Evaluation}
-Our results indicate that {\em IR selection} is generally better than {\em list selection}. From Figure~\ref{fig:selection-time}A, the average target acquisition time for {\em IR selection} is 6.67 seconds, while for {\em list selection} it took 8.86 seconds. We run Student's t-test on the data and it shows significant difference ($t(279)=-3.81, p=0.00017$).
+\subsection{Results}
+Our results indicate that {\em IR selection} outperforms {\em list selection}.  The average target acquisition time for {\em IR selection} is 6.67 seconds, while {\em list selection} took 8.86 seconds (see Figure~\ref{fig:selection-time}A). Student's t-test shows a significant difference ($t(279)=-3.81, p=0.00017$).
 
-To further understand if the gain comes from the coarse selection, we splited the data from {\em IR selection} into two parts -- ones that require disambiguation and ones that don't. The result is shown in Figure~\ref{fig:selection-time}B. It shows that it takes 6.40 seconds (on average) to complete the connection if coarse selection has achieved the acquisition, while when multiple devices are in range, the time increases to 9.16 seconds, indicating additional 2.76 seconds for disambiguation. Though it takes significantly longer ($t(19)=-2.7827, p=0.012$ using t-test) in the latter case, they only happen 10\% of total {\em IR selection} trials.
+To understand how scanning and refinement contribute to total selection time, we split the data from {\em IR selection} into two parts -- trials that required refinement and ones that did not. It takes 6.40 seconds (on average) to complete  a selection without any refinement, but 9.16 seconds with refinement, indicating that an additional 2.76 seconds are needed for disambiguation (see Figure~\ref{fig:selection-time}B). This difference is significant ($t(19)=-2.7827, p=0.012$ using t-test \bjoern{I don't understand why we have 279 DF in the previous test but only 19 here??}). Because many targets were spaced far apart, refinements were only necessary in 10\% of total {\em IR selection} trials in this study.
 
-From the above result, we learned that with IR, we can have effectively reduced the overall target acquisition time. And the major gain comes from the fact that {\em coarse selection} helps reduce the chances of entering {\em fine selection} stage. 
 
 \begin{figure}[t]
 \centering
@@ -42,7 +46,10 @@ From the above result, we learned that with IR, we can have effectively reduced 
 \label{fig:time-vs-list-order}
 \end{figure}
 
-To further generalize the results, in Figure~\ref{fig:time-vs-list-order}, we show the acquisition time for each individual target in {\em list selection} condition, ordered by their relative position in the list. Since with IR technique, the acquisition time is invariant from each target's order, we use solid lines to represent the average performance of {\em IR selection}. From this figure, we can see that once the target's order is larger than 6, the average acquistion time will be larger than the case when disambiguation is needed in {\em IR selection}. Therefore, we argue that once there are more targets in the physical space, the {\em list selection} method is not scalable. Further more, in real-life scenarios, targets would have longer names than an alphabet letter. This would increase the searching and text comparison time and also reduce the number of targets being shown in the UI screen.
+To further generalize the results, in Figure~\ref{fig:time-vs-list-order}, we show the acquisition time for each individual target in {\em list selection} condition, ordered by their relative position in the list. Since with IR technique, the acquisition time is invariant from each target's order, we use solid lines to represent the average performance of {\em IR selection}. From this figure, we can see that once there are more than 6 targets, the average acquistion time will be larger than IR selection, even if disambiguation is needed. %Therefore, we argue that once there are more targets in the physical space, the {\em list selection} method is not scalable. Further more, in real-life scenarios, targets would have longer names than an alphabet letter. This would increase the searching and text comparison time and also reduce the number of targets being shown in the UI screen.
+
+In summary, {\em Naive IR} can outperform linear list selection, but the refinement step detracts significantly from the efficiency of the technique.
+% learned that with IR, we can have effectively reduced the overall target acquisition time. And the major gain comes from the fact that {\em coarse selection} helps reduce the chances of entering {\em fine selection} stage.
 
 \ben{qualitative feedback hasn't been added yet for this part.}
 %\subsubsection{Preference}

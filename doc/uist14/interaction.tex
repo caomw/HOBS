@@ -1,27 +1,43 @@
+%!TEX root = uist14.tex
+\section{IR for head orientation sensing}
+\subsection{Hardware}
+A central hypothesis of this paper is that the area cursor paradigm~\cite{kabbash1995prince} is well matched to head orientation selection. Head orientation input is imprecise because it does not capture eye movement and has to rely on a low-bandwidth muscle group. Therefore, point selection techniques like laser pointers are not appropriate. 
 
-\section{Interaction Models}
+Infrared emitters are a good technology match since they emit light within a given angle, resulting in a cone in front of the emitter where the light is visible. LEDs with many different fields of view are commercially available. \bjoern{say something about receivers and how point to point connections enable us to leverage head orientation without needing a map.}
 
-In this section, we describe how head orientation-based interaction works from the users' point of views (Figure~\ref{fig:interaction}). \sean{do we want to just use the term Glass or explains that it stands for any head-worn computing devices?}
+Another benefit is the low cost and easy integration of both emitters and detectors - detectors often have support for common IR protocol decoding built in and cost cents, making it economically feasible to add detectors to dozens or hundreds of devices in an environment.
 
-{\bf Scan:} The user first scans the environment to locate the position of the target. During this stage, Glass constantly sends out IR signals, and the target offers immediate feedback when it receives the signal. 
+Our augmentation to Google Glass adds a \bjoern{add modelnumber and spec details} LED (see Figure~\ref{fig:glass}. In the following description, we refer to Glass because the term is succinct; but  other suitable head-worn computing devices could be substituted.
 
-{\bf Coarse Selection:} The user confirms his desire to connect to a target by tapping on the Glass touchpad. Glass collects the responses from targets regarding their IR signal reception. If there is only one single target in IR range, then it's automatically connected and the selection process is completed. However, in a relative dense environment where multiple targets are within range, the user needs to perform a fine selection.
+\bjoern{need to mention that all the target nodes also have to be able to talk to each other and to glass outside the IR channel. We use XBees for this purpose.}
 
-{\bf Fine selection:} When disambiguation is needed, the user needs to make an explicit selection among the targets that within his view range. There are multiple ways to achieve it -- either from Glass touchpad that controls a GUI list or using the head motion sensor on Glass. We will provide a thorough and complete discussion later in the paper. Once the user confirms the current selection, he could tap to complete the fine selection process. Since the purpose of this stage is to effectively disambiguate among potential targets, we will also use {\em disambiguation} to refer to this stage.
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.9\columnwidth]{figures/tube_from_top_annotated.pdf}
+\caption{Google Glass augmented with a repositionable IR holder.}
+\label{fig:glass}
+\end{figure}
+
+\subsection{Interaction Model}
+From the user's perspective, interaction with \systemname proceeds in two stages (Figure~\ref{fig:interaction}): 
+
+{\bf Scan:} The user first scans the environment to locate the position of the target. During this stage, Glass constantly sends out IR signals, and  targets offer immediate feedback when they receive a signal. The user confirms his desire to connect to a target by tapping on the Glass touchpad. Glass collects the responses from targets that have received IR reception (we use an XBee-based backchannel for this traffic). If there is only one single target in IR range, it is automatically selected. However, in a dense environment where multiple targets are within range, the user needs to perform a refinement.
+
+{\bf Refine:} When disambiguation is needed, the user needs to make an explicit selection among the targets that within his view range. We have designed multiple refinement mechanisms -- all enable the user to select one from a subset of targets. The user confirms a current selection a tap. Since the purpose of this stage is to disambiguate among potential targets, we will also use {\em disambiguation} to refer to this stage. Again, a tap confirms a selection.
 
 \begin{figure}[t!]
 \centering
-\includegraphics[width=\columnwidth]{figures/interactionModel.pdf}
+\includegraphics[width=\columnwidth]{figures/interactionModel2.pdf}
 \caption{Four different states during the head-orientation targeting.}
 \label{fig:interaction}
 \end{figure}
 
-From the flow of interaction, we learned that the overall target acquisition time can be broken down into the following pieces:
+The overall target acquisition time thus depends on scan and refine times; the probability that refinement is needed; and the time to commit an action (tap):
 \begin{equation}
-t_{total}=t_{scan}+t_{coarse}+t_{disambiguation}
+t_{total}=t_{scan}+P(refine)*t_{refine}+t_{commit}
 \end{equation}
 
-Our goal of this paper is to minimize the overall target selection time. In the following few sections, we will describe our iterative design process during which we have explored the design space.
+In the following sections, we describe our iterative design and evaluation process to minimize the overall target selection time.
 
 %%% Local Variables: 
 %%% mode: latex
