@@ -8,13 +8,16 @@
 Performance of the {\em Naive IR} technique will degrade as target density in an environment increases, as increased density will require refinement steps. We therefore ask a follow-on research question: ``How might we improve selection time in a dense environment?''
 
 \subsection{Technique}
-Previously we only used IR reception as a binary signal for identifying potential targets. We hypothesize that IR intensity at the receiver side can provide more information about the likelihood that a user intended to select a particular target. Received IR intensity falls off with distance between IR emitter and receiver as well as with the angle between emitter and receiver. To measure intensity, we add \bjoern{add model number and characteristics} and replace the IR emitter with \bjoern{modelnumber, characteristics}.
-We have empirically measured the intensity distribution at the receiver for this configuration in Figure~\ref{fig:measurement}. \ben{still working on it, not sure how much value we will get out of it. Seems useful to support the argument of the benefit though.}
-Our measurements confirm that angular difference has a large effect on the intensity readings.
+Previously we only used IR reception as a binary signal for identifying potential targets. We hypothesize that IR intensity at the receiver side can provide more information about the likelihood that a user intended to select a particular target. Received IR intensity falls off with distance between IR emitter and receiver as well as with the angle between emitter and receiver. To measure intensity, we add an IR light-to-voltage converter (model number TSL267-LF from AMS-TAOS USA Inc and replace the IR emitter with IR emitter (model number SFH 4545 from OSRAM Opto Semiconductors Inc).
+% transmitter webpage: http://www.digikey.com/product-search/en?x=0&y=0&lang=en&site=us&KeyWords=475-2919-ND
+% http://www.digikey.com/product-detail/en/TSL267-LF/TSL267-LF-ND/3095052
+
+We have empirically measured the intensity distribution at the receiver for this configuration in Figure~\ref{fig:measurement}. Our measurements confirm that angular difference has a large effect on the intensity readings (see how the IR intensity distribution changes when the offset from the center increases).
+
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.9\columnwidth]{figures/placeholder.pdf}
-\caption{placeholder for empirical measurement.}
+\includegraphics[width=1\columnwidth]{figures/IRIntensityDistribution.pdf}
+\caption{Empirical measurement of IR intensity at different position. We measure the intensity at the plane of every 1 meter away from the IR emitter. On that plane, we obtain a sample every 5 centimeters. The size and color brightness in this graph represents the intensity readings.}
 \label{fig:measurement}
 \end{figure}
 
@@ -64,9 +67,9 @@ To quantify the improvement this design we performed a second study to compare t
 \subsection{Results}
 {\em Intensity IR} reduces the number of trials in which refinement dialogs are needed from 225 of 300 in {\em Naive IR} to 167 of 300 trials. A Chi-square test shows this difference is significant ($\chi^2(1) = 24.755$, $p < 0.0001$). This demonstrates that the new approach successfully reduces the probability that a disambiguation dialog is needed.
 
-In the cases when disambiguation is inevitable, {\em Intensity IR} sorts the list based on the intensity reading, while {\em Naive IR} sorts alphabetically. {\em Intensity IR} reduces the fraction of refinement trails in which additional list navigation is necessary (i.e., the first, already selected element is incorrect).  {\em Intensity IR} sorted the desired target as the first one in the list in 55\% of cases (93 of 167). In comparison, for {\em Naive IR}, only 35\% of trials sorted the desired target as the first one in the list (80 out of 219\bjoern{why isn't this 225 as above?}). Again, a Chi-square test show that this difference is significant (with $\chi^2(1) = 15.758$, $p < 0.0001$. 
+In the cases when disambiguation is inevitable, {\em Intensity IR} sorts the list based on the intensity reading, while {\em Naive IR} sorts alphabetically. {\em Intensity IR} reduces the fraction of refinement trails in which additional list navigation is necessary (i.e., the first, already selected element is incorrect).  {\em Intensity IR} sorted the desired target as the first one in the list in 55\% of cases (93 of 167). In comparison, for {\em Naive IR}, only 35\% of trials sorted the desired target as the first one in the list (80 out of 225). Again, a Chi-square test show that this difference is significant (with $\chi^2(1) = 15.758$, $p < 0.0001$. 
 
-Such gain can be seen from Figure~\ref{fig:study2} where the overall target acquisition time is obtained. \bjoern{avoid passive voice throughout!} The average selection time decreases from 4.31 seconds for {\em Naive IR} to 3.64 second for {\em Intensity IR}. This difference is also significant ($t(555)=3.2945$, $p=0.001$.) \bjoern{for consistency's sake, can we show a box plot as in figure 5?}
+From Figure~\ref{fig:study2}, we can see that the overall target aquisition time has decreased from 4.31 seconds for {\em Naive IR} to 3.64 second for {\em Intensity IR}. This difference is also significant ($t(555)=3.2945$, $p=0.001$.) \bjoern{for consistency's sake, can we show a box plot as in figure 5?} \ben{I think cdf is a better way than boxplot? It actually provides more information. I may consider using cdf consistently.}
 
 %  t.test(name$complete, intensity$complete)
 
@@ -84,7 +87,7 @@ Such gain can be seen from Figure~\ref{fig:study2} where the overall target acqu
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.9\columnwidth]{figures/study2_time.pdf}
-\caption{The target acquisition of in {\em Valued IR} and {\em Binary IR} condition.}
+\caption{The target acquisition of in {\em Naive IR} and {\em Intensity IR} condition.}
 \label{fig:study2}
 \end{figure}
 

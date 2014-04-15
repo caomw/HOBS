@@ -1,26 +1,27 @@
 %!TEX root = uist14.tex
-\section{Application Example: Universal Remote Control}
+\section{Applications}
 \label{sec:applications}
 
-%In this section we describe four possible applications that can be built on top of the head orientation-based selection. We focus our discussion on {\em GlassRemote} -- a universal remote control application.
+Though such head orientation targeting enables a wide range of context-aware applications, in this paper we focus on our GlassRemote system that we have built using the existing hardware platform to achieve a universal smart appliance control functionality.
 
-%\subsection{GlassRemote}
-%\label{sec:univ-remote-contr}
+The huge benefit using head orientation is to solve two challenges that exist in most commercial list-based solutions -- {\em naming} and {\em scoping}. First, assigning clear names is non-trivial. Especially in shared spaces, the person trying to control the device might not be the one that named it - e.g., while an office building manager may know what ``Light 4 in area E'' corresponds to, an occupant may not. Second, without a method of scoping selection to automatically filter non-relevant devices, paging though long lists of names or navigating hierarchies becomes potentially more cumbersome than the physical action that the ``convenient'' software solution was meant to replace. Our head-orientation based interaction elegently solves these two problems.
 
-We extended the head-orientation targeting and existing hardware platform to achieve a universal remote control functionality in smart home scenario. The motivation is to solve two challenges that exist in current list-based solutions -- {\em naming} and {\em scoping}. First, assigning clear names is non-trivial. Especially in shared spaces, the person trying to control the device might not be the one that named it - e.g., while an office building manager may know what ``Light 4 in area E'' corresponds to, an occupant may not. Second, without a method of scoping selection to automatically filter non-relevant devices, paging though long lists of names or navigating hierarchies becomes potentially more cumbersome than the physical action that the ``convenient'' software solution was meant to replace. Our head-orientation based interaction elegently solves these two problems.
+In order to control a smart appliance, the user performs a physical target selection (scan, refine and confirm) first and then the appliance-specific UI will be shown in the near-eye display. 
 
-\bjoern{you need to tell us more about how the interaction works - namely, that you pull the user interface for an appliance onto the near-eye display. This may not be obvious.}
+\begin{figure}[t]
+\centering
+\includegraphics[width=1\columnwidth]{figures/smarthome-scenario.pdf}
+\caption{In the smart home scenario, we have built three smart appliances for a user experience study. The control interface supports both simple on/off appliances (lamp or fan) and multi-functional appliances (TV, for example).}
+\label{fig:smart-home}
+\end{figure}
 
-To assess the usability of such applications when the novel interaction scheme is added, we have created a few smart appliances (including a fan, a lamp and a TV) and asked 14 participants to work through a concrete smart home scenario. The fan and lamp are relatively dumb and only support turning-on and turning-off. The smart TV provides control capability of switching the channels and adjust the volumn, as well as pause/play. For the smart home scenario, the participant has been asked to perform a series of actions that swtich the targets and control them. We then report some of the results to strength our motivation for the head-orientation interaction.
+To assess the usability of such applications when the novel interaction scheme is added, we have built a few smart appliances (including a fan, a lamp and a TV, Figure~\ref{fig:smart-home}) and asked 14 participants to work through a concrete smart home scenario. The fan and lamp are relatively dumb and only support turning-on and turning-off. The smart TV provides control capability of switching the channels and adjust the volumn, as well as pause/play. From this study, we report some of the qualitative results to strength our motivation for the head-orientation interaction.
 
-Durign the study, all participants have successfully completed the list of tasks. They commented positively on the universal remote control functionality (e.g., \studyquote{I didn't have to search for different remote controllers for different appliances}) and stated it was easy to target and connect to appliances, in line with the findings of the previous study procedure. Participants saw benefits of the device for families --- \studyquote{It might also be useful for people who need to take care of small children that they can complete all the tasks while keeping an eye on their children at the same time}, though settings that require more movement than watching a movie at home (e.g., cooking) may be more appropriate scenarios for wearing the device.
+\ben{Will add more from our survey.}
+During the study, all participants have successfully completed the list of tasks. They commented positively on the universal remote control functionality (e.g., \studyquote{I didn't have to search for different remote controllers for different appliances}) and stated it was easy to target and connect to appliances, in line with the findings of the previous study procedure. Participants saw benefits of the device for families --- \studyquote{It might also be useful for people who need to take care of small children that they can complete all the tasks while keeping an eye on their children at the same time}, though settings that require more movement than watching a movie at home (e.g., cooking) may be more appropriate scenarios for wearing the device.
 
 %% I feel like we should mention a bit about the interaction complexity. But that's a bit out of the scope of this paper.
 %% Participants rated the ease of control of particular appliances differently. Ease of use ratings were higher for the lamp and fan which had simple, discrete on/off actions, and lower for the more complex movie player (see Figure~\ref{fig:smarthome-likert}). Multiple participants remarked that the difficulty was based on the affordances of Glass: \studyquote{Most of the difficulty I had with Glass came from having to navigate the interface on the tiny screen with the touch pad}. The screen size and (largely) 1D input put a limit on the complexity of interfaces that can be presented. As one participant remarked: \studyquote{[The media player] does not seem to be more efficient than a tablet device.} The difficulty can also partly be ascribed to our interaction design, which required one finger swipes to switch between parameters and two finger gestures for adjusting parameters --- it was hard for users to exert fine control over two-finger swipes. In addition, users did not always remember these mappings as they are not yet part of a standard gesture vocabulary.
-
-\bjoern{since length will be an issue, let's just focus on glass remote and skip the others?}
-\ben{I still think that by listing a few other applications, it helps identifying the importance of physical targeting. We may do that with a short paragraph instead of a subsection.}
-Additional applications such as attention tracking or indoor position and orientation estimation of a wearer based on our technique are conceivable; we leave them to future work.
 
 %\subsection{Attention Tracking}
 %\label{sec:attention-tracking}

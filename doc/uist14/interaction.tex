@@ -3,17 +3,25 @@
 \subsection{Hardware}
 A central hypothesis of this paper is that the area cursor paradigm~\cite{kabbash1995prince} is well matched to head orientation selection. Head orientation input is imprecise because it does not capture eye movement and has to rely on a low-bandwidth muscle group. Therefore, point selection techniques like laser pointers are not appropriate. 
 
-Infrared emitters are a good technology match since they emit light within a given angle, resulting in a cone in front of the emitter where the light is visible. LEDs with many different fields of view are commercially available. \bjoern{say something about receivers and how point to point connections enable us to leverage head orientation without needing a map.}
+Infrared emitters are a good technology match since they emit light within a given angle, resulting in a cone in front of the emitter where the light is visible. LEDs with many different fields of view are commercially available. Each individual target that is equipped with IR detector can react to the signal. Such point to point communications enables us to achieve targeting without needing a map.
+%% \bjoern{say something about receivers and how point to point connections enable us to leverage head orientation without needing a map.}
 
 Another benefit is the low cost and easy integration of both emitters and detectors - detectors often have support for common IR protocol decoding built in and cost cents, making it economically feasible to add detectors to dozens or hundreds of devices in an environment.
 
-Our augmentation to Google Glass adds a \bjoern{add modelnumber and spec details} LED (see Figure~\ref{fig:glass}. In the following description, we refer to Glass because the term is succinct; but  other suitable head-worn computing devices could be substituted.
+Our augmentation to Google Glass adds a 940nm 5mm IR emitter\footnote{In the prototype, we have used the IR emitter SFH 4545 from OSRAM Opto Semiconductors Inc.} (see Figure~\ref{fig:glass}). \ben{add description about the microcontroller.} In the following description, we refer to Glass because the term is succinct; but other suitable head-worn computing devices could be substituted.
 
-\bjoern{need to mention that all the target nodes also have to be able to talk to each other and to glass outside the IR channel. We use XBees for this purpose.}
+% The IR emitter is the one from OSRAM Opto Semiconductors Inc with manufacturer part number SFH 4545. From the datasheet, it has a view angle of $10^\circ$. Part of the reason we have chosen it is because the radiant intensity can quite high if we provide it with sufficient current flow (550mW/sr @ 100mA). We can then easily adjust it using a resistor to satisfy different demands. 
+% % transmitter webpage: http://www.digikey.com/product-search/en?x=0&y=0&lang=en&site=us&KeyWords=475-2919-ND
+% For the IR receiver, we use 38.0kHz IR Receiver Modules from Vishay Semiconductor Opto Division (manufacturer part number TSOP38238). 
+% % receiver webpage http://www.digikey.com/product-detail/en/TSOP38238/751-1227-ND/1681362
+% In order to read the IR intensity, we integrates another IR light-to-voltage converter from AMS-TAOS USA Inc (manufacturer part number TSL267-LF) which is pretty sensitive to IR irradiance. 
+% % http://www.digikey.com/product-detail/en/TSL267-LF/TSL267-LF-ND/3095052
+
+Though IR signal has enabled us achieve head orientation-based targeting (simplex communication), we envision that more complicated applications could be built on top. Therefore, we added 802.15.4 radio to Glass and all the target nodes.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.9\columnwidth]{figures/tube_from_top_annotated.pdf}
+\includegraphics[width=0.9\columnwidth]{figures/GlassWithHolder.jpg}
 \caption{Google Glass augmented with a repositionable IR holder.}
 \label{fig:glass}
 \end{figure}
