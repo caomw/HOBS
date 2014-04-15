@@ -1,7 +1,8 @@
 %!TEX root = uist14.tex
 
-\ben{This parts needs to be changed based on the current flow of the story.}
+\bjoern{updated: }
 Emerging head-worn computing devices can enable hands-free interactions with smart objects in physical spaces. 
 %
-We introduce and characterize a method for selecting and interacting with physical targets at a distance using head orientation. We augment a commercial wearable device, Google Glass, with an infrared (IR) emitter to select targets equipped with IR receivers. We present our iterative design process that has shown with IR, it outperforms a pure list selection. And with IR intensity, the time can be further reduced. If head motion is added, we can infer a spatial data structure of the nodes to enable a natural head-motion based disambiguation.
-We demonstrate an application of our selection technique for controlling smart appliances and report qualitative user impressions.
+We present the iterative design and evaluation of \systemname -- a head-orientation based selections method for such devices, for interacting with physical targets at a distance. We augment a commercial wearable device, Google Glass, with an infrared (IR) emitter to select targets equipped with IR receivers. Our first design shows that a naive IR implementation can outperform list selection, but has poor performance when refinement between multiple targets is needed. A second design uses IR intensity measurement at targets to improve refinement. To address a lack of natural mapping of on-screen target lists to spatial target location, our third design infers a spatial data structure of the targets from demonstration to enable a natural head-motion based disambiguation.
+%
+We also demonstrate a universal remote control application of the technique and report qualitative user impressions.
