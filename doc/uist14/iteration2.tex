@@ -32,7 +32,7 @@ The intensity information is used in two ways:
 \item When disambiguation is still needed, meaning that multiple targets have relatively close intensity values, the system sorts the disambiguation list according to the IR intensity, from strongest to weakest. This will help us reduce the $t_{disambiguation}$ significantly if the first one appears matches the actual target.
 \end{enumerate}
 
-We seek to quantify the improvement of such design and performed another user study to compare the {\em Binary IR} and {\em Valued IR} approaches. For this study, we aim to discover the performances at a denser environment. Thus, we take the 10 nodes and set it up in a smaller area (see Figure~\ref{fig:study-layout2}). In total, we have XX users for this study \ben{more information about users later.} Each user performs the target acquisition study 30 times for each approach. Similarly, half of them perform {\em Binary IR} first and the other half {\em Valued IR} first.
+We seek to quantify the improvement of such design and performed another user study to compare the {\em Binary IR} and {\em Valued IR} approaches. For this study, we aim to discover the performances at a denser environment. Thus, we take the 10 nodes and set it up in a smaller area (see Figure~\ref{fig:study-layout2}). In total, we have 10 users for this study, and each user performs 30 target acquisition tasks for each approach. Similarly to our first within-subject study, half of them perform {\em Binary IR} first and the other half {\em Valued IR} first.
 
 \begin{figure}[t]
 \centering
@@ -41,14 +41,54 @@ We seek to quantify the improvement of such design and performed another user st
 \label{fig:study-layout2}
 \end{figure}
 
+% new study results
+% ceiling(c(nrow(name), nrow(name_multiple), wrong_guess, wrong_percentage * 100))
+% intensity
+%  300 167  74  45
+% name
+%  300 225 145  65
+
+%% first one
+%% 
+%             Outcome 1	Outcome 2	     Total
+% Group 1 	167	133	300
+% Group 2	225	75	300
+% Total	        392	208	600
+%% Chi squared equals 24.755 with 1 degrees of freedom. 
+%%  The two-tailed P value is less than 0.0001
+
+
+% 	    Outcome 1	Outcome 2	     Total
+% Group 1	74	93	167
+% Group 2	145	80	225
+% Total	        219	173	392
+% Chi squared equals 15.758 with 1 degrees of freedom. 
+%   The two-tailed P value is less than 0.0001
+
+
+
+
 \subsection{Evaluation}
 Below is a summary of the study result.
 \begin{enumerate}
-\item Among the 150 trials in {\em Binary IR} condition, there are 104 times when disambiguation is needed. In {\em Valued IR} condition, only 65 out of 150 trials need disambiguation. We perform a Chi-square test on this result and the result is $\chi^2(1) = 20.611$, $p < 0.0001$. \ben{not sure about the degree of freedom being 1 here, will check later.} This demonstrates that the new approach successfully reduces the chances where disambiguation is needed.
-\item In the cases when disambiguation is inevitable, the {\em Valued IR} will sort the list based on the intensity reading. As a result, out of the 65 times when disambiguation is involved, {\em Valued IR} sorts the desired target as the first one in the list 38 times (roughly 58\%). In comparison, for {\em Binary IR}, only 37 out of 104 (~35\%) times can the user find the desired target first in the list. Again a Chi-square test demonstrates the statistical differences (with $\chi^2(1) = 8.487$, $p = 0.0036$. 
+\item Among the 300 trials in {\em Binary IR} condition, there are 225 times when disambiguation is needed. In {\em Valued IR} condition, only 167 out of 300 trials need disambiguation. We perform a Chi-square test on this result and the result is $\chi^2(1) = 24.755$, $p < 0.0001$. This demonstrates that the new approach successfully reduces the chances where disambiguation is needed.
+\item In the cases when disambiguation is inevitable, the {\em Valued IR} will sort the list based on the intensity reading. As a result, out of the 167 times when disambiguation is involved, {\em Valued IR} sorts the desired target as the first one in the list 93 times (roughly 55\%). In comparison, for {\em Binary IR}, only 80 out of 219 (35\%) times can the user find the desired target first in the list. Again a Chi-square test demonstrates the statistical difference (with $\chi^2(1) = 15.758$, $p < 0.0001$. 
 \end{enumerate}
 
-Such gain can be seen from Figure~\ref{fig:study2} where the overall target acquisition time is obtained. The average time is 4.32 seconds and 3.71 second for {\em Binary IR} and {\em Valued IR}, respectively; and a t-test shows that they are also significantly different $t(282)=2.0922$, $p=0.03$.
+Such gain can be seen from Figure~\ref{fig:study2} where the overall target acquisition time is obtained. The average time is 4.31 seconds and 3.64 second for {\em Binary IR} and {\em Valued IR}, respectively; and a t-test shows that they are also significantly different $t(555)=3.2945$, $p=0.001$.
+
+%  t.test(name$complete, intensity$complete)
+
+% 	Welch Two Sample t-test
+
+% data:  name$complete and intensity$complete
+% t = 3.2945, df = 555.272, p-value = 0.001049
+% alternative hypothesis: true difference in means is not equal to 0
+% 95 percent confidence interval:
+%  0.2707875 1.0704747
+% sample estimates:
+% mean of x mean of y 
+%  4.311340  3.640709 
 
 \begin{figure}[t]
 \centering
@@ -57,7 +97,7 @@ Such gain can be seen from Figure~\ref{fig:study2} where the overall target acqu
 \label{fig:study2}
 \end{figure}
 
-However, one side effect that we have observed in this approach is that the {\em Valued IR} sometimes eliminates the desired target during the {\em coarse selection} stage. The rate is not high (16 out of 150 cases, ~10\%), but this is the trade-off for the overall faster acquisition time.
+However, one side effect that we have observed in this approach is that the {\em Valued IR} sometimes eliminates the desired target during the {\em coarse selection} stage. The rate is not high (13 out of 300 cases, 4.3\%), but this is the trade-off for the overall faster acquisition time.
 
 %%% Local Variables: 
 %%% mode: latex
