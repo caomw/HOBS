@@ -17,7 +17,7 @@ Our augmentation to Google Glass adds a 940nm 5mm IR emitter\footnote{In the pro
 % In order to read the IR intensity, we integrates another IR light-to-voltage converter from AMS-TAOS USA Inc (manufacturer part number TSL267-LF) which is pretty sensitive to IR irradiance. 
 % % http://www.digikey.com/product-detail/en/TSL267-LF/TSL267-LF-ND/3095052
 
-Though IR signal has enabled us achieve head orientation-based targeting (simplex communication), we envision that more complicated applications could be built on top. Therefore, we added 802.15.4 radio to Glass and all the target nodes.
+While we use IR signal to establish simplex point-to-point communication from Glass to a target, we envision that more complicated applications can be built on top of the selection functionality. Therefore, we added 802.15.4 radios to Glass and all the target nodes to enable bi-directional communication between all nodes and Glass. \bjoern{not entirely correct - we also need node-to-glass communication for the Intensity IR technique.}
 
 \begin{figure}[t]
 \centering
