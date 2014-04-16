@@ -32,8 +32,8 @@ To quantify the improvement this design we performed a second study to compare t
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=1.0\columnwidth]{figures/study-layout2.jpg}
-\caption{The current environment setup \ben{needs annotation and a better photo.} \bjoern{yes}.. blackboard is 2*107+122 cm , 183 cm dimension.}
+\includegraphics[width=1.0\columnwidth]{figures/study-layout2.png}
+\caption{The environment setup for our second study. In comparison to our first study, we have delibrately increased the target density.}
 \label{fig:study-layout2}
 \end{figure}
 
@@ -71,8 +71,6 @@ In the cases when disambiguation is inevitable, {\em Intensity IR} sorts the lis
 
 From Figure~\ref{fig:study2}, we can see that the overall target aquisition time has decreased from 4.31 seconds for {\em Naive IR} to 3.64 second for {\em Intensity IR}. This difference is also significant ($t(555)=3.2945$, $p=0.001$.) 
 
-%% resolved: \bjoern{for consistency's sake, can we show a box plot as in figure 5?} \ben{I think cdf is a better way than boxplot? It actually provides more information. I may consider using cdf consistently.}
-
 %  t.test(name$complete, intensity$complete)
 
 % 	Welch Two Sample t-test
@@ -89,11 +87,11 @@ From Figure~\ref{fig:study2}, we can see that the overall target aquisition time
 \begin{figure}[t]
 \centering
 \includegraphics[width=1.0\columnwidth]{figures/result_study2.pdf}
-\caption{The target acquisition of in {\em Naive IR} and {\em Intensity IR} condition.}
+\caption{Boxplot and CDF of the target acquisition time in {\em Naive IR} and {\em Intensity IR} conditions.}
 \label{fig:study2}
 \end{figure}
 
-One side effect that we have observed in this approach is that the {\em Intensity IR} sometimes eliminates the desired target during the {\em scanning} stage. The this error rate (13 out of 300 cases, 4.3\%), is higher than the error rate for {\em Naive IR} \bjoern{insert error rate}. % but this is the trade-off for the overall faster acquisition time.
+One side effect that we have observed in this approach is that the {\em Intensity IR} sometimes eliminates the desired target during the {\em scanning} stage. Out of 300 trials, 13 of them (4.3\%) has been accidentally eliminated. This is higher than the error rate for {\em Naive IR} (only 5 out of 300, ~1.6\%). % but this is the trade-off for the overall faster acquisition time.
 
 %%% Local Variables: 
 %%% mode: latex
