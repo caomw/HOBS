@@ -4,10 +4,10 @@
 
 %With our first study, we learn that using IR to perform {\em coarse selection} can reduce the overall target selection time. A major reason for the improvement is because disambiguation is only needed 10\% of the time. 
 %because in many cases there will be only one target in range and fine selection is not needed, and in cases where it’s needed, the list length has been effectively reduced. 
-Performance of the {\em Naive IR} technique will degrade as target density in an environment increases, as increased density will require refinement steps. We therefore ask a follow-on research question: {\em``How might we improve selection time in a dense environment?’’}
+Performance of the {\em Naive IR} technique will degrade as target density in an environment increases, as increased density will require refinement steps. We therefore ask a follow-on research question: {\em``How might we improve selection time in a dense environment?''}
 
 \subsection{Technique}
-Previously we only used IR reception as a binary signal for identifying potential targets. We hypothesize that IR intensity at the receiver side can provide more information about the likelihood that a user intended to select a particular target. Received IR intensity falls off with distance between IR emitter and receiver as well as with the angle between emitter and receiver. To measure intensity, we add an IR light-to-voltage converter (model number TSL267-LF from AMS-TAOS USA Inc and replace the IR emitter with IR emitter (model number SFH 4545 from OSRAM Opto Semiconductors Inc).
+Previously we only used IR reception as a binary signal for identifying potential targets. We hypothesize that IR intensity at the receiver side can provide more information about the likelihood that a user intended to select a particular target. Received IR intensity falls off with distance between IR emitter and receiver as well as with the angle between emitter and receiver. To measure intensity, we add an IR light-to-voltage converter TSL267-LF by AMS-TAOS USA Inc.
 % transmitter webpage: http://www.digikey.com/product-search/en?x=0&y=0&lang=en&site=us&KeyWords=475-2919-ND
 % http://www.digikey.com/product-detail/en/TSL267-LF/TSL267-LF-ND/3095052
 
