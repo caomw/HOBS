@@ -4,12 +4,26 @@
 \subsection{Problem Statement and Goal}
 Both {\em Naive IR} and {\em Intensity IR} rely on list navigation on the near-eye display for the refinement step. This has two problems: First, a spatial layout of targets is compressed into a uni-dimensional list. List navigation commands thus have poor spatial mapping. Second, our techniques require the user to switch their focus back and forth between the physical world and the display. These issues motivated us to design an approach that also utilizes orientation information during the {\em refinement} stage, to provide a more direct mapping between the user's actions and target selection.
 
-In our third iteration, we ask the question ``can we build a system purely using head orientation and visual feedback from the environment for target selection?''
+In our third iteration, we ask the question ``can we build a system which further minimize the chance of falling back to list based refinement?''
 
 \subsection{Technique}
-The motion sensors (including gyroscope, magnetometer and accelerometer) on the head-worn device can help us determine the orientation of a user's head. However, this absolute orientation cannot be directly used in any indoor environment as the user may change their location. However, as long as the targets are spread around the periphery, their relative orientation is stable. This key observation inspires us to investigate a hybrid solution with IR and orientation sensors on Glass.
+The motion sensors (including gyroscope, magnetometer and accelerometer) on the head-worn device can help us determine the orientation of a user's head. However, this absolute orientation cannot be directly used in any indoor environment as the user may change their location. However, as long as the targets are spread around the periphery, their relative orientation to each other is stable (see Figure~\ref{fig:third_principle}). This key observation inspires us to investigate a hybrid solution with IR and orientation sensors on Glass.
 
-There are two phases to this technique: learning the relative orientations or targets in a room and intelligently suggesting targets during disambiguation.
+\begin{figure}[t]
+\centering
+\includegraphics[width=1\columnwidth]{figures/third_principle.png}
+\caption{Even when the user's absolution position changes, the relative relationship in the orientation space remain invariant.}
+\label{fig:third_principle}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=1\columnwidth]{figures/third_technique.pdf}
+\caption{\ben{figure in interactionModel2.key file.} Our third technique learned each target's absolute orientation and construct the orientation map. Though we store the absolute orientation value, during the {\em refinement} stage, the prediction is only based on relative changes to a reference point. In such a way, the prediction will work regardless of user's position.}
+\label{fig:third_technique}
+\end{figure}
+
+There are two phases to this technique: learning the relative orientations or targets in a room and intelligently suggesting targets during refinement.
 
 In the first stage, the user orients their head towards each device, and the system learns a map of the devices based on their corresponding sensor readings. During the second stage, when the user wishes to use head-motion for disambiguation, they will put their finger on the touchpad to enter a quasi-mode in which their head movement is used to select targets. In this mode, only one device has a solid indicator light on at a time. \bjoern{revisit prior sentence - there's a problem in the current technique in that the user doesn't know which targets are in the refinement set and which aren't.} \achal{There is no longer a refinement set - instead the user can select between all the devices using just orientation once they enter quasi mode.} The user can then tilt in the direction of the device they wish to switch to. This gesture is inspired by observing users who tend to adjust their glasses for closer inspection.
 
