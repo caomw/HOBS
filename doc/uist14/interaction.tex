@@ -1,12 +1,13 @@
 %!TEX root = uist14.tex
 \section{IR for head orientation sensing}
+
 \subsection{Hardware}
 A central hypothesis of this paper is that the area cursor paradigm~\cite{kabbash1995prince} is well matched to head orientation selection. Head orientation input is imprecise because it does not capture eye movement and has to rely on a low-bandwidth muscle group. Therefore, point selection techniques like laser pointers are not appropriate. 
 
 Infrared emitters are a good technology match since they emit light within a given angle, resulting in a cone in front of the emitter where the light is visible. LEDs with many different fields of view are commercially available. Each individual target that is equipped with IR detector can react to the signal. Such point to point communication enables us to achieve targeting without needing a map.
 %% \bjoern{say something about receivers and how point to point connections enable us to leverage head orientation without needing a map.}
 
-Another benefit is the low cost and easy integration of both emitters and detectors - detectors often have support for common IR protocol decoding built in and cost cents, making it economically feasible to add detectors to dozens or hundreds of devices in an environment.
+Another benefit is the low cost and easy integration of both emitters and detectors - detectors often have support for common IR protocol decoding built in and are inexpensive, making it economically feasible to add detectors to dozens or hundreds of devices in an environment.
 
 Our augmentation to Google Glass adds a 940nm 5mm IR emitter (SFH 4545 from OSRAM Opto Semiconductors Inc.). The emitter is controlled by an additional microcontroller which communicates with Google Glass through Bluetooth radio. (see Figure~\ref{fig:glass}). In the following description, we use the term ``Glass'' to refer to this augmented hardware.
 
@@ -31,9 +32,9 @@ While we use IR signal for targeting, wireless communications are needed to effi
 \subsection{Interaction Model}
 From the user's perspective, interaction with \systemname proceeds in two stages (Figure~\ref{fig:interaction}): 
 
-{\bf Scan:} The user first scans the environment to locate the position of the target. During this stage, Glass constantly sends out IR signals, and  targets offer immediate feedback when they receive a signal. The user confirms his desire to connect to a target by tapping on the Glass touchpad. Glass collects the responses from targets that have received IR reception through the backchannel of XBee. If there is only one single target in IR range, it is automatically selected. However, in a dense environment where multiple targets are within range, the user needs to perform a refinement.
+{\bf Scan:} The user first scans the environment to locate the position of the target. During this stage, Glass constantly sends out IR signals, and  targets offer immediate feedback when they receive a signal. The user confirms his desire to connect to a target by tapping on the Glass touchpad. Glass collects the responses from targets that have received IR reception through the backchannel of XBee. If there is only one single target in IR range, it is automatically selected. However, in a dense environment where multiple targets are within range, the user needs refine his selection.
 
-{\bf Refine:} When disambiguation is needed, the user must make an explicit selection among the targets within his view range. We have designed multiple refinement mechanisms -- all enable the user to select one from a subset of targets. The user confirms a current selection with a tap. Since the purpose of this stage is to disambiguate among potential targets, we will also use {\em disambiguation} to refer to this stage. Finally, a tap confirms a decision.
+{\bf Refine:} When disambiguation is needed, the user must make an explicit selection among the targets within his view range. We have designed multiple refinement mechanisms -- all of which enable the user to select one from a subset of targets. The user confirms a current selection with a tap. Since the purpose of this stage is to disambiguate among potential targets, we will also use {\em disambiguation} to refer to this stage. Finally, a tap confirms a decision.
 
 \begin{figure}[t!]
 \centering
@@ -42,7 +43,7 @@ From the user's perspective, interaction with \systemname proceeds in two stages
 \label{fig:interaction}
 \end{figure}
 
-The overall target acquisition time thus depends on scan and refine times; the probability that refinement is needed; and the time to commit an action (tap):
+The overall target acquisition time thus depends on scan and refine times, the probability that refinement is needed, and the time to commit an action (tap):
 \begin{equation}
 t_{total}=t_{scan}+P(refine)*t_{refine}+t_{commit}
 \label{eq:time}
