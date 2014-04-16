@@ -33,7 +33,7 @@ To quantify the improvement this design we performed a second study to compare t
 \begin{figure}[t]
 \centering
 \includegraphics[width=1.0\columnwidth]{figures/study-layout2.jpg}
-\caption{The current environment setup \ben{needs annotation and a better photo.} \bjoern{yes}.}
+\caption{The current environment setup \ben{needs annotation and a better photo.} \bjoern{yes}.. blackboard is 2*107+122 cm , 183 cm dimension.}
 \label{fig:study-layout2}
 \end{figure}
 
@@ -69,7 +69,9 @@ To quantify the improvement this design we performed a second study to compare t
 
 In the cases when disambiguation is inevitable, {\em Intensity IR} sorts the list based on the intensity reading, while {\em Naive IR} sorts alphabetically. {\em Intensity IR} reduces the fraction of refinement trails in which additional list navigation is necessary (i.e., the first, already selected element is incorrect).  {\em Intensity IR} sorted the desired target as the first one in the list in 55\% of cases (93 of 167). In comparison, for {\em Naive IR}, only 35\% of trials sorted the desired target as the first one in the list (80 out of 225). Again, a Chi-square test show that this difference is significant (with $\chi^2(1) = 15.758$, $p < 0.0001$. 
 
-From Figure~\ref{fig:study2}, we can see that the overall target aquisition time has decreased from 4.31 seconds for {\em Naive IR} to 3.64 second for {\em Intensity IR}. This difference is also significant ($t(555)=3.2945$, $p=0.001$.) \bjoern{for consistency's sake, can we show a box plot as in figure 5?} \ben{I think cdf is a better way than boxplot? It actually provides more information. I may consider using cdf consistently.}
+From Figure~\ref{fig:study2}, we can see that the overall target aquisition time has decreased from 4.31 seconds for {\em Naive IR} to 3.64 second for {\em Intensity IR}. This difference is also significant ($t(555)=3.2945$, $p=0.001$.) 
+
+%% resolved: \bjoern{for consistency's sake, can we show a box plot as in figure 5?} \ben{I think cdf is a better way than boxplot? It actually provides more information. I may consider using cdf consistently.}
 
 %  t.test(name$complete, intensity$complete)
 
@@ -86,7 +88,7 @@ From Figure~\ref{fig:study2}, we can see that the overall target aquisition time
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.9\columnwidth]{figures/study2_time.pdf}
+\includegraphics[width=1.0\columnwidth]{figures/result_study2.pdf}
 \caption{The target acquisition of in {\em Naive IR} and {\em Intensity IR} condition.}
 \label{fig:study2}
 \end{figure}
