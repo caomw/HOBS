@@ -9,7 +9,7 @@ In our first implementation, we use IR for scanning as described in the previous
 A natural point of comparison is an interface that does not use any head orientation information - it always shows a complete list of all targets. We implemented a list view where users swiped forward and backward on the Glass touchpad to navigate incrementally through the list. To quantify the benefit of using IR for the scanning step, we carried out a target acquisition study which compares the {\em Naive IR selection} and {\em list selection}.  
 
 \subsection{Method}
-We deployed 10 wireless nodes in an indoor environment (Figure~\ref{fig:targeting-study-layout}). Each of them has a number as ID and a letter representing the name. We recruited 14 participants from our institution for this study. 13 had never used Glass before, so we offered a Google Glass tutorial before the experiment for them to get familiar with Glass gestures. Four participants wore prescription glasses, which may have affected their task performance as wearing glasses beneath Glass makes it more cumbersome to secure the position of Glass and to adjust the screen to the optimal angle. In this study, the IR LED was fixed and not repositionable as shown in Figure~\ref{fig:glass}.
+We deployed 10 wireless nodes in an indoor environment (Figure~\ref{fig:targeting-study-layout}). Each of them has a number as ID and a letter representing the name. We recruited 14 participants from our institution for this study. 13 had never used Google Glass before, so we offered a tutorial before the experiment in order to introduce the device. Four participants wore prescription glasses, which makes Glass more cumbersome to use and adjust, and may have affected their task performance. In this study, the IR LED was fixed and not repositionable as shown in Figure~\ref{fig:glass}.
 
 \begin{figure}[t]
 \centering
@@ -18,7 +18,7 @@ We deployed 10 wireless nodes in an indoor environment (Figure~\ref{fig:targetin
 \label{fig:targeting-study-layout}
 \end{figure}
 
-In the within-subject study, half of the participants performed {\em IR selection} first and the other half used {\em list selection} first. For each selection condition, we conducted 15 target selections by randomly choosing from all the targets. During the study, we measured the {\bf target acquisition time} for each target selection. Afterward, participants were asked to complete a survey of mainly open-ended answers about their experience.
+In the within-subject study, half of the participants performed {\em IR selection} first and the other half used {\em list selection} first. For each selection condition, we conducted 15 target selections by randomly choosing from all the targets. During the study, we measured the {\bf target acquisition time} for each target selection. Afterward, participants were asked to complete a survey of primarily open-ended answers about their experience.
 
 %% remove this for now
 %% Our measurements suggest that IR communication can be targeted to an area about 60-120cm in diameter, up to 5m in front of the user. These values are a reasonable match for selecting targets in a room-size environment. A wider beam would lead to an increased chance of multiple appliances receiving IR signals simultaneously. A narrower beam will make targeting more challenging, given the precision constraints of human head movement.
@@ -49,7 +49,7 @@ In the within-subject study, half of the participants performed {\em IR selectio
 Our results indicate that {\em IR selection} outperforms {\em list selection}.  The average target acquisition time for {\em IR selection} is 6.67 seconds 
 while {\em list selection} took 8.86 {\em list} seconds (see Figure~\ref{fig:ir_vs_list}). A t-test shows a significant difference ($t(279)=-3.81, p=0.00017$).
 
-To understand how scanning and refinement contribute to total selection time, we split the data from {\em IR selection} into two parts -- trials that required refinement and ones that did not. It takes 6.40 seconds (on average) to complete  a selection without any refinement, but 9.16 seconds with refinement, indicating that an additional 2.76 seconds are needed for disambiguation (see Figure~\ref{fig:with_without_refinement}). This difference is significant ($t(19)=-2.7827, p=0.012)$ using t-test.
+To understand how scanning and refinement contribute to total selection time, we split the data from {\em IR selection} into two parts -- trials that required refinement and ones that did not. It takes 6.40 seconds (on average) to complete  a selection without any refinement, but 9.16 seconds with refinement, indicating that an additional 2.76 seconds are needed for disambiguation (see Figure~\ref{fig:with_without_refinement}). This difference is significant $(t(19)=-2.7827, p=0.012)$ using t-test.
 %  \bjoern{I don't understand why we have 279 DF in the previous test but only 19 here??}). 
 %% \ben{Because the times when refinement is needed is only 18 times, so the DF is bounded by the samples.}
 Because many targets were spaced far apart, refinements were only necessary in 10\% of total {\em IR selection} trials in this study.
@@ -58,7 +58,7 @@ To further generalize the results, in Figure~\ref{fig:time-vs-list-order}, we sh
 
 As for the qualitative feedback, 11 out of 14 participants preferred IR selection over list mode (two preferred list, one was undecided). While both interfaces were judged similarly on overall ease of connecting, list selection was perceived to be cumbersome. One user noted benefit of {\em IR selection} being \studyquote{more direct [than list mode]}, allowing users to focus on the targeted objects instead of the screen. One subject called it \studyquote{natural to interact with things just by looking at them}. Another mentioned that \studyquote{it's really convenient that what I'm looking at is what I'm targeting}, and many participants compared the overall time of target acquisition. One subject pointed out that \studyquote{{\em IR selection} doesn't requires you to swipe a lot of times like list mode}.
 
-In summary, {\em Naive IR} can outperform linear list selection, and most users like this head-orientation based targeting. But from our quantitative result, the refinement step detracts significantly from the efficiency of the technique.
+In summary, {\em Naive IR} can outperform linear list selection, and most users prefer this head-orientation based targeting. From our quantitative result, however, we foudn that the refinement step detracts significantly from the efficiency of the technique.
 
 
 % learned that with IR, we can have effectively reduced the overall target acquisition time. And the major gain comes from the fact that {\em coarse selection} helps reduce the chances of entering {\em fine selection} stage.
