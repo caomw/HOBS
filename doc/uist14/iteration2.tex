@@ -2,10 +2,9 @@
 
 \section{Iteration 2: Intensity IR}
 
-\subsection{Problem Statement and Goal}
 %With our first study, we learn that using IR to perform {\em coarse selection} can reduce the overall target selection time. A major reason for the improvement is because disambiguation is only needed 10\% of the time. 
 %because in many cases there will be only one target in range and fine selection is not needed, and in cases where it’s needed, the list length has been effectively reduced. 
-Performance of the {\em Naive IR} technique will degrade as target density in an environment increases, as increased density will require refinement steps. We therefore ask a follow-on research question: ``How might we improve selection time in a dense environment?''
+Performance of the {\em Naive IR} technique will degrade as target density in an environment increases, as increased density will require refinement steps. We therefore ask a follow-on research question: {\em``How might we improve selection time in a dense environment?’’}
 
 \subsection{Technique}
 Previously we only used IR reception as a binary signal for identifying potential targets. We hypothesize that IR intensity at the receiver side can provide more information about the likelihood that a user intended to select a particular target. Received IR intensity falls off with distance between IR emitter and receiver as well as with the angle between emitter and receiver. To measure intensity, we add an IR light-to-voltage converter (model number TSL267-LF from AMS-TAOS USA Inc and replace the IR emitter with IR emitter (model number SFH 4545 from OSRAM Opto Semiconductors Inc).
@@ -28,7 +27,7 @@ The intensity information is used in two ways:
 \end{enumerate}
 
 \subsection{Method}
-To quantify the improvement this design we performed a second study to compare the {\em Naive IR} and {\em Intensity IR} approaches. Because we were interested in discovering performance differences in denser environment, we reposition the 10 nodes and set it up in a smaller area (see Figure~\ref{fig:study-layout2}). We recruited 10 participants for this study. Each  user performed 30 target acquisition tasks for each approach. Similarly to our first within-subject study, half of them perform {\em Naive IR} first and the other half {\em Intesity IR} first.
+To quantify the improvement in this design we performed a second study to compare the {\em Naive IR} and {\em Intensity IR} approaches. Because we were interested in discovering performance differences in denser environment, we reposition the 10 nodes and set them up in a smaller area (see Figure~\ref{fig:study-layout2}). We recruited 10 participants for this study. Each  user performed 30 target acquisition tasks for each approach. As in our first within-subject study, half of them perform {\em Naive IR} first and the other half {\em Intesity IR} first.
 
 \begin{figure}[t]
 \centering
@@ -67,7 +66,7 @@ To quantify the improvement this design we performed a second study to compare t
 \subsection{Results}
 {\em Intensity IR} reduces the number of trials in which refinement dialogs are needed from 225 of 300 in {\em Naive IR} to 167 of 300 trials. A Chi-square test shows this difference is significant ($\chi^2(1) = 24.755$, $p < 0.0001$). This demonstrates that the new approach successfully reduces the probability that a disambiguation dialog is needed.
 
-In the cases when disambiguation is inevitable, {\em Intensity IR} sorts the list based on the intensity reading, while {\em Naive IR} sorts alphabetically. {\em Intensity IR} reduces the fraction of refinement trails in which additional list navigation is necessary (i.e., the first, already selected element is incorrect).  {\em Intensity IR} sorted the desired target as the first one in the list in 55\% of cases (93 of 167). In comparison, for {\em Naive IR}, only 35\% of trials sorted the desired target as the first one in the list (80 out of 225). Again, a Chi-square test show that this difference is significant (with $\chi^2(1) = 15.758$, $p < 0.0001$).
+In the cases when disambiguation is inevitable, {\em Intensity IR} sorts the list based on the intensity reading, while {\em Naive IR} sorts alphabetically. {\em Intensity IR} reduces the fraction of refinement trails in which additional list navigation is necessary (i.e., the first, already selected element is incorrect).  {\em Intensity IR} sorted the desired target as the first one in the list in 55\% of cases (93 of 167). In comparison, for {\em Naive IR}, only 35\% of trials sorted the desired target as the first one in the list (80 out of 225). A Chi-square test show that this difference is significant (with $\chi^2(1) = 15.758$, $p < 0.0001$).
 
 From Figure~\ref{fig:study2}, we can see that the overall target aquisition time has decreased from 4.31 seconds for {\em Naive IR} to 3.64 second for {\em Intensity IR}. This difference is also significant ($t(555)=3.2945$, $p=0.001$.) 
 
