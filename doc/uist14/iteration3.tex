@@ -9,13 +9,13 @@ In our third iteration, we build a system which further minimizes the chance of
 falling back to list based {\em refinement}.
 
 \subsection{Technique}
-The motion sensors (including gyroscope, magnetometer and accelerometer) on the
-head-worn device can help us determine the orientation of a user's head.
-Unfortunately, this absolute orientation cannot be directly used in any indoor
-environment as the user may change their location. As long as the targets are
-spread around the periphery, however, their relative orientations are stable
+Using the motion sensors (including gyroscope, magnetometer and accelerometer) on the
+head-worn device and IR, we can discover the spatial relationships between targets and the head orientation of the user.  
+
+Unfortunately, this absolute orientation cannot be applied to all indoor
+environments, since the user’s movements through the space could change the relationships between targets. However, with the constraint that the targets are spread around the periphery, their relative orientations are stable
 (see Figure~\ref{fig:third_principle}). This key observation inspires us to
-investigate a hybrid solution with IR and orientation sensors on Glass.
+investigate a hybrid solution using a combination of IR and orientation sensors on Glass.
 
 \begin{figure}[t]
 \centering
