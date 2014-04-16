@@ -1,0 +1,692 @@
+--------- beginning of /dev/log/system
+--------- beginning of /dev/log/main
+E/GlasSees( 2189): time: 1397517775331 Tapped to connect
+E/GlasSees( 2189): time: 1397517775417 BT message level: 4
+E/GlasSees( 2189): time: 1397517775432 BT message level: :76, 17:44, 
+E/GlasSees( 2189): time: 1397517775439 Room level: [04, 17] current: 4
+E/GlasSees( 2189): time: 1397517776233 Change to: 17
+E/GlasSees( 2189): time: 1397517776599 Connected to 17
+E/GlasSees( 2189): time: 1397517778151 Change to: 4
+E/GlasSees( 2189): time: 1397517778924 Disconnected
+E/GlasSees( 2189): time: 1397517782532 Tapped to connect
+E/GlasSees( 2189): time: 1397517782619 BT message level: 4:35, 5:
+E/GlasSees( 2189): time: 1397517782633 BT message level: 61, 11:68, 
+E/GlasSees( 2189): time: 1397517782642 Room level: [11, 05, 04] current: 11
+E/GlasSees( 2189): time: 1397517783359 Connected to 11
+E/GlasSees( 2189): time: 1397517785114 Disconnected
+E/GlasSees( 2189): time: 1397517787270 Tapped to connect
+E/GlasSees( 2189): time: 1397517787323 BT message level: 3
+E/GlasSees( 2189): time: 1397517787341 BT message level: :24, 5:36, 
+E/GlasSees( 2189): time: 1397517787348 Room level: [05, 03] current: 5
+E/GlasSees( 2189): time: 1397517788004 Connected to 5
+E/GlasSees( 2189): time: 1397517789795 Disconnected
+E/GlasSees( 2189): time: 1397517792732 Tapped to connect
+E/GlasSees( 2189): time: 1397517792820 BT message level: 5:44, 7:4
+E/GlasSees( 2189): time: 1397517792836 BT message level: 0, 11:40, 
+E/GlasSees( 2189): time: 1397517792846 Room level: [05, 07, 11] current: 5
+E/GlasSees( 2189): time: 1397517793717 Connected to 5
+E/GlasSees( 2189): time: 1397517795416 Disconnected
+E/GlasSees( 2189): time: 1397517798520 Tapped to connect
+E/GlasSees( 2189): time: 1397517798616 BT message level: 5
+E/GlasSees( 2189): time: 1397517798633 BT message level: :29, 
+E/GlasSees( 2189): time: 1397517798639 Connected to 5
+E/GlasSees( 2189): time: 1397517803057 Disconnected
+E/GlasSees( 2189): time: 1397517803930 Tapped to connect
+E/GlasSees( 2189): time: 1397517803995 BT message level: 7
+E/GlasSees( 2189): time: 1397517803996 BT message level: :50, 14:84, 
+E/GlasSees( 2189): time: 1397517804004 Room level: [14, 07] current: 14
+E/GlasSees( 2189): time: 1397517804733 Change to: 7
+E/GlasSees( 2189): time: 1397517805185 Connected to 7
+E/GlasSees( 2189): time: 1397517806617 Disconnected
+E/GlasSees( 2189): time: 1397517809455 Tapped to connect
+E/GlasSees( 2189): time: 1397517809540 BT message level: 3:68, 4
+E/GlasSees( 2189): time: 1397517809573 BT message level: :45, 
+E/GlasSees( 2189): time: 1397517809581 Room level: [03, 04] current: 3
+E/GlasSees( 2189): time: 1397517810328 Change to: 4
+E/GlasSees( 2189): time: 1397517810678 Connected to 4
+E/GlasSees( 2189): time: 1397517812727 Disconnected
+E/GlasSees( 2189): time: 1397517815129 Tapped to connect
+E/GlasSees( 2189): time: 1397517815252 BT message level: :
+E/GlasSees( 2189): time: 1397517815255 BT message level: :38, 7:40, 11:54, 
+E/GlasSees( 2189): time: 1397517815871 Tapped to connect
+E/GlasSees( 2189): time: 1397517815956 BT message level: 4
+E/GlasSees( 2189): time: 1397517815972 BT message level: :37, 5:28, 11:48, 
+E/GlasSees( 2189): time: 1397517815977 Room level: [11, 04, 05] current: 11
+E/GlasSees( 2189): time: 1397517816221 Connected to 11
+E/GlasSees( 2189): time: 1397517817782 Change to: 11
+E/GlasSees( 2189): time: 1397517818437 Disconnected
+E/GlasSees( 2189): time: 1397517819242 Tapped to connect
+E/GlasSees( 2189): time: 1397517819354 BT message level: 3:
+E/GlasSees( 2189): time: 1397517819377 BT message level: 33, 4:40, 5:24, 11:40, 
+E/GlasSees( 2189): time: 1397517819385 Room level: [04, 11, 03, 05] current: 4
+E/GlasSees( 2189): time: 1397517820979 Connected to 4
+E/GlasSees( 2189): time: 1397517823421 Disconnected
+E/GlasSees( 2189): time: 1397517825567 Tapped to connect
+E/GlasSees( 2189): time: 1397517825629 BT message level: 5:44, 
+E/GlasSees( 2189): time: 1397517825630 BT message level: 5:44, 11:40, 
+E/GlasSees( 2189): time: 1397517825640 Room level: [05, 11] current: 5
+E/GlasSees( 2189): time: 1397517826359 Change to: 11
+E/GlasSees( 2189): time: 1397517826673 Connected to 11
+E/GlasSees( 2189): time: 1397517828119 Disconnected
+E/GlasSees( 2189): time: 1397517833275 Tapped to connect
+E/GlasSees( 2189): time: 1397517833333 BT message level: 7:114,
+E/GlasSees( 2189): time: 1397517833365 BT message level:  
+E/GlasSees( 2189): time: 1397517833374 Connected to 7
+E/GlasSees( 2189): time: 1397517835434 Disconnected
+E/GlasSees( 2189): time: 1397517836118 Tapped to connect
+E/GlasSees( 2189): time: 1397517836189 BT message level: 29
+E/GlasSees( 2189): time: 1397517836190 BT message level: 29, 6:46, 14:41, 
+E/GlasSees( 2189): time: 1397517836808 Tapped to connect
+E/GlasSees( 2189): time: 1397517836866 BT message level: 4:
+E/GlasSees( 2189): time: 1397517836867 BT message level: 53, 7:100, 
+E/GlasSees( 2189): time: 1397517836874 Room level: [07, 04] current: 7
+E/GlasSees( 2189): time: 1397517837661 Change to: 7
+E/GlasSees( 2189): time: 1397517838288 Change to: 4
+E/GlasSees( 2189): time: 1397517838911 Disconnected
+E/GlasSees( 2189): time: 1397517839802 Tapped to connect
+E/GlasSees( 2189): time: 1397517839887 BT message level: :
+E/GlasSees( 2189): time: 1397517839888 BT message level: :34, 6:31, 7:50, 
+E/GlasSees( 2189): time: 1397517841186 Tapped to connect
+E/GlasSees( 2189): time: 1397517841270 BT message level: 3:45, 4:5
+E/GlasSees( 2189): time: 1397517841289 BT message level: 9, 7:47, 
+E/GlasSees( 2189): time: 1397517841299 Room level: [04, 07, 03] current: 4
+E/GlasSees( 2189): time: 1397517841537 Connected to 4
+E/GlasSees( 2189): time: 1397517842803 Change to: 7
+E/GlasSees( 2189): time: 1397517843480 Disconnected
+E/GlasSees( 2189): time: 1397517845400 Tapped to connect
+E/GlasSees( 2189): time: 1397517845469 BT message level: 3: 
+E/GlasSees( 2189): time: 1397517845470 BT message level: 6, 7:56, 
+E/GlasSees( 2189): time: 1397517845477 Room level: [07, 03] current: 7
+E/GlasSees( 2189): time: 1397517846575 Change to: 3
+E/GlasSees( 2189): time: 1397517848170 Disconnected
+E/GlasSees( 2189): time: 1397517849129 Tapped to connect
+E/GlasSees( 2189): time: 1397517849216 BT message level: 3
+E/GlasSees( 2189): time: 1397517849229 BT message level: :39, 4:38, 14:20, 
+E/GlasSees( 2189): time: 1397517849238 Room level: [03, 04, 14] current: 3
+E/GlasSees( 2189): time: 1397517850977 Disconnected
+E/GlasSees( 2189): time: 1397517851887 Tapped to connect
+E/GlasSees( 2189): time: 1397517851960 BT message level: :
+E/GlasSees( 2189): time: 1397517851961 BT message level: :48, 4:49, 7:84, 
+E/GlasSees( 2189): time: 1397517852549 Tapped to connect
+E/GlasSees( 2189): time: 1397517852634 BT message level: 3
+E/GlasSees( 2189): time: 1397517852650 BT message level: :48, 4:58, 7:73, 
+E/GlasSees( 2189): time: 1397517852660 Room level: [07, 04, 03] current: 7
+E/GlasSees( 2189): time: 1397517853546 Change to: 4
+E/GlasSees( 2189): time: 1397517853988 Change to: 3
+E/GlasSees( 2189): time: 1397517854545 Change to: 3
+E/GlasSees( 2189): time: 1397517855429 Disconnected
+E/GlasSees( 2189): time: 1397517875809 Tapped to connect
+E/GlasSees( 2189): time: 1397517875944 BT message level: 7:
+E/GlasSees( 2189): time: 1397517875966 BT message level: 58, 14:33, 
+E/GlasSees( 2189): time: 1397517875973 Room level: [07, 14] current: 7
+E/GlasSees( 2189): time: 1397517876085 Connected to 7
+E/GlasSees( 2189): time: 1397517877004 Connected to 7
+E/GlasSees( 2189): time: 1397517877419 Change to: 7
+E/GlasSees( 2189): time: 1397517878593 Change to: 7
+E/GlasSees( 2189): time: 1397517879727 Disconnected
+E/GlasSees( 2189): time: 1397517880563 Tapped to connect
+E/GlasSees( 2189): time: 1397517880674 BT message level:  14:26, 
+E/GlasSees( 2189): 2,
+E/GlasSees( 2189): time: 1397517880680 Room level: [07, 14] current: 7
+E/GlasSees( 2189): time: 1397517880692 BT message level:  14:26, 
+E/GlasSees( 2189): time: 1397517880697 Room level: [07, 14] current: 7
+E/GlasSees( 2189): time: 1397517881492 Change to: 14
+E/GlasSees( 2189): time: 1397517881915 Change to: 14
+E/GlasSees( 2189): time: 1397517882898 Change to: 14
+E/GlasSees( 2189): time: 1397517883650 Disconnected
+E/GlasSees( 2189): time: 1397517885171 Tapped to connect
+E/GlasSees( 2189): time: 1397517885281 BT message level: 7
+E/GlasSees( 2189): time: 1397517885284 BT message level: :35, 12:44, 
+E/GlasSees( 2189): time: 1397517885293 Room level: [12, 07] current: 12
+E/GlasSees( 2189): time: 1397517886303 Connected to 12
+E/GlasSees( 2189): time: 1397517887819 Disconnected
+E/GlasSees( 2189): time: 1397517892430 Tapped to connect
+E/GlasSees( 2189): time: 1397517892503 BT message level: 13, 11:1
+E/GlasSees( 2189): time: 1397517892506 BT message level: 13, 11:11, 
+E/GlasSees( 2189): time: 1397517893084 Tapped to connect
+E/GlasSees( 2189): time: 1397517893171 BT message level: :
+E/GlasSees( 2189): time: 1397517893172 BT message level: :44, 
+E/GlasSees( 2189): time: 1397517893691 Tapped to connect
+E/GlasSees( 2189): time: 1397517893797 BT message level: 5
+E/GlasSees( 2189): time: 1397517893806 BT message level: :59, 
+E/GlasSees( 2189): time: 1397517893812 Connected to 5
+E/GlasSees( 2189): time: 1397517900410 Disconnected
+E/GlasSees( 2189): time: 1397517901015 Tapped to connect
+E/GlasSees( 2189): time: 1397517901109 BT message level: 12
+E/GlasSees( 2189): time: 1397517901124 BT message level: :75, 
+E/GlasSees( 2189): time: 1397517901132 Connected to 12
+E/GlasSees( 2189): time: 1397517903398 Disconnected
+E/GlasSees( 2189): time: 1397517906413 Tapped to connect
+E/GlasSees( 2189): time: 1397517906472 BT message level: 5
+E/GlasSees( 2189): time: 1397517906473 BT message level: :120, 
+E/GlasSees( 2189): time: 1397517906479 Connected to 5
+E/GlasSees( 2189): time: 1397517908087 Disconnected
+E/GlasSees( 2189): time: 1397517909018 Tapped to connect
+E/GlasSees( 2189): time: 1397517909101 BT message level: 5:
+E/GlasSees( 2189): time: 1397517909102 BT message level: 102, 11:80, 
+E/GlasSees( 2189): time: 1397517909109 Room level: [05, 11] current: 5
+E/GlasSees( 2189): time: 1397517909999 Change to: 11
+E/GlasSees( 2189): time: 1397517910342 Connected to 11
+E/GlasSees( 2189): time: 1397517912403 Disconnected
+E/GlasSees( 2189): time: 1397517914855 Tapped to connect
+E/GlasSees( 2189): time: 1397517914941 BT message level: 4:40, 5:4
+E/GlasSees( 2189): time: 1397517914955 BT message level: 7, 11:39, 
+E/GlasSees( 2189): time: 1397517914960 Room level: [05, 04, 11] current: 5
+E/GlasSees( 2189): time: 1397517914973 BT message level: 4:40, 5:47, 11:39, 
+E/GlasSees( 2189): time: 1397517914979 Room level: [05, 04, 11] current: 5
+E/GlasSees( 2189): time: 1397517915818 Connected to 5
+E/GlasSees( 2189): time: 1397517921863 Connected to 5
+E/GlasSees( 2189): time: 1397517922701 Disconnected
+E/GlasSees( 2189): time: 1397517924048 Tapped to connect
+E/GlasSees( 2189): time: 1397517924163 BT message level: 3:3
+E/GlasSees( 2189): time: 1397517924164 BT message level: 6, 14:45, 
+E/GlasSees( 2189): time: 1397517924169 Room level: [14, 03] current: 14
+E/GlasSees( 2189): time: 1397517925223 Connected to 14
+E/GlasSees( 2189): time: 1397517926794 Disconnected
+E/GlasSees( 2189): time: 1397517927624 Tapped to connect
+E/GlasSees( 2189): time: 1397517927711 BT message level: 1
+E/GlasSees( 2189): time: 1397517927728 BT message level: 4:121, 
+E/GlasSees( 2189): time: 1397517927733 Connected to 14
+E/GlasSees( 2189): time: 1397517927871 Disconnected
+E/GlasSees( 2189): time: 1397517931528 Tapped to connect
+E/GlasSees( 2189): time: 1397517931618 BT message level: 4
+E/GlasSees( 2189): time: 1397517931637 BT message level: :44, 6:87, 
+E/GlasSees( 2189): time: 1397517931644 Room level: [06, 04] current: 6
+E/GlasSees( 2189): time: 1397517932349 Connected to 6
+E/GlasSees( 2189): time: 1397517934346 Disconnected
+E/GlasSees( 2189): time: 1397517943570 Tapped to connect
+E/GlasSees( 2189): time: 1397517943698 BT message level: 4
+E/GlasSees( 2189): time: 1397517943699 BT message level: :56, 17:34, 
+E/GlasSees( 2189): time: 1397517943707 Room level: [04, 17] current: 4
+E/GlasSees( 2189): time: 1397517944367 Connected to 4
+E/GlasSees( 2189): time: 1397517946725 Change to: 4
+E/GlasSees( 2189): time: 1397517947565 Disconnected
+E/GlasSees( 2189): time: 1397517951427 Tapped to connect
+E/GlasSees( 2189): time: 1397517951495 BT message level: 3:3
+E/GlasSees( 2189): time: 1397517951509 BT message level: 3, 7:44, 11:42, 
+E/GlasSees( 2189): time: 1397517951514 Room level: [07, 11, 03] current: 7
+E/GlasSees( 2189): time: 1397517952217 Change to: 11
+E/GlasSees( 2189): time: 1397517952490 Change to: 3
+E/GlasSees( 2189): time: 1397517952832 Connected to 3
+E/GlasSees( 2189): time: 1397517954540 Disconnected
+E/GlasSees( 2189): time: 1397517957636 Tapped to connect
+E/GlasSees( 2189): time: 1397517957704 BT message level: 4
+E/GlasSees( 2189): time: 1397517957735 BT message level: :40, 
+E/GlasSees( 2189): time: 1397517957742 Connected to 4
+E/GlasSees( 2189): time: 1397517960070 Disconnected
+E/GlasSees( 2189): time: 1397517963675 Tapped to connect
+E/GlasSees( 2189): time: 1397517963763 BT message level: 6
+E/GlasSees( 2189): time: 1397517963778 BT message level: :87, 
+E/GlasSees( 2189): time: 1397517963784 Connected to 6
+E/GlasSees( 2189): time: 1397517965963 Disconnected
+E/GlasSees( 2189): time: 1397517968794 Tapped to connect
+E/GlasSees( 2189): time: 1397517968907 BT message level: :
+E/GlasSees( 2189): time: 1397517968930 BT message level: :48, 17:28, 
+E/GlasSees( 2189): time: 1397517969613 Tapped to connect
+E/GlasSees( 2189): time: 1397517969714 BT message level: 4
+E/GlasSees( 2189): time: 1397517969733 BT message level: :56, 
+E/GlasSees( 2189): time: 1397517969739 Connected to 4
+E/GlasSees( 2189): time: 1397517971930 Disconnected
+E/GlasSees( 2189): time: 1397517978186 Tapped to connect
+E/GlasSees( 2189): time: 1397517978274 BT message level: 4:43
+E/GlasSees( 2189): time: 1397517978276 BT message level: , 5:45, 11:70, 
+E/GlasSees( 2189): time: 1397517978291 Room level: [11, 05, 04] current: 11
+E/GlasSees( 2189): time: 1397517978452 Connected to 11
+E/GlasSees( 2189): time: 1397517979661 Change to: 5
+E/GlasSees( 2189): time: 1397517980342 Disconnected
+E/GlasSees( 2189): time: 1397517981014 Tapped to connect
+E/GlasSees( 2189): time: 1397517981102 BT message level: 1
+E/GlasSees( 2189): time: 1397517981117 BT message level: 1:84, 
+E/GlasSees( 2189): time: 1397517981123 Connected to 11
+E/GlasSees( 2189): time: 1397517982884 Disconnected
+E/GlasSees( 2189): time: 1397517983592 Tapped to connect
+E/GlasSees( 2189): time: 1397517983650 BT message level: 4
+E/GlasSees( 2189): time: 1397517983681 BT message level: :80, 11:62, 
+E/GlasSees( 2189): time: 1397517983688 Room level: [04, 11] current: 4
+E/GlasSees( 2189): time: 1397517984581 Connected to 4
+E/GlasSees( 2189): time: 1397517987264 Disconnected
+E/GlasSees( 2189): time: 1397517991484 Tapped to connect
+E/GlasSees( 2189): time: 1397517991557 BT message level: 5
+E/GlasSees( 2189): time: 1397517991591 BT message level: :44, 11:28, 
+E/GlasSees( 2189): time: 1397517991599 Room level: [05, 11] current: 5
+E/GlasSees( 2189): time: 1397517992349 Change to: 11
+E/GlasSees( 2189): time: 1397517992675 Connected to 11
+E/GlasSees( 2189): time: 1397517995067 Disconnected
+E/GlasSees( 2189): time: 1397517996588 Tapped to connect
+E/GlasSees( 2189): time: 1397517996667 BT message level: 4
+E/GlasSees( 2189): time: 1397517996699 BT message level: :35, 17:42, 
+E/GlasSees( 2189): time: 1397517996705 Room level: [17, 04] current: 17
+E/GlasSees( 2189): time: 1397517997346 Connected to 17
+E/GlasSees( 2189): time: 1397517999277 Disconnected
+E/GlasSees( 2189): time: 1397518002411 Tapped to connect
+E/GlasSees( 2189): time: 1397518002501 BT message level: 6:76, 
+E/GlasSees( 2189): time: 1397518002511 Room level: [17, 04] current: 17
+E/GlasSees( 2189): time: 1397518003474 Change to: 4
+E/GlasSees( 2189): time: 1397518004118 Change to: 17
+E/GlasSees( 2189): time: 1397518004736 Change to: 4
+E/GlasSees( 2189): time: 1397518005367 Change to: 17
+E/GlasSees( 2189): time: 1397518006069 Disconnected
+E/GlasSees( 2189): time: 1397518006788 Tapped to connect
+E/GlasSees( 2189): time: 1397518006846 BT message level: 4
+E/GlasSees( 2189): time: 1397518006879 BT message level: :28, 
+E/GlasSees( 2189): time: 1397518006893 Connected to 4
+E/GlasSees( 2189): time: 1397518008020 Disconnected
+E/GlasSees( 2189): time: 1397518008986 Tapped to connect
+E/GlasSees( 2189): time: 1397518009046 BT message level: 4
+E/GlasSees( 2189): time: 1397518009048 BT message level: :52, 6:31, 17:32, 
+E/GlasSees( 2189): time: 1397518009059 Room level: [04, 17, 06] current: 4
+E/GlasSees( 2189): time: 1397518010283 Change to: 17
+E/GlasSees( 2189): time: 1397518010574 Change to: 6
+E/GlasSees( 2189): time: 1397518010977 Connected to 6
+E/GlasSees( 2189): time: 1397518013112 Disconnected
+E/GlasSees( 2189): time: 1397518016445 Tapped to connect
+E/GlasSees( 2189): time: 1397518016561 BT message level: :
+E/GlasSees( 2189): time: 1397518016562 BT message level: :64, 4:33, 7:48, 14:64, 
+E/GlasSees( 2189): time: 1397518017100 Tapped to connect
+E/GlasSees( 2189): time: 1397518017161 BT message level: 3:78, 1
+E/GlasSees( 2189): time: 1397518017168 BT message level: 4:98, 
+E/GlasSees( 2189): time: 1397518017176 Room level: [14, 03] current: 14
+E/GlasSees( 2189): time: 1397518018371 Disconnected
+E/GlasSees( 2189): time: 1397518019002 Tapped to connect
+E/GlasSees( 2189): time: 1397518019073 BT message level: 1
+E/GlasSees( 2189): time: 1397518019094 BT message level: 4:128, 
+E/GlasSees( 2189): time: 1397518019099 Connected to 14
+E/GlasSees( 2189): time: 1397518020182 Disconnected
+E/GlasSees( 2189): time: 1397518021821 Tapped to connect
+E/GlasSees( 2189): time: 1397518021878 BT message level: 14:120, 
+E/GlasSees( 2189): time: 1397518021911 BT message level: 
+E/GlasSees( 2189): time: 1397518021917 Connected to 14
+E/GlasSees( 2189): time: 1397518025066 Disconnected
+E/GlasSees( 2189): time: 1397518025711 Tapped to connect
+E/GlasSees( 2189): time: 1397518025783 BT message level: 14
+E/GlasSees( 2189): time: 1397518025804 BT message level: :91, 
+E/GlasSees( 2189): time: 1397518025810 Connected to 14
+E/GlasSees( 2189): time: 1397518026762 Disconnected
+E/GlasSees( 2189): time: 1397518027373 Tapped to connect
+E/GlasSees( 2189): time: 1397518027418 BT message level: 7
+E/GlasSees( 2189): time: 1397518027436 BT message level: :92, 
+E/GlasSees( 2189): time: 1397518027442 Connected to 7
+E/GlasSees( 2189): time: 1397518027468 BT message level: 7:92, 
+E/GlasSees( 2189): time: 1397518027475 Connected to 7
+E/GlasSees( 2189): time: 1397518032290 Disconnected
+E/GlasSees( 2189): time: 1397518034103 Tapped to connect
+E/GlasSees( 2189): time: 1397518034188 BT message level: 4:
+E/GlasSees( 2189): time: 1397518034221 BT message level: 50, 6:78, 
+E/GlasSees( 2189): time: 1397518034229 Room level: [06, 04] current: 6
+E/GlasSees( 2189): time: 1397518034911 Connected to 6
+E/GlasSees( 2189): time: 1397518036721 Disconnected
+E/GlasSees( 2189): time: 1397518042027 Tapped to connect
+E/GlasSees( 2189): time: 1397518042087 BT message level: 4
+E/GlasSees( 2189): time: 1397518042094 BT message level: :30, 5:37, 11:36, 
+E/GlasSees( 2189): time: 1397518042101 Room level: [05, 11, 04] current: 5
+E/GlasSees( 2189): time: 1397518043003 Change to: 11
+E/GlasSees( 2189): time: 1397518043342 Connected to 11
+E/GlasSees( 2189): time: 1397518047645 Connected to 11
+E/GlasSees( 2189): time: 1397518048270 Disconnected
+E/GlasSees( 2189): time: 1397518048853 Tapped to connect
+E/GlasSees( 2189): time: 1397518048939 BT message level: 4
+E/GlasSees( 2189): time: 1397518048955 BT message level: :66, 
+E/GlasSees( 2189): time: 1397518048963 Connected to 4
+E/GlasSees( 2189): time: 1397518053862 Disconnected
+E/GlasSees( 2189): time: 1397518055916 Tapped to connect
+E/GlasSees( 2189): time: 1397518056004 BT message level: 1
+E/GlasSees( 2189): time: 1397518056019 BT message level: 1:49, 
+E/GlasSees( 2189): time: 1397518056025 Connected to 11
+E/GlasSees( 2189): time: 1397518057978 Disconnected
+E/GlasSees( 2189): time: 1397518061444 Tapped to connect
+E/GlasSees( 2189): time: 1397518061530 BT message level: 1
+E/GlasSees( 2189): time: 1397518061563 BT message level: 2:109, 
+E/GlasSees( 2189): time: 1397518061568 Connected to 12
+E/GlasSees( 2189): time: 1397518063439 Disconnected
+E/GlasSees( 2189): time: 1397518067132 Tapped to connect
+E/GlasSees( 2189): time: 1397518067213 BT message level: 4
+E/GlasSees( 2189): time: 1397518067215 BT message level: :40, 11:48, 17:64, 
+E/GlasSees( 2189): time: 1397518067225 Room level: [17, 11, 04] current: 17
+E/GlasSees( 2189): time: 1397518067865 Connected to 17
+E/GlasSees( 2189): time: 1397518069364 Disconnected
+E/GlasSees( 2189): time: 1397518073530 Tapped to connect
+E/GlasSees( 2189): time: 1397518073589 BT message level: :
+E/GlasSees( 2189): time: 1397518073590 BT message level: :70, 
+E/GlasSees( 2189): time: 1397518074211 Tapped to connect
+E/GlasSees( 2189): time: 1397518074330 BT message level: 3
+E/GlasSees( 2189): time: 1397518074348 BT message level: :44, 4:38, 11:48, 
+E/GlasSees( 2189): time: 1397518074358 Room level: [11, 03, 04] current: 11
+E/GlasSees( 2189): time: 1397518074610 Connected to 11
+E/GlasSees( 2189): time: 1397518075583 Change to: 11
+E/GlasSees( 2189): time: 1397518076152 Disconnected
+E/GlasSees( 2189): time: 1397518076749 Tapped to connect
+E/GlasSees( 2189): time: 1397518076851 BT message level: 3
+E/GlasSees( 2189): time: 1397518076853 BT message level: :41, 4:33, 11:50, 
+E/GlasSees( 2189): time: 1397518076862 Room level: [11, 03, 04] current: 11
+E/GlasSees( 2189): time: 1397518077462 Change to: 3
+E/GlasSees( 2189): time: 1397518077826 Connected to 3
+E/GlasSees( 2189): time: 1397518079380 Disconnected
+E/GlasSees( 2189): time: 1397518083642 Tapped to connect
+E/GlasSees( 2189): time: 1397518083733 BT message level: 11:82, 
+E/GlasSees( 2189): time: 1397518083734 BT message level: 
+E/GlasSees( 2189): time: 1397518083740 Connected to 11
+E/GlasSees( 2189): time: 1397518085168 Disconnected
+E/GlasSees( 2189): time: 1397518093290 Tapped to connect
+E/GlasSees( 2189): time: 1397518093350 BT message level: 7:15,
+E/GlasSees( 2189): time: 1397518093368 BT message level:  8:22, 11:15, 
+E/GlasSees( 2189): time: 1397518093377 Room level: [08, 07, 11] current: 8
+E/GlasSees( 2189): time: 1397518094038 Connected to 8
+E/GlasSees( 2189): time: 1397518096278 Change to: 8
+E/GlasSees( 2189): time: 1397518096910 Disconnected
+E/GlasSees( 2858): time: 1397518238622 Tapped to connect
+E/GlasSees( 2858): time: 1397518238680 BT message level: 19
+E/GlasSees( 2858): time: 1397518238681 BT message level: 197, 7:32, 14:144, 
+E/GlasSees( 2858): time: 1397518239325 Tapped to connect
+E/GlasSees( 2858): time: 1397518239389 BT message level: 3:
+E/GlasSees( 2858): time: 1397518239421 BT message level: 141, 7:64, 14:58, 
+E/GlasSees( 2858): time: 1397518239435 Room level: [03, 07, 14] current: 3
+E/GlasSees( 2858): time: 1397518247250 Connected to 3
+E/GlasSees( 2858): time: 1397518248392 Change to: 3
+E/GlasSees( 2858): time: 1397518248986 Change to: 3
+E/GlasSees( 2858): time: 1397518249804 Disconnected
+E/GlasSees( 2858): time: 1397518263896 Tapped to connect
+E/GlasSees( 2858): time: 1397518263983 BT message level: 6:40, 
+E/GlasSees( 2858): time: 1397518264001 BT message level: 7:76, 14:26, 
+E/GlasSees( 2858): time: 1397518264010 Room level: [06, 07, 14] current: 6
+E/GlasSees( 2858): time: 1397518264713 Change to: 7
+E/GlasSees( 2858): time: 1397518265078 Connected to 7
+E/GlasSees( 2858): time: 1397518266608 Change to: 6
+E/GlasSees( 2858): time: 1397518267472 Change to: 6
+E/GlasSees( 2858): time: 1397518268180 Disconnected
+E/GlasSees( 2858): time: 1397518273232 Tapped to connect
+E/GlasSees( 2858): time: 1397518273327 BT message level: 4:
+E/GlasSees( 2858): time: 1397518273341 BT message level: 52, 6:174, 
+E/GlasSees( 2858): time: 1397518273350 Room level: [04, 06] current: 4
+E/GlasSees( 2858): time: 1397518274060 Change to: 6
+E/GlasSees( 2858): time: 1397518274297 Connected to 6
+E/GlasSees( 2858): time: 1397518275626 Disconnected
+E/GlasSees( 2858): time: 1397518278637 Tapped to connect
+E/GlasSees( 2858): time: 1397518278697 BT message level: 5:109,
+E/GlasSees( 2858): time: 1397518278704 BT message level:  11:79, 
+E/GlasSees( 2858): time: 1397518278711 Room level: [05, 11] current: 5
+E/GlasSees( 2858): time: 1397518279446 Connected to 5
+E/GlasSees( 2858): time: 1397518280393 Change to: 11
+E/GlasSees( 2858): time: 1397518281124 Disconnected
+E/GlasSees( 2858): time: 1397518285141 Tapped to connect
+E/GlasSees( 2858): time: 1397518285278 BT message level: 3:27, 4
+E/GlasSees( 2858): time: 1397518285279 BT message level: :27, 14:40, 
+E/GlasSees( 2858): time: 1397518285294 Room level: [03, 04, 14] current: 3
+E/GlasSees( 2858): time: 1397518285952 Connected to 3
+E/GlasSees( 2858): time: 1397518286834 Change to: 3
+E/GlasSees( 2858): time: 1397518287716 Disconnected
+E/GlasSees( 2858): time: 1397518290825 Tapped to connect
+E/GlasSees( 2858): time: 1397518290917 BT message level: 5:11,
+E/GlasSees( 2858): time: 1397518290940 BT message level:  11:9, 
+E/GlasSees( 2858): time: 1397518290955 Room level: [05, 11] current: 5
+E/GlasSees( 2858): time: 1397518291623 Connected to 5
+E/GlasSees( 2858): time: 1397518292556 Disconnected
+E/GlasSees( 2858): time: 1397518295774 Tapped to connect
+E/GlasSees( 2858): time: 1397518295860 BT message level: 4:9, 
+E/GlasSees( 2858): time: 1397518295876 BT message level: 5:120, 11:196, 
+E/GlasSees( 2858): time: 1397518295888 Room level: [04, 05, 11] current: 4
+E/GlasSees( 2858): time: 1397518296581 Change to: 5
+E/GlasSees( 2858): time: 1397518296867 Change to: 11
+E/GlasSees( 2858): time: 1397518297250 Connected to 11
+E/GlasSees( 2858): time: 1397518298597 Change to: 5
+E/GlasSees( 2858): time: 1397518299455 Disconnected
+E/GlasSees( 2858): time: 1397518303013 Tapped to connect
+E/GlasSees( 2858): time: 1397518303111 BT message level: 7
+E/GlasSees( 2858): time: 1397518303112 BT message level: :11, 12:30, 
+E/GlasSees( 2858): time: 1397518303120 Room level: [07, 12] current: 7
+E/GlasSees( 2858): time: 1397518303792 Change to: 12
+E/GlasSees( 2858): time: 1397518304084 Connected to 12
+E/GlasSees( 2858): time: 1397518305405 Change to: 12
+E/GlasSees( 2858): time: 1397518306085 Change to: 7
+E/GlasSees( 2858): time: 1397518306803 Change to: 12
+E/GlasSees( 2858): time: 1397518307694 Change to: 12
+E/GlasSees( 2858): time: 1397518308240 Disconnected
+E/GlasSees( 2858): time: 1397518312040 Tapped to connect
+E/GlasSees( 2858): time: 1397518312112 BT message level: 12:40, 
+E/GlasSees( 2858): time: 1397518312119 Room level: [07, 12] current: 7
+E/GlasSees( 2858): time: 1397518312782 Change to: 12
+E/GlasSees( 2858): time: 1397518313135 Connected to 12
+E/GlasSees( 2858): time: 1397518315434 Change to: 7
+E/GlasSees( 2858): time: 1397518316165 Disconnected
+E/GlasSees( 2858): time: 1397518320268 Tapped to connect
+E/GlasSees( 2858): time: 1397518320355 BT message level: 3
+E/GlasSees( 2858): time: 1397518320370 BT message level: :36, 7:6, 14:62, 
+E/GlasSees( 2858): time: 1397518320397 Room level: [03, 07, 14] current: 3
+E/GlasSees( 2858): time: 1397518321173 Connected to 3
+E/GlasSees( 2858): time: 1397518322122 Change to: 7
+E/GlasSees( 2858): time: 1397518323078 Change to: 3
+E/GlasSees( 2858): time: 1397518323819 Change to: 3
+E/GlasSees( 2858): time: 1397518324561 Disconnected
+E/GlasSees( 2858): time: 1397518329518 Tapped to connect
+E/GlasSees( 2858): time: 1397518329598 BT message level: 7:
+E/GlasSees( 2858): time: 1397518329629 BT message level: 73, 14:70, 
+E/GlasSees( 2858): time: 1397518329642 Room level: [07, 14] current: 7
+E/GlasSees( 2858): time: 1397518330217 Connected to 7
+E/GlasSees( 2858): time: 1397518332152 Disconnected
+E/GlasSees( 2858): time: 1397518337114 Tapped to connect
+E/GlasSees( 2858): time: 1397518337181 BT message level: , 8
+E/GlasSees( 2858): time: 1397518337182 BT message level: , 8:50, 14:38, 
+E/GlasSees( 2858): 7:8, 8:50, 14:38, 
+E/GlasSees( 2858): time: 1397518338041 Tapped to connect
+E/GlasSees( 2858): time: 1397518338450 Tapped to connect
+E/GlasSees( 2858): time: 1397518338512 BT message level: 7:22
+E/GlasSees( 2858): time: 1397518338533 BT message level: 7:22
+E/GlasSees( 2858): time: 1397518338536 BT message level: 7:22, 
+E/GlasSees( 2858): time: 1397518338542 Connected to 7
+E/GlasSees( 2858): time: 1397518342096 Disconnected
+E/GlasSees( 2858): time: 1397518343199 Tapped to connect
+E/GlasSees( 2858): time: 1397518343287 BT message level: 8
+E/GlasSees( 2858): time: 1397518343304 BT message level: :9, 
+E/GlasSees( 2858): time: 1397518343310 Connected to 8
+E/GlasSees( 2858): time: 1397518345338 Disconnected
+E/GlasSees( 2858): time: 1397518349668 Tapped to connect
+E/GlasSees( 2858): time: 1397518349784 BT message level: 18, 14:8
+E/GlasSees( 2858): time: 1397518349785 BT message level: 18, 14:82, 
+E/GlasSees( 2858): time: 1397518350225 Tapped to connect
+E/GlasSees( 2858): time: 1397518350287 BT message level: 6:19,
+E/GlasSees( 2858): time: 1397518350320 BT message level:  7:88, 14:81, 
+E/GlasSees( 2858): time: 1397518350329 Room level: [06, 07, 14] current: 6
+E/GlasSees( 2858): time: 1397518350528 Connected to 6
+E/GlasSees( 2858): time: 1397518351589 Change to: 6
+E/GlasSees( 2858): time: 1397518352269 Change to: 6
+E/GlasSees( 2858): time: 1397518352752 Change to: 6
+E/GlasSees( 2858): time: 1397518353279 Disconnected
+E/GlasSees( 2858): time: 1397518354038 Tapped to connect
+E/GlasSees( 2858): time: 1397518354101 BT message level: 6:1
+E/GlasSees( 2858): time: 1397518354106 BT message level: 9, 7:70, 14:57, 
+E/GlasSees( 2858): time: 1397518354119 Room level: [06, 07, 14] current: 6
+E/GlasSees( 2858): time: 1397518354757 Change to: 7
+E/GlasSees( 2858): time: 1397518355157 Connected to 7
+E/GlasSees( 2858): time: 1397518356787 Disconnected
+E/GlasSees( 2858): time: 1397518359192 Tapped to connect
+E/GlasSees( 2858): time: 1397518359250 BT message level: 7,
+E/GlasSees( 2858): time: 1397518359251 BT message level: 7, 8:16, 
+E/GlasSees( 2858): time: 1397518359835 Tapped to connect
+E/GlasSees( 2858): time: 1397518359943 BT message level: 37
+E/GlasSees( 2858): time: 1397518359945 BT message level: 37, 
+E/GlasSees( 2858): time: 1397518360452 Tapped to connect
+E/GlasSees( 2858): time: 1397518360546 BT message level: 8, 
+E/GlasSees( 2858): time: 1397518360548 BT message level: 8, 
+E/GlasSees( 2858): time: 1397518361121 Tapped to connect
+E/GlasSees( 2858): time: 1397518361211 BT message level: 8:33
+E/GlasSees( 2858): time: 1397518361227 BT message level: , 
+E/GlasSees( 2858): time: 1397518361235 Connected to 8
+E/GlasSees( 2858): time: 1397518364015 Disconnected
+E/GlasSees( 2858): time: 1397518365487 Tapped to connect
+E/GlasSees( 2858): time: 1397518365583 BT message level: 3:
+E/GlasSees( 2858): time: 1397518365584 BT message level: 7, 4:11, 5:64, 7:22, 11:13, 
+E/GlasSees( 2858): time: 1397518365603 Room level: [03, 04, 05, 07, 11] current: 3
+E/GlasSees( 2858): time: 1397518366441 Change to: 4
+E/GlasSees( 2858): time: 1397518366829 Change to: 5
+E/GlasSees( 2858): time: 1397518367214 Connected to 5
+E/GlasSees( 2858): time: 1397518368753 Disconnected
+E/GlasSees( 2858): time: 1397518371926 Tapped to connect
+E/GlasSees( 2858): time: 1397518371986 BT message level: 4:6,
+E/GlasSees( 2858): time: 1397518371987 BT message level:  17:49, 
+E/GlasSees( 2858): time: 1397518371996 Room level: [04, 17] current: 4
+E/GlasSees( 2858): time: 1397518372717 Change to: 17
+E/GlasSees( 2858): time: 1397518373044 Connected to 17
+E/GlasSees( 2858): time: 1397518374235 Disconnected
+E/GlasSees( 2858): time: 1397518377988 Tapped to connect
+E/GlasSees( 2858): time: 1397518378046 BT message level: 7:10, 8:
+E/GlasSees( 2858): time: 1397518378080 BT message level: 40, 
+E/GlasSees( 2858): time: 1397518378087 Room level: [07, 08] current: 7
+E/GlasSees( 2858): time: 1397518378729 Change to: 8
+E/GlasSees( 2858): time: 1397518379068 Connected to 8
+E/GlasSees( 2858): time: 1397518380176 Disconnected
+E/GlasSees( 2858): time: 1397518381272 Tapped to connect
+E/GlasSees( 2858): time: 1397518381386 BT message level: 6:51, 
+E/GlasSees( 2858): time: 1397518381387 BT message level: 6:51, 
+E/GlasSees( 2858): time: 1397518381395 Connected to 6
+E/GlasSees( 2858): time: 1397518382472 Disconnected
+E/GlasSees( 2858): time: 1397518385848 Tapped to connect
+E/GlasSees( 2858): time: 1397518385908 BT message level: 5
+E/GlasSees( 2858): time: 1397518385909 BT message level: :56, 
+E/GlasSees( 2858): time: 1397518385916 Connected to 5
+E/GlasSees( 2858): time: 1397518386952 Disconnected
+E/GlasSees( 2858): time: 1397518387641 Tapped to connect
+E/GlasSees( 2858): time: 1397518387753 BT message level: :
+E/GlasSees( 2858): time: 1397518387755 BT message level: :22, 11:67, 
+E/GlasSees( 2858): time: 1397518389262 Tapped to connect
+E/GlasSees( 2858): time: 1397518389330 BT message level: 1
+E/GlasSees( 2858): time: 1397518389339 BT message level: 1:39, 
+E/GlasSees( 2858): time: 1397518389346 Connected to 11
+E/GlasSees( 2858): time: 1397518392538 Disconnected
+E/GlasSees( 2858): time: 1397518393936 Tapped to connect
+E/GlasSees( 2858): time: 1397518394021 BT message level: 6
+E/GlasSees( 2858): time: 1397518394046 BT message level: :42, 7:45, 
+E/GlasSees( 2858): time: 1397518394054 Room level: [06, 07] current: 6
+E/GlasSees( 2858): time: 1397518395354 Change to: 7
+E/GlasSees( 2858): time: 1397518395894 Disconnected
+E/GlasSees( 2858): time: 1397518396591 Tapped to connect
+E/GlasSees( 2858): time: 1397518396700 BT message level: 3
+E/GlasSees( 2858): time: 1397518396701 BT message level: :21, 14:29, 
+E/GlasSees( 2858): time: 1397518396709 Room level: [03, 14] current: 3
+E/GlasSees( 2858): time: 1397518397486 Change to: 14
+E/GlasSees( 2858): time: 1397518397837 Connected to 14
+E/GlasSees( 2858): time: 1397518398934 Change to: 3
+E/GlasSees( 2858): time: 1397518400406 Change to: 3
+E/GlasSees( 2858): time: 1397518401233 Disconnected
+E/GlasSees( 2858): time: 1397518404042 Tapped to connect
+E/GlasSees( 2858): time: 1397518404153 BT message level: 3:
+E/GlasSees( 2858): time: 1397518404154 BT message level: 33, 14:39, 
+E/GlasSees( 2858): time: 1397518404166 Room level: [03, 14] current: 3
+E/GlasSees( 2858): time: 1397518404764 Connected to 3
+E/GlasSees( 2858): time: 1397518405920 Disconnected
+E/GlasSees( 2858): time: 1397518411215 Tapped to connect
+E/GlasSees( 2858): time: 1397518411307 BT message level: 3:25, 4:48, 1
+E/GlasSees( 2858): time: 1397518411325 BT message level: 1:57, 
+E/GlasSees( 2858): time: 1397518411334 Room level: [03, 04, 11] current: 3
+E/GlasSees( 2858): time: 1397518411980 Change to: 4
+E/GlasSees( 2858): time: 1397518412481 Connected to 4
+E/GlasSees( 2858): time: 1397518413742 Change to: 3
+E/GlasSees( 2858): time: 1397518414596 Disconnected
+E/GlasSees( 2858): time: 1397518416987 Tapped to connect
+E/GlasSees( 2858): time: 1397518417045 BT message level: 3:6, 4:9, 
+E/GlasSees( 2858): time: 1397518417063 BT message level: 5:174, 7:8, 11:14, 
+E/GlasSees( 2858): time: 1397518417108 Room level: [03, 04, 05, 07, 11] current: 3
+E/GlasSees( 2858): time: 1397518417864 Change to: 4
+E/GlasSees( 2858): time: 1397518418372 Change to: 5
+E/GlasSees( 2858): time: 1397518418829 Change to: 7
+E/GlasSees( 2858): time: 1397518419322 Change to: 11
+E/GlasSees( 2858): time: 1397518419700 Connected to 11
+E/GlasSees( 2858): time: 1397518421111 Change to: 7
+E/GlasSees( 2858): time: 1397518421825 Disconnected
+E/GlasSees( 2858): time: 1397518425483 Tapped to connect
+E/GlasSees( 2858): time: 1397518425559 BT message level: 4:
+E/GlasSees( 2858): time: 1397518425591 BT message level: 30, 11:6, 17:38, 
+E/GlasSees( 2858): time: 1397518425598 Room level: [04, 11, 17] current: 4
+E/GlasSees( 2858): time: 1397518426360 Change to: 11
+E/GlasSees( 2858): time: 1397518426658 Change to: 17
+E/GlasSees( 2858): time: 1397518426997 Connected to 17
+E/GlasSees( 2858): time: 1397518429958 Disconnected
+E/GlasSees( 2858): time: 1397518430642 Tapped to connect
+E/GlasSees( 2858): time: 1397518430747 BT message level: :
+E/GlasSees( 2858): time: 1397518430749 BT message level: :44, 7:34, 
+E/GlasSees( 2858): time: 1397518431410 Tapped to connect
+E/GlasSees( 2858): time: 1397518431501 BT message level: 6:53, 7:6
+E/GlasSees( 2858): time: 1397518431519 BT message level: 7, 
+E/GlasSees( 2858): time: 1397518431525 Room level: [06, 07] current: 6
+E/GlasSees( 2858): time: 1397518432360 Connected to 6
+E/GlasSees( 2858): time: 1397518433944 Disconnected
+E/GlasSees( 2858): time: 1397518436553 Tapped to connect
+E/GlasSees( 2858): time: 1397518436621 BT message level: 5:45, 11
+E/GlasSees( 2858): time: 1397518436637 BT message level: :68, 
+E/GlasSees( 2858): time: 1397518436642 Room level: [05, 11] current: 5
+E/GlasSees( 2858): time: 1397518437472 Connected to 5
+E/GlasSees( 2858): time: 1397518438685 Change to: 11
+E/GlasSees( 2858): time: 1397518439404 Disconnected
+E/GlasSees( 2858): time: 1397518440798 Tapped to connect
+E/GlasSees( 2858): time: 1397518440885 BT message level: 17:16
+E/GlasSees( 2858): time: 1397518440915 BT message level: 5, 
+E/GlasSees( 2858): time: 1397518440922 Connected to 17
+E/GlasSees( 2858): time: 1397518442280 Disconnected
+E/GlasSees( 2858): time: 1397518444872 Tapped to connect
+E/GlasSees( 2858): time: 1397518444986 BT message level: 1:29, 
+E/GlasSees( 2858): time: 1397518444987 BT message level: 1:29, 
+E/GlasSees( 2858): time: 1397518444995 Connected to 1
+E/GlasSees( 2858): time: 1397518446243 Disconnected
+E/GlasSees( 2858): time: 1397518446825 Tapped to connect
+E/GlasSees( 2858): time: 1397518446887 BT message level: 3
+E/GlasSees( 2858): time: 1397518446919 BT message level: :23, 4:72, 11:13, 
+E/GlasSees( 2858): time: 1397518446938 Room level: [03, 04, 11] current: 3
+E/GlasSees( 2858): time: 1397518447666 Change to: 4
+E/GlasSees( 2858): time: 1397518447981 Connected to 4
+E/GlasSees( 2858): time: 1397518449616 Disconnected
+E/GlasSees( 2858): time: 1397518451401 Tapped to connect
+E/GlasSees( 2858): time: 1397518451487 BT message level: 6:5
+E/GlasSees( 2858): time: 1397518451504 BT message level: 5, 7:25, 
+E/GlasSees( 2858): time: 1397518451510 Room level: [06, 07] current: 6
+E/GlasSees( 2858): time: 1397518452169 Connected to 6
+E/GlasSees( 2858): time: 1397518453149 Disconnected
+E/GlasSees( 2858): time: 1397518455685 Tapped to connect
+E/GlasSees( 2858): time: 1397518455774 BT message level: 4
+E/GlasSees( 2858): time: 1397518455790 BT message level: :53, 11:13, 
+E/GlasSees( 2858): time: 1397518455795 Room level: [04, 11] current: 4
+E/GlasSees( 2858): time: 1397518456418 Connected to 4
+E/GlasSees( 2858): time: 1397518457429 Disconnected
+E/GlasSees( 2858): time: 1397518459957 Tapped to connect
+E/GlasSees( 2858): time: 1397518460049 BT message level: 6:20, 12:117, 
+E/GlasSees( 2858): time: 1397518460078 BT message level: 
+E/GlasSees( 2858): time: 1397518460086 Room level: [06, 12] current: 6
+E/GlasSees( 2858): time: 1397518460736 Change to: 12
+E/GlasSees( 2858): time: 1397518460988 Connected to 12
+E/GlasSees( 2858): time: 1397518462555 Disconnected
+E/GlasSees( 2858): time: 1397518464865 Tapped to connect
+E/GlasSees( 2858): time: 1397518464972 BT message level: 16
+E/GlasSees( 2858): time: 1397518464973 BT message level: 164, 11:46, 
+E/GlasSees( 2858): time: 1397518465728 Tapped to connect
+E/GlasSees( 2858): time: 1397518465793 BT message level: 5
+E/GlasSees( 2858): time: 1397518465798 BT message level: :33, 11:87, 
+E/GlasSees( 2858): time: 1397518465814 Room level: [05, 11] current: 5
+E/GlasSees( 2858): time: 1397518466495 Change to: 11
+E/GlasSees( 2858): time: 1397518466760 Connected to 11
+E/GlasSees( 2858): time: 1397518467710 Disconnected
+E/GlasSees( 2858): time: 1397518470338 Tapped to connect
+E/GlasSees( 2858): time: 1397518470428 BT message level: 3
+E/GlasSees( 2858): time: 1397518470429 BT message level: :55, 4:26, 7:6, 11:50, 
+E/GlasSees( 2858): time: 1397518470441 Room level: [03, 04, 07, 11] current: 3
+E/GlasSees( 2858): time: 1397518471129 Change to: 3
+E/GlasSees( 2858): time: 1397518471344 Connected to 3
+E/GlasSees( 2858): time: 1397518472229 Disconnected
+E/GlasSees( 2858): time: 1397518472889 Tapped to connect
+E/GlasSees( 2858): time: 1397518472960 BT message level: 3
+E/GlasSees( 2858): time: 1397518472993 BT message level: :45, 4:73, 11:51, 
+E/GlasSees( 2858): time: 1397518473003 Room level: [03, 04, 11] current: 3
+E/GlasSees( 2858): time: 1397518473718 Change to: 4
+E/GlasSees( 2858): time: 1397518474057 Connected to 4
+E/GlasSees( 2858): time: 1397518476835 Disconnected
+E/GlasSees( 2858): time: 1397518479852 Tapped to connect
+E/GlasSees( 2858): time: 1397518479923 BT message level: 3:4
+E/GlasSees( 2858): time: 1397518479940 BT message level: 8, 7:25, 14:42, 
+E/GlasSees( 2858): time: 1397518479950 Room level: [03, 07, 14] current: 3
+E/GlasSees( 2858): time: 1397518480667 Change to: 7
+E/GlasSees( 2858): time: 1397518480990 Change to: 14
+E/GlasSees( 2858): time: 1397518481368 Connected to 14
+E/GlasSees( 2858): time: 1397518483740 Change to: 14
+E/GlasSees( 2858): time: 1397518484369 Disconnected
+E/GlasSees( 2858): time: 1397518490841 Tapped to connect
+E/GlasSees( 2858): time: 1397518490938 BT message level: 3
+E/GlasSees( 2858): time: 1397518490952 BT message level: :52, 4:52, 7:12, 14:50, 
+E/GlasSees( 2858): time: 1397518490972 Room level: [03, 04, 07, 14] current: 3
+E/GlasSees( 2858): time: 1397520661025 Connected to 3
+E/GlasSees( 2858): time: 1397520662004 Disconnected

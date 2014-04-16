@@ -1,24 +1,40 @@
 \section{Discussion}
 \label{sec:discussion}
 
-\ben{cannot focus on writing this part clearly at 4am... I am just laying down whatever has popedup my heads and plan to refine it tomorrow.}
+\subsection{What is the design space?}
+\label{sec:what-design-space}
+\ben{may change this to a seperate section.}
+Throughout our three iteration, the goal is minimize the overall target selection time (Eq~\ref{eq:time}).
 
-\subsection{Generalization of our results}
-\label{sec:gener-our-results}
-This paper describes three iterative designs and either of them can be applied to a more broader range. First, the scan + refinement model is generic. Second, with a combination of signal reception and strength measurement, together with the signal strength model, a system can usually do better. Third, multiple types of sensors combined can overcome a lot of issues. 
+In our first iteration, by introducing IR to for the {\em scan}, we effectively reduce $P(refine)$ (for a less dense environment) and $t_{refine}$ (reduce the target numbers for the {\em refinement} stage. 
 
-\subsection{Using Google Glass}
+During the second iteration, with {\em Intensity IR}, $P(refine)$ is the same as {\em Naive IR} while it has been further descreased in a relative dense environment. Also $t_{refine}$ is also reduced because the order of targets in {\em refinement} stage is based on the probability of it being the intended target. 
+
+Iteraction 3 attempts to solve the problem of mapping targets in the physical space to a 1-d list data structure, and it's mainly in the {\em refinement} stage. Preliminary studies have shown that users prefer this more direct {\em refinement} to the menu-based approach. 
+
+\ben{Will add a figure to illustrate the above points.}
+
+\subsection{How dense can the environment be?}
+\label{sec:how-dense-can}
+The motivation of our second iteraction comes from the challenge of a relative dense environment. However, the term {\it dense} is not well-defined in physical space. Given two targets, there are potentially four different parameters to fully describe the {\it density}: separation in x, separation in y, separation in depth and the overall distance from the user to the targets (or the center between them). In this paper, we have focused on the design space of user interaction and a comparison of different techniques. In {\em Intensity IR} technique, we have done a preliminary study of the distribution of IR signal to justify the benefit of using intensity for {\em scan} and  {\em refine} stage. A more systematic and thorough study should be carried to understand the performanc of \systemnamenospace under different scenarios. Though the absolute target acquisition time will change when the environment setup differs, our study results still holds. We leave the {\em density} study as future work.  
+
+
+\subsection{Why Google Glass?}
 \label{sec:using-google-glass}
-In our current implementation, we have chosen to use Google Glass as the main head-worn computing device. This decision was made primarily because Glass has the display, touchpad, and IMU sensors and programming Glass is easy (standard Android). But this doesn't exclude other head-worn devices. 
+Google Glass is a well-engineered wearable device that has integrated touchpad, display, and IMU and a couple of wireless radios. This is a suitable platform because we need a head-worn device that can get users' input and display related UI at the near-eye space. The IMU on Google Glass also helps us explore our third technique of monitoring users' head motion for direct {\em refinement}. 
 
-Comments about that our system made the assumption that users have to wear Google Glass first doesn't hold. The work is more about the design exploration of how head orientation can be used for targeting. 
+Before we settled down on Google Glass, we have actually attempted to build a similar glasses form-factor device. Though we successfully integrated the touchpad, and were considering IMU, the near-eye display was difficult to engineer. Among the available commercial off-the-shelf head-up display wearable devices, Google Glass stands out because it's light-weight and designed for everyday use. It's also easy to program (standard Android) with little learning curve.
 
-\subsection{Gaze Tracking}
-\label{sec:gaze-tracking}
-The reason I brought up it here is because gaze tracking seems to be mentioned by multiple people and having a discussion here is good to clear the questions.
+\subsection{Computer vision-based physical targeting}
+\label{sec:comp-visi-based}
+One device-free appraoch of performing physical targeting has been brought up during numerous discussions with people when we are working on this project. We see a few challenges in this approach:
+\begin{itemize}
+\item Achieving high accuracy object detection is still an open problem in computer vision. 
+\item problem 2
+\item problem 3
+\end{itemize}
 
-
-
+is to use computer vision to detect \ben{Talk about the challenges in using pure computer vision technique.}
 
 %%% Local Variables: 
 %%% mode: latex

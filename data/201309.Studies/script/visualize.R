@@ -1,50 +1,6 @@
 require('ggplot2')
 
-# Multiple plot function
-#
-# ggplot objects can be passed in ..., or to plotlist (as a list of ggplot objects)
-# - cols:   Number of columns in layout
-# - layout: A matrix specifying the layout. If present, 'cols' is ignored.
-#
-# If the layout is something like matrix(c(1,2,3,3), nrow=2, byrow=TRUE),
-# then plot 1 will go in the upper left, 2 will go in the upper right, and
-# 3 will go all the way across the bottom.
-#
-multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
-  require(grid)
-
-  # Make a list from the ... arguments and plotlist
-  plots <- c(list(...), plotlist)
-
-  numPlots = length(plots)
-
-  # If layout is NULL, then use 'cols' to determine layout
-  if (is.null(layout)) {
-    # Make the panel
-    # ncol: Number of columns of plots
-    # nrow: Number of rows needed, calculated from # of cols
-    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
-                    ncol = cols, nrow = ceiling(numPlots/cols))
-  }
-
- if (numPlots==1) {
-    print(plots[[1]])
-
-  } else {
-    # Set up the page
-    grid.newpage()
-    pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
-
-    # Make each plot, in the correct location
-    for (i in 1:numPlots) {
-      # Get the i,j matrix positions of the regions that contain this subplot
-      matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
-
-      print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
-                                      layout.pos.col = matchidx$col))
-    }
-  }
-}
+## to run this script, you need multiplot
 
 ## Summarizes data.
 ## Gives count, mean, standard deviation, standard error of the mean, and confidence interval (default 95%).
@@ -102,7 +58,7 @@ df.IR.mul <- df[grepl("IR", df$mode) & grepl("mul", df$correct_type), ]
 #### draw the list mode, time vs. position
 ## notice this is no longer reproducible for the graph we use in the paper
 ## due to my stupid usage of git
-pdf("../../doc/sigchi14/figures/R_List_by_Target.pdf", width=7, height=4)
+
 df.List <- df[grepl("List", df$mode), ]
 df.List <- df.List[!grepl("next", df.List$fate),]
 # mapping from id to name
@@ -112,20 +68,26 @@ dfc <- summarySE(df.List, measurevar="correct_time", groupvars = "target", na.rm
 label.x <- sapply(names(table(df.List$target)), function(x) regexpr(x, name))
 # Standard error of the mean
 cols <- c("LINE1"="#56B4E9","LINE2"="#3591d1","BAR"="#62c76b")
-ggplot(dfc, aes(x=target, y=correct_time, group=1)) + 
-    geom_line(lwd=0.5, alpha=0.5) +
-    geom_errorbar(aes(ymin=correct_time-se, ymax=correct_time+se), width=.1) +
-    geom_point(shape=21, size=3, fill="white") +
-    geom_abline(intercept = 5.08526, slope = 0.59287, lwd=0.5, alpha=0.7, linetype=3) +
-    geom_hline(lwd=0.5, colour = "#56B4E9" , yintercept=9.16, linetype=1) +
-    geom_hline(lwd=0.5, colour = "#56B4E9", yintercept=6.40, linetype=1) +
-    annotate("text", x = 1, y = 9.4, colour = "#56B4E9", label = "IR multiple", size=4) +
-    annotate("text", x = 0.9, y = 6.66, colour = "#56B4E9", label = "IR single", size=4) +
-    ylim(3,14) + xlab("order in list") + ylab("time (seconds)") + scale_x_discrete(labels=seq(0, 9)) +
-    scale_colour_manual(name="Error Bars",values=cols) + scale_fill_manual(name="Bar",values=cols) +
-    theme(legend.position = c(.5, .5))
+
+scalability_study <- ggplot(dfc, aes(x=target, y=correct_time, group=1)) + 
+  geom_line(lwd=0.5, alpha=0.5) +
+  geom_errorbar(aes(ymin=correct_time-se, ymax=correct_time+se), width=.1) +
+  geom_point(shape=21, size=3, fill="white") +
+  geom_abline(intercept = 5.08526, slope = 0.59287, lwd=0.5, alpha=0.7, linetype=3) +
+  geom_hline(lwd=0.5, colour = "#56B4E9" , yintercept=9.16, linetype=1) +
+geom_hline(lwd=0.5, colour = "#56B4E9", yintercept=6.40, linetype=1) +
+annotate("text", x = 1.3, y = 9.6, colour = "#56B4E9", label = "with refinement", size=4) +
+annotate("text", x = 1, y = 7.16, colour = "#56B4E9", label = "without\n refinement", size=4) +
+ylim(3,14) + xlab("order in list") + ylab("time (seconds)") + scale_x_discrete(labels=seq(1, 10)) +
+  scale_colour_manual(name="Error Bars",values=cols) + scale_fill_manual(name="Bar",values=cols) +
+  theme(legend.position = c(.5, .5)) +
+  theme_bw()
+
+pdf("R_List_by_Target.pdf", width=7, height=4)
+scalability_study
 dev.off()
 
+## the following box is not that useful
 box <- ggplot(df.List, aes(factor(target), correct_time))
 box <- box + geom_boxplot(lwd=0.5, fill = '#9FB987', alpha=0.3) + ylim(2.5,15) + xlab("order in list") + ylab("time (seconds)") + scale_x_discrete(labels=seq(0, 9))
 box <- box +
@@ -227,30 +189,73 @@ dev.off()
 #### draw the list mode, time vs. position
 mode.bind.type <- cbind(df, paste(df$mode, df$correct_type))
 colnames(mode.bind.type)[14] <- "mode_type"
-pdf("../../doc/sigchi14/figures/R_time_by_Category.pdf", width=7, height=4)
+
 box1 <- ggplot(mode.bind.type, aes(factor(mode), correct_time, fill = mode.bind.type$mode))
-box1 <- box1 + geom_boxplot(lwd=0.5) + ylim(2.5,25) + xlab("(A)") +
-    theme(legend.position = "none") +
-    scale_fill_manual(values = c("#A4C3D9", "#9FB987")) + #477843
-    stat_summary(fun.y = "mean", geom = "text", label="---", size= 8, color= "white") +
-    ylab("time (seconds)") +
-    annotate("text", x = 1, y = 25, label = "mean: 6.67", size=3.6) +
-    annotate("text", x = 1, y = 23.6, label = "median: 5.77", size=3.6) +
-    annotate("text", x = 2, y = 25, label = "mean: 8.86", size=3.6) +
-    annotate("text", x = 2, y = 23.6, label = "median: 7.96", size=3.6)
-toPlot <- mode.bind.type[grepl("IR", mode.bind.type$mode_type), ]
-box2 <- ggplot(toPlot, aes(factor(mode_type), correct_time, fill = toPlot$mode_type))
-box2 <- box2 + geom_boxplot(lwd=0.5) + ylim(2.5,25) + xlab("(B)") +
-    theme(legend.position = "none", axis.title.y=element_blank()) +
-    scale_fill_manual(values = c("#0072B2", "#56B4E9")) +
-    stat_summary(fun.y = "mean", geom = "text", label="---", size= 8, color= "white") +
-    annotate("text", x = 1, y = 25, label = "mean: 9.16", size=3.6) +
-    annotate("text", x = 1, y = 23.6, label = "median: 7.67", size=3.6) +
-    annotate("text", x = 2, y = 25, label = "mean: 6.40", size=3.6) +
-    annotate("text", x = 2, y = 23.6, label = "median: 5.63", size=3.6) +
-    scale_x_discrete(labels=c("IR multiple", "IR single"))
-multiplot(box1, box2, cols=2)
+box1 <- box1 + geom_boxplot(lwd=0.5) + ylim(2.5,25) + xlab("") + ylab("time (seconds)") +
+##  scale_fill_manual(values = c("#A4C3D9", "#9FB987")) + 
+  stat_summary(fun.y = "mean", geom = "text", label="---", size= 8, color= "white") +
+  annotate("text", x = 1, y = 25, label = "mean: 6.67", size=3.6) +
+  annotate("text", x = 1, y = 24, label = "median: 5.77", size=3.6) +
+  annotate("text", x = 2, y = 25, label = "mean: 8.86", size=3.6) +
+  annotate("text", x = 2, y = 24, label = "median: 7.96", size=3.6) +
+  theme_bw() +
+  theme(legend.position = "none", axis.title.y=element_blank())
+
+cdf1 <- ggplot(mode.bind.type, aes(x = correct_time, colour = mode)) +
+  stat_ecdf() +
+  ylab("cumulative distribution function") +
+  xlab("acquisition time") +
+  xlim(c(0, 20)) +
+  theme_bw() +
+  theme(legend.justification=c(1,0), legend.position=c(1,0)) +
+  scale_fill_discrete(name="test",
+                      labels=c("IR selection", "list selection"))
+
+
+pdf("IR_vs_list.pdf", width = 7, height = 4)
+multiplot(box1, cdf1, cols = 2)
 dev.off()
+
+## pdf("R_time_by_Category.pdf", width=7, height=4)
+## multiplot(box1, box2, cols=2)
+## dev.off()
+
+toPlot <- mode.bind.type[grepl("IR", mode.bind.type$mode_type), ]
+for (i in 1:nrow(toPlot)) {
+  if (toString(toPlot$mode_type[i]) == "IR single") {
+    toPlot$type[i] <- "without refinement"
+  }
+  else {
+    toPlot$type[i] <- "with refinement"
+  }
+}
+
+box2 <- ggplot(toPlot, aes(factor(type), correct_time, fill = toPlot$mode_type))
+box2 <- box2 + geom_boxplot(lwd=0.5) + ylim(2.5,25) + xlab("") +
+  scale_fill_manual(values = c("#0072B2", "#56B4E9")) +
+  annotate("text", x = 1, y = 25, label = "mean: 9.16", size=3.6) +
+  annotate("text", x = 1, y = 24, label = "median: 7.67", size=3.6) +
+  annotate("text", x = 2, y = 25, label = "mean: 6.40", size=3.6) +
+  annotate("text", x = 2, y = 24, label = "median: 5.63", size=3.6) +
+  stat_summary(fun.y = "mean", geom = "text", label="---", size= 8, color= "white") +
+  theme_bw() +
+  theme(legend.position = "none", axis.title.y=element_blank()) +
+  scale_x_discrete(labels=c("with refinement", "without refinement"))
+
+cdf2 <- ggplot(toPlot, aes(x = correct_time, colour = type)) +
+  stat_ecdf() +
+  ylab("cumulative distribution function") +
+  xlab("acquisition time") +
+  xlim(c(0, 20)) +
+  theme_bw() +
+  theme(legend.justification=c(1,0), legend.position=c(1,0)) +
+  scale_fill_discrete(name="test",
+                      labels=c("IR selection", "list selection"))
+
+pdf("with_and_without_refinement.pdf", width = 7, height = 4)
+multiplot(box2, cdf2, cols = 2)
+dev.off()
+
 
 ## IR
 ## summary(mode.bind.type[grepl("IR", mode.bind.type$mode),]$correct_time)
