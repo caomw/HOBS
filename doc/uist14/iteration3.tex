@@ -4,7 +4,7 @@
 
 Both {\em Naive IR} and {\em Intensity IR} rely on list navigation on the near-eye display for the refinement step. The list interface has a few clear shortcomings: navigation actions map poorly to real world results, and the users must switch their focus back and forth between the physical scene and the near-eye display. These problems motivated us to design an approach that harnesses the head orientation during the {\em refinement} stage.
 
-In our third iteration, we build a system which further minimizes the chance of falling back to list based {\em refinement}.
+In our third iteration, we ask the question {\em can we build a system purely using head orientation and visual feedback from the environment for target selection?}
 
 \subsection{Technique}
 
@@ -29,7 +29,7 @@ environments, since the user’s movements through the space could change the re
 \begin{figure}[t]
 \centering
 \includegraphics[width=1\columnwidth]{figures/third_technique3.pdf}
-\caption{\ben{figure in interactionModel2.key file.} Our third technique learned each target's absolute orientation and construct the orientation map. Though we store the absolute orientation value, during the {\em refinement} stage, the prediction is only based on relative changes to a reference point. In such a way, the prediction will work regardless of user's position.}
+\caption{\ben{figure in interactionModel2.key file.} Our third technique learned each target's absolute orientation and construct the orientation map. Though we store the absolute orientation value, during the {\em refinement} stage, the prediction is only based on relative changes to a reference point. Thus, the prediction will work regardless of user's position.}
 \label{fig:third_technique}
 \end{figure}
 
