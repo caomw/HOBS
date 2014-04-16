@@ -1,20 +1,10 @@
-%!TEX root = uist14.tex
-\section{Iteration 3: Head motion refinement}
-\label{sec:iteration-3:-head}
-\subsection{Problem Statement and Goal}
-Both {\em Naive IR} and {\em Intensity IR} rely on list navigation on the
-near-eye display for the refinement step. The list interface has a few clear shortcomings: navigation actions map poorly to real world results, and the users must switch their focus back and forth between the physical scene and the near-eye display. These problems motivated us to design an approach that harnesses the head orientation during the {\em refinement} stage.
-
-In our third iteration, we build a system which further minimizes the chance of
-falling back to list based {\em refinement}.
-
 \subsection{Technique}
 
 We introduce a third technique that uses a combination of motion sensors and IR to learn the relative orientations of
 targets in a room and intelligently suggest targets during refinement (see
 Figure~\ref{fig:third_technique}).
 
-Unfortunately, this absolute orientation cannot be applied to all indoor
+This absolute orientation cannot be applied to all indoor
 environments, since the user’s movements through the space could change the relationships between targets. However, with the constraint that the targets are spread around the periphery, their relative orientations are stable
 (see Figure~\ref{fig:third_principle}). 
 
@@ -40,26 +30,5 @@ quasi-mode for refinement. In this quasi-mode, one device lights up at a time. W
 the nearest device in that direction. 
 
 \subsection{Evaluation}
-\ben{We then need evaluation results here, quantitative and qualitative.}
-\bjoern{got to here in my pass}
-
-
-% %!TEX root = uist14.tex
-% \section{Iteration 3: Orientation-based refinement}
-% \bjoern{While taking IR intensity into account further reduced the need for manual refinement and increased performance, the UI navigation scheme is problematic - it is not spatially related in any meaningful way to the layout of targets in a room. A better interaction technique would respect that ordering. For example, when refinement is needed, tilting the head slightly to the right could select the target that's adjacent to the right of the currently selected target.
-
-% Such spatial navigation requires knowledge about the layout of targets in the environment. However, one of the strengths of our technique so far is that it does not require any map ahead of time. To enable some spatial navigation, we introduce a final iteration in which we build up a spatial data structure by demonstration (i.e., the user looks around the room) and then leverage that data structure during the refinement step of our interaction.}
-
-% \bjoern{This technique is based on the assumption that users will generally select targets in indoor environments where targets are spread around the periphery. These assumptions enable us to use orientation data without knowing the user's absolute position.}
-
-% \subsection{Implementation}
-% \bjoern{give implementation details}
-
-% \subsection{Informal User Feedback}
-% \bjoern{We informally evaluate this technique with N users: ...}
-
- 
-%%% Local Variables: 
-%%% mode: latex
-%%% TeX-master: "uist14"
-%%% End: 
+We evaluate the head motion refinement method by holding an informal study and collecting qualitative feedback from a subset of 4 users from the Iteration 2 study. In the study, we asked users to try cycling through the targets using the new quasi-mode.
+The users had strong preferences for the new method of refinement. On a scale from 1-7, 1 being the least mental effort and 7 being the most mental effort users rated the old technique 4.25 and the new technique 2 on average. 100\% indicated a preference for head movement to list navigation. One user referenced the issue of naming targets that the list necessitates, preferring the experience of ``matching visual cues rather than numbers''. Another participant remarked that it ``just made more sense'' and was a ``more natural way for demonstrating intentionality.'' The users prefered the new mapping in relation to the whole environment: ``it leveraged the spatial sense that I already had just by using the system''. They were also delighted to avoid list navigation, which they now called ``difficult'' and ``painful''. 
