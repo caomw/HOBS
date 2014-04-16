@@ -7,7 +7,7 @@ Both{\em Naive IR} and {\em Intensity IR} rely on list navigation on the near-ey
 In our third iteration, we ask the question ``can we build a system purely using head orientation and visual feedback from the environment for target selection?''
 
 \subsection{Technique}
-The motion sensors (including gyroscope, magnetometer and accelerometer) on the head-worn device can help us determine the orientation of a user's head. However, this absolute orientation cannot be directly used in any indoor environment as the user may change their location \achal{Should we use gender neutral language?}\bjoern{yes. just did in the previous sentence}. However, as long as the targets are spread around the periphery, their relative orientation doesn't change. This key observation inspires us to investigate a hybrid solution with IR and orientation sensors on Glass.
+The motion sensors (including gyroscope, magnetometer and accelerometer) on the head-worn device can help us determine the orientation of a user's head. However, this absolute orientation cannot be directly used in any indoor environment as the user may change their location. However, as long as the targets are spread around the periphery, their relative orientation doesn't change. This key observation inspires us to investigate a hybrid solution with IR and orientation sensors on Glass.
 
 There are two phases to this technique: learning the relative orientations or targets in a room and intelligently suggesting targets during disambiguation.
 
