@@ -3,18 +3,10 @@
 \label{sec:iteration-3:-head}
 \subsection{Problem Statement and Goal}
 Both {\em Naive IR} and {\em Intensity IR} rely on list navigation on the
-near-eye display for the refinement step. This has two problems: First, a
-spatial layout of targets is compressed into a uni-dimensional list. List
-navigation commands thus have poor spatial mapping. Second, our techniques
-require the user to switch their focus back and forth between the physical
-world and the display. These issues motivated us to design an approach that
-also utilizes orientation information during the {\em refinement} stage, to
-provide a more direct mapping between the user's actions and target selection.
+near-eye display for the refinement step. The list interface has a few clear shortcomings: navigation actions map poorly to real world results, and the users must switch their focus back and forth between the physical scene and the near-eye display. These problems motivated us to design an approach that harnesses the head orientation during the {\em refinement} stage.
 
-\achal{This used to have an explicit question which I removed, as it sounded
-very unnatural.}
 In our third iteration, we build a system which further minimizes the chance of
-falling back to list based refinement.
+falling back to list based {\em refinement}.
 
 \subsection{Technique}
 The motion sensors (including gyroscope, magnetometer and accelerometer) on the
