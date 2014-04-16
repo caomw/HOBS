@@ -9,13 +9,14 @@ In our third iteration, we build a system which further minimizes the chance of
 falling back to list based {\em refinement}.
 
 \subsection{Technique}
-Using the motion sensors (including gyroscope, magnetometer and accelerometer) on the
-head-worn device and IR, we can discover the spatial relationships between targets and the head orientation of the user.  
+
+We introduce a third technique that uses a combination of motion sensors and IR to learn the relative orientations of
+targets in a room and intelligently suggest targets during refinement (see
+Figure~\ref{fig:third_technique}).
 
 Unfortunately, this absolute orientation cannot be applied to all indoor
 environments, since the user’s movements through the space could change the relationships between targets. However, with the constraint that the targets are spread around the periphery, their relative orientations are stable
-(see Figure~\ref{fig:third_principle}). This key observation inspires us to
-investigate a hybrid solution using a combination of IR and orientation sensors on Glass.
+(see Figure~\ref{fig:third_principle}). 
 
 \begin{figure}[t]
 \centering
@@ -31,33 +32,12 @@ investigate a hybrid solution using a combination of IR and orientation sensors 
 \label{fig:third_technique}
 \end{figure}
 
-There are two phases to this technique: learning the relative orientations or
-targets in a room and intelligently suggesting targets during refinement (see
-Figure~\ref{fig:third_technique}).
+In the learning stage, the user scans over the targets, and the
+system attains the absolute orientation of each device from IR and motion sensors. From this information it can abstract out their relative positions and build an {\em adjacency map}.
 
-In the first stage, the user orients their head towards each device, and the
-system learns a map of the devices based on their corresponding sensor readings.
-During the second stage, when the user wishes to use head-motion for
-disambiguation, they will put their finger on the touchpad to enter a
-quasi-mode, where only one device has a solid indicator light on at a time. This
-gesture is inspired by observing users who tend to adjust their glasses for
-closer inspection. The user can then tilt in the direction of the device they
-wish to switch to. The system then uses its understanding of the relative
-locations of the devices to create an {\em adjacency map}.
-
-The technical implementation of this interaction involves a number of subtleties
-due to the noisiness of our data. As mentioned earlier, absolute orientations
-of devices change frequently at the slightest user movement. Unfortunately,
-while relative orientation information is more stable, it does not contain
-the necessary information for essential tasks, such as adding devices to a
-learned map. To overcome these issues, we implement a hybrid method using
-absolute and relative orientations augmented by IR information. Our system
-stores the absolute orientations of each device during the learning stage, but
-utilizes only the relative information for disambiguation. Once the user is in
-quasi-mode, our system calculates the user's direction of motion using a
-low-passed history of sensor measurements, and searches through the devices for
-the nearest device in that direction. Thus, although the absolute orientations
-may be incorrect, the relative information can still be used for disambiguation.
+After the map is created, the user can hold down on the touchpad to enter a
+quasi-mode for refinement. In this quasi-mode, one device lights up at a time. When the user turns his head in the direction of another device, the light switches to that device. Therefore, the user can move between devices one at a time with slight head movements. We implement this interaction by calculating the user's direction of motion using a low-passed history of sensor measurements and searching through the adjacency map for
+the nearest device in that direction. 
 
 \subsection{Evaluation}
 \ben{We then need evaluation results here, quantitative and qualitative.}
