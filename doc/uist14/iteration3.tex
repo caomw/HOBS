@@ -22,14 +22,14 @@ environments, since the user’s movements through the space could change the re
 \begin{figure}[t]
 \centering
 \includegraphics[width=1\columnwidth]{figures/third_principle.png}
-\caption{Even when the user's absolution position changes, the relative relationship in the orientation space remain invariant.}
+\caption{This illustrates that when the change of user's absolution position doesn't change the relative relationship of physical targets.}
 \label{fig:third_principle}
 \end{figure}
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=1\columnwidth]{figures/third_technique3.pdf}
-\caption{\ben{figure in interactionModel2.key file.} Our third technique learned each target's absolute orientation and construct the orientation map. Though we store the absolute orientation value, during the {\em refinement} stage, the prediction is only based on relative changes to a reference point. Thus, the prediction will work regardless of user's position.}
+\caption{Our third technique learned each target's absolute orientation and construct the adjacency map. During the {\em refinement} stage, the prediction is based on relative changes to a reference point.}
 \label{fig:third_technique}
 \end{figure}
 
