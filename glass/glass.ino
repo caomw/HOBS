@@ -210,6 +210,8 @@ void loop() {
 	XBee.println(message); // hover event
 	delay(10);
 	XBee.println(message); // hover event
+	delay(10);
+	XBee.println(message); // hover event
 	Serial.write(message);
       } else if ( message[0]== 'C') {
 	XBee.println(message); // click event
