@@ -1,3 +1,4 @@
+setwd("~/repos/CS294-84Project/data/201309.Studies/script/")
 require('ggplot2')
 
 ## to run this script, you need multiplot
@@ -223,14 +224,16 @@ dev.off()
 toPlot <- mode.bind.type[grepl("IR", mode.bind.type$mode_type), ]
 for (i in 1:nrow(toPlot)) {
   if (toString(toPlot$mode_type[i]) == "IR single") {
-    toPlot$type[i] <- "without refinement"
+    toPlot$type[i] <- "no refinement"
   }
   else {
     toPlot$type[i] <- "with refinement"
   }
 }
 
-box2 <- ggplot(toPlot, aes(factor(type), correct_time, fill = toPlot$mode_type))
+box2$type <- factor(box2$type, c("without refinement ","with refinement"))
+
+box2 <- ggplot(toPlot, aes(factor(type), correct_time, fill = factor(toPlot$type)))
 box2 <- box2 + geom_boxplot(lwd=0.5) + ylim(2.5,25) + xlab("") +
   scale_fill_manual(values = c("#0072B2", "#56B4E9")) +
   annotate("text", x = 1, y = 25, label = "mean: 9.16", size=3.6) +
@@ -240,9 +243,10 @@ box2 <- box2 + geom_boxplot(lwd=0.5) + ylim(2.5,25) + xlab("") +
   stat_summary(fun.y = "mean", geom = "text", label="---", size= 8, color= "white") +
   theme_bw() +
   theme(legend.position = "none", axis.title.y=element_blank()) +
-  scale_x_discrete(labels=c("with refinement", "without refinement"))
+  scale_x_discrete(labels=c("no refinement", "with refinement"))
 
 cdf2 <- ggplot(toPlot, aes(x = correct_time, colour = type)) +
+  scale_colour_manual(values = c("#0072B2", "#56B4E9")) +
   stat_ecdf() +
   ylab("cumulative distribution function") +
   xlab("acquisition time") +
