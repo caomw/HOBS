@@ -1,20 +1,18 @@
-%!TEX root = uist14.tex
+%!TEX root = sui14.tex
 \section{Introduction}
-% \bjoern{something happened to the figure caption font - it doesn't match the standard template. Please fix.}
-% \ben{fixed. Problem is because of using caption package}.
+\bjoern{We should see if we can change language in a few places to strengthen the connection to ``Spatial User Interaction", the title of the conference.}
 
 %% from the swarm vision to the necessity of selection
-The number of smart objects in our environment with embedded computation and communication has grown rapidly. These objects are all potential targets for interaction. To initiate such an interaction, a user needs to first acquire the target object -- a fundamental task in an interaction process that has been extensively studied in the digital world, but is not yet well-explored in physical spaces.
+The number of smart objects in our environment with embedded computation and communication has grown rapidly. These objects are all potential targets for interaction. To initiate spatial interactions, a user needs to first acquire the target object -- a fundamental task in an interaction process that has been extensively studied in the digital world, but is not yet well-explored in physical spaces.
 
-%% To initiate such interaction requires {\em selection} information about the object at the user's {\em locus of attention}~\cite{raskin}. \sean{this sentence is unclear to me.}
 
 %% previous approaches are limited
 Past research has introduced techniques of augmenting hand-held mobile devices with accessories like laser pointers to enable direct aiming at target devices in space~\cite{beigl_point_1999,patel_2-way_2003}. While promising, some drawbacks of using hand-held devices are that the device first has to be retrieved (e.g., from a pocket) and cautiously aimed; that the user's hands are required to be free for operation; and that the user's visual attention is split between looking down at a screen and out at targets in the world. 
 
 %% introducing head-worn computing and head orientation
-Emerging head-worn computing devices have the potential to overcome some of these limitations: they do not require retrieval since the devices are already worn; they may enable hands-free or uni-manual interactions; and they offer near-eye or see-through displays to present information in the wearer's field of view. We thus investigate how such computing devices may be used for the selection of physical targets.
+Emerging head-worn computing devices have the potential to overcome some of these limitations: they do not require retrieval since the devices are already worn; they may enable hands-free or uni-manual interactions; and they offer near-eye or see-through displays to present information in the wearer's field of view. We thus investigate how such computing devices may be used for the selection and control of devices in physical spaces.
 
-Head-worn devices can naturally exploit the user's head orientation, an important but less precise indicator of the user's {\em locus of attention}~\cite{raskin}. It suggests the general direction, but not the particular point of focus. While gaze tracking could provide further information about a user's focus, wearable gaze tracking cannot by itself reliably determine the identity of objects in focus (i.e. it also needs to know what the user is seeing). Equipping all devices with stationary gaze trackers is possible~\cite{vertegaal2005media} but much costlier than our approach. We therefore study how to leverage head-orientation alone for target selection in physical spaces. 
+Head-worn devices can naturally exploit the user's head orientation, an important (but imprecise) indicator of the user's {\em locus of attention}~\cite{raskin}. It suggests the general direction, but not the particular point of focus. While gaze tracking could provide further information about a user's focus, wearable gaze tracking cannot by itself reliably determine the identity of objects in focus (i.e. it also needs to know what the user is seeing). Equipping all devices with stationary gaze trackers is possible~\cite{vertegaal2005media} but much costlier than our approach. We therefore study how to leverage head-orientation alone for target selection in physical spaces. \bjoern{I think this needs reworking. In essence, reviewers didn't believe us that head orientation was a sensible way to go when compared to more complex gaze tracking or computer vision approaches.}
 
 The imprecision of human head movement suggests adapting area cursor techniques developed for assistive devices~\cite{kabbash1995prince,worden1997making,findlater2010enhanced}. Such techniques employ a two-step selection process: a {\em coarse} selection of an area of interest, followed by a {\em refinement} to select a target within that area.
 
