@@ -44,4 +44,6 @@ server/*.txt
 data/result_test.txt
 
 doc/sigchi14/sigchi14.pdf
+doc/uist14/uist14.pdf
+doc/sui14/sui14.pdf
 _region_.tex
