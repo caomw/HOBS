@@ -33,6 +33,25 @@ Handheld projectors can both display a user interface in space and communicate c
 
 Other targeting systems use IR with handheld pointers~\cite{swindells_that_2002} as well as wearable devices such as rings and Bluetooth audio earpieces~\cite{merrill_augmenting_2007} to connect to smart devices. Our system tackles an unresolved issue of such IR-based approaches -- navigating an area dense with potential targets.
 
+\subsection{Markers and Vision Methods}
+\achal{Not sure where to put this, feel free to move.}
+\changes{Many alternative solutions for detecting devices in contained spaces
+rely on passive tags on devices, combined with computer vision methods for
+detection. Unfortunately, these methods either impose significant constraints
+on the camera used for detection, or require large, obtrusive tags, and
+inevitably lack feedback from passive devices in the environment. \cite{Bokode},
+for example, relies on visually imperceptible codes, but has significant
+drawbacks: despite using a 12.1 megapixel DSLR camera, detections are no
+longer robust past an angle of 20. Similarly, in our experiments, we found
+that striking a balance between the size of the tag, the prices of the
+device, and the computational cost of detection was unfeasible with current
+cameras and algorithms.}
+
+\ben{Reviewers suggest considering computer vision-based techniques with markers in the environment (such as QR codes, or Bokode [Mohan] which extends the working distance to a few meters for visual tags). We considered this direction and found several drawbacks, including computational complexity, low accuracy when targets are far, the absence of real-time environment feedback with passive tags, and aesthetic issues with QR codes. While we don't claim our choice of IR is optimal, it has important advantages -- it is low-cost, readily available and quite suitable for area selection. We can weaken our claim and add explanations of how disambiguation techniques might generalize to other methods of implementing target identification.}
+
+\achal{Read and discussed the Bokode paper and CV in general. Unsure about what
+to do regarding "weakening our claim."}
+
 %\ben{new related works from reviewers}. \bjoern{folded in}
 %\changes{RFIG Lamps and photosensing wireless tags [Raskar et al] use a projector and data is encoded in each pixel so that tags can localize themselves for target selection. Our IR emitter, a relatively low-cost solution, doesn’t have this feature but shares the commonality of covering an area for the ease of selection. At the end of their paper, they envision an IR-based system to solve ambient light problems. Our work lies in that direction and also contributes evaluations with user studies.
 %Progressive Refinement [Bacima] studies several progressive refinement selection modalities, which is close to our two-stage selection; but our contexts are head-orientation as it reflects users' point of interest.
