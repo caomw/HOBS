@@ -3,10 +3,10 @@
 Our approach is related to head- and eye-controlled interfaces, area cursors and prior work on hardware devices for pointing in physical spaces.
 
 \subsection{Head and Gaze Input}
-Head movement has long been used for virtual camera control in VR applications~\cite{pausch_user_1993} and as an assistive input technology for cursor control of desktop applications~\cite{radwin1990method}. However, human neck muscles have a lower bandwidth than other muscle groups, e.g., the wrist~\cite{card_morphological_1991}.
-
+Head movement has long been used for virtual camera control in VR applications~\cite{pausch_user_1993} and as an assistive input technology for cursor control of desktop applications~\cite{radwin1990method}. However, it is notable that human neck muscles have a lower bandwidth than other muscle groups, e.g., the wrist~\cite{card_morphological_1991}.
+%
 %Card, summarizing other work, shows that neck muscles are a poor muscle group for pointing in general: neck muscles only have a bandwidth of about $4.2bits/s$ (compared to $23bits/s$ of wrist muscles used by a standard mouse~\cite{Card:1991:MAD:123078.128726}. 
-
+%
 Prior work often focused on head orientation for controlling graphical interfaces; in contrast, we apply this modality to selection in physical spaces.
 
 Gaze can also be used to control graphical user interfaces~\cite{kumar2007eyepoint}. While there are wearable gaze trackers~\cite{bulling2009wearable}, turning information about a concrete point in space where a user is looking into a selection requires a map of each space with known target locations. Our system works through point-to-point IR communication and does not require an {\em a priori} map. Target objects in the environment can also be equipped with individual cameras that watch the user~\cite{smith2013gaze,vertegaal2005media}. Such an approach can enable similar benefits as our approach, but is computationally more expensive than our single-pixel sensor solution and may not work at greater distances or angles, because it relies on finding the user's pupils in a camera image.
