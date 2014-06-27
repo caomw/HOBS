@@ -22,13 +22,13 @@ We conceptualize area pointing as a two-stage process: in the {\em coarse} phase
 }
 
 \subsection{Pointing in Physical Spaces}
-Rukzio studied alternative methods for selecting devices in physical spaces and found that users strongly preferred either tapping target appliances with a mobile device or pointing at a distance to browsing a list~\cite{rukzio_experimental_2006}.
+Rukzio ~\cite{rukzio_experimental_2006} studied alternative methods for selecting devices in physical spaces and found that users strongly preferred either tapping target appliances with a mobile device or pointing at a distance to browsing a list.
 
 Several approaches to spatial selection with handheld devices exist for controlling appliances~\cite{beigl_point_1999,patel_2-way_2003,wilson_xwand:_2003,schmidt_picontrol:_2012,kemp_point-and-click_2008} and exchanging information with smart infrastructure sensor networks ~\cite{lifton_tricorder:_2007,mittal_ubicorder:_2011,costanza_sensortune:_2010}. In some techniques, users select objects of interest with laser pointers. The laser dot provides immediate visual feedback to the user about what is being selected; however, its small target area makes it poorly matched to head orientation input.
 
 Other approaches rely on virtual room models in which a user's location is estimated using IMU-based orientation sensing~\cite{wilson_xwand:_2003,lifton_tricorder:_2007} -- in contrast, our technique does not require a static map ahead of time.
 
-Handheld projectors can both display a user interface in space and communicate control information optically, e.g., by encoding information temporally (using Gray codes in Picontrol~\cite{schmidt_picontrol:_2012} and RFIG Lamps~\cite{raskar_rfig_2004}) or spatially (using QR codes in the infrared spectrum in SideBySide~\cite{willis_sidebyside:_2011}). Our solution is similar in spirit but relies on simple low-cost IR emitters and detectors. \bjoern{need a stronger statement here}
+Handheld projectors can both display a user interface in space and communicate control information optically, e.g., by encoding information temporally (using Gray codes in Picontrol~\cite{schmidt_picontrol:_2012} and RFIG Lamps~\cite{raskar_rfig_2004}) or spatially (using QR codes in the infrared spectrum in SideBySide~\cite{willis_sidebyside:_2011}). Our solution is similar in spirit but requires only small, low-cost IR emitters and detectors. \bjoern{need a stronger statement here} \achal{Tried to add a small contrast of small/low cost, but don't want to explicitly say projectors are large and unwieldy as there may be some exceptions.}
 %However, visible tags at appropriate sizes may be rejected by users because of their negative aesthetic effect on the space.
 
 Other targeting systems use IR with handheld pointers~\cite{swindells_that_2002} as well as wearable devices such as rings and Bluetooth audio earpieces~\cite{merrill_augmenting_2007} to connect to smart devices. Our system tackles an unresolved issue of such IR-based approaches -- navigating an area dense with potential targets.
@@ -40,15 +40,16 @@ Other targeting systems use IR with handheld pointers~\cite{swindells_that_2002}
 
 \changes{Many alternative solutions for detecting devices in contained spaces
 rely on passive tags on devices, combined with computer vision methods for
-detection. Unfortunately, these methods either impose significant constraints
-on the camera used for detection, or require large, obtrusive tags, and
-inevitably lack feedback from passive devices in the environment. \cite{Bokode},
+detection. Unfortunately, these methods impose significant constraints
+on the camera used for detection~\cite{Bokode}, require large, obtrusive tags, or are
+designed to work specifically at short distances~\cite{CyberCode}; inevitably,
+they also lack feedback from passive devices in the environment. \cite{Bokode},
 for example, relies on visually imperceptible codes, but has significant
-drawbacks: despite using a 12.1 megapixel DSLR camera, detections are no
-longer robust past an angle of 20. Similarly, in our experiments, we found
-that striking a balance between the size of the tag, the prices of the
-device, and the computational cost of detection was unfeasible with current
-cameras and algorithms.}
+drawbacks: despite using a 12.1 megapixel DSLR camera, detections are no longer
+robust past an angle of 20. Similarly, in our experiments, we found that
+striking a balance between the size of the tag, the prices of the device, and
+the computational cost of detection was unfeasible with current cameras and
+algorithms.}
 
 \ben{Reviewers suggest considering computer vision-based techniques with markers in the environment (such as QR codes, or Bokode [Mohan] which extends the working distance to a few meters for visual tags). We considered this direction and found several drawbacks, including computational complexity, low accuracy when targets are far, the absence of real-time environment feedback with passive tags, and aesthetic issues with QR codes. While we don't claim our choice of IR is optimal, it has important advantages -- it is low-cost, readily available and quite suitable for area selection. We can weaken our claim and add explanations of how disambiguation techniques might generalize to other methods of implementing target identification.}
 
