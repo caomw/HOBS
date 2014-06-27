@@ -3,57 +3,55 @@
 Our approach is related to head- and eye-controlled interfaces, area cursors and prior work on hardware devices for pointing in physical spaces.
 
 \subsection{Head and Gaze Input}
-Head movement has long been used for virtual camera control in VR applications~\cite{pausch_user_1993} and as an assistive input technology for cursor control of desktop applications~\cite{radwin1990method}. However, it is notable that human neck muscles have a lower bandwidth than other muscle groups, e.g., the wrist~\cite{card_morphological_1991}.
+\changes{Head movement has long been used for virtual camera control in VR applications~\cite{pausch_user_1993} and as an assistive input technology for cursor control of desktop applications~\cite{radwin1990method}. However, it is notable that human neck muscles have a lower bandwidth than other muscle groups, e.g., the wrist~\cite{card_morphological_1991}.}
 %
 %Card, summarizing other work, shows that neck muscles are a poor muscle group for pointing in general: neck muscles only have a bandwidth of about $4.2bits/s$ (compared to $23bits/s$ of wrist muscles used by a standard mouse~\cite{Card:1991:MAD:123078.128726}. 
 %
 Prior work often focused on head orientation for controlling graphical interfaces; in contrast, we apply this modality to selection in physical spaces.
 
-Gaze can also be used to control graphical user interfaces~\cite{kumar2007eyepoint}. While there are wearable gaze trackers~\cite{bulling2009wearable}, turning information about a concrete point in space where a user is looking into a selection requires a map of each space with known target locations. Our system works through point-to-point IR communication and does not require an {\em a priori} map. Target objects in the environment can also be equipped with individual cameras that watch the user~\cite{smith2013gaze,vertegaal2005media}. Such an approach can enable similar benefits as our approach, but is computationally more expensive than our single-pixel sensor solution and may not work at greater distances or angles, because it relies on finding the user's pupils in a camera image.
+Gaze can also be used to control graphical user interfaces~\cite{kumar2007eyepoint}. While there are wearable gaze trackers~\cite{bulling2009wearable}, turning information about a concrete point in space where a user is looking into a selection requires a map with known target locations or the use of visually obtrusive markers such as QR codes. 
+Our system works through point-to-point IR communication and does not require an {\em a priori} map or markers. Target objects in the environment can also be equipped with individual cameras that watch the user~\cite{smith2013gaze,vertegaal2005media}. Such an approach can enable similar benefits as our approach, but is computationally more expensive than our single-pixel sensor solution and may not work at greater distances or angles, because it relies on finding the user's pupils in a camera image.
 
 %Our work is closer in spirit to Selker's headworn system~\cite{Selker:2001:EGE:634067.634176}.
 
 \subsection{Area Cursors}
 \changes{
 In 2D area cursors for GUIs, the activation area of the cursor is enlarged, which facilitates acquiring smaller targets~\cite{kabbash1995prince}. We argue that head orientation pointing has analogous characteristics (limited pointing performance and accuracy). Area cursors are especially appropriate for individuals with motor control impairments or difficulties~\cite{worden1997making,findlater2010enhanced}. Similar ideas have also been extended into 3D to provide selection with progressive refinement in 3D scenes~
-\cite{bacim2013design}. In all area and space cursors, the large activation area can lead to multiple targets being selected and disambiguation is needed. 
+\cite{bacim2013design}. In all area and space cursors, the large activation area can lead to multiple targets being selected and disambiguation is needed. This paper describes the trade-offs between several disambiguation approaches.
 
-We conceptualize area pointing as a two-stage process: in the {\em coarse} phase, which we call {\em scanning}, users move so the activation area intersects with the target object (and possibly other, unintended targets). In the {\em refinement} phase, they adjust so only the intended target will be selected. Many disambiguation techniques are possible for refinement -- this paper describes the trade-offs between several of them.
+%We conceptualize area pointing as a two-stage process: in the {\em coarse} phase, which we call {\em scanning}, users move so the activation area intersects with the target object (and possibly other, unintended targets). In the {\em refinement} phase, they adjust so only the intended target will be selected. Many disambiguation techniques are possible for refinement -- this paper describes the trade-offs between several of them.
 }
 
 \subsection{Pointing in Physical Spaces}
 Rukzio studied alternative methods for selecting devices in physical spaces and found that users strongly preferred either tapping target appliances with a mobile device or pointing at a distance to browsing a list~\cite{rukzio_experimental_2006}.
 
-Several approaches to spatial selection with handheld devices exist for controlling appliances~\cite{beigl_point_1999,patel_2-way_2003,wilson_xwand:_2003,schmidt_picontrol:_2012,kemp_point-and-click_2008} and exchanging information with smart infrastructure sensor networks ~\cite{lifton_tricorder:_2007,mittal_ubicorder:_2011,costanza_sensortune:_2010}. In some techniques, users select objects of interest with laser pointers. The laser dot provides immediate visual feedback to the user about what is being selected; however, its small target area makes it poorly matched to head orientation input.
-
+Several approaches to spatial selection with handheld devices~\cite{beigl_point_1999,patel_2-way_2003,wilson_xwand:_2003,schmidt_picontrol:_2012,kemp_point-and-click_2008} or finger-worn devices~\cite{merrill_augmenting_2007} exist. 
+%and exchanging information with smart infrastructure sensor networks ~\cite{lifton_tricorder:_2007,mittal_ubicorder:_2011,costanza_sensortune:_2010}. 
+In some techniques, users select objects of interest with laser pointers. The laser dot provides immediate visual feedback to the user about what is being selected; however, its small target area makes it poorly matched to head orientation input.
 Other approaches rely on virtual room models in which a user's location is estimated using IMU-based orientation sensing~\cite{wilson_xwand:_2003,lifton_tricorder:_2007} -- in contrast, our technique does not require a static map ahead of time.
+%Other targeting systems use IR with handheld pointers~\cite{swindells_that_2002} as well as wearable devices such as rings and Bluetooth audio earpieces~\cite{merrill_augmenting_2007} to connect to smart devices. 
+Our system tackles an unresolved issue of prior approaches -- navigating an area dense with potential targets and resolving selection ambiguity.
 
-Handheld projectors can both display a user interface in space and communicate control information optically, e.g., by encoding information temporally (using Gray codes in Picontrol~\cite{schmidt_picontrol:_2012} and RFIG Lamps~\cite{raskar_rfig_2004}) or spatially (using QR codes in the infrared spectrum in SideBySide~\cite{willis_sidebyside:_2011}). Our solution is similar in spirit but relies on simple low-cost IR emitters and detectors. \bjoern{need a stronger statement here}
+\subsection{Vision- and Projection-Based Target Selection}
+\changes{Many alternative solutions for detecting devices in contained spaces
+rely on computer-vision recognition of printed tags on devices. Unfortunately, these methods either impose significant constraints
+on the camera used for detection, or require large, obtrusive tags, and
+inevitably lack feedback from passive markers in the environment. \bjoern{need a better reference than bokode that uses QR codes for initiating interaction.}
+Handheld projectors can both display a user interface in space and communicate control information optically, e.g., by encoding information temporally (using Gray codes in Picontrol~\cite{schmidt_picontrol:_2012} and RFIG Lamps~\cite{raskar_rfig_2004}) or spatially (using QR codes in the infrared spectrum in SideBySide~\cite{willis_sidebyside:_2011}). Our solution is similar in spirit but relies on simple low-cost IR emitters and detectors. \bjoern{need a stronger statement here}}
 %However, visible tags at appropriate sizes may be rejected by users because of their negative aesthetic effect on the space.
 
-Other targeting systems use IR with handheld pointers~\cite{swindells_that_2002} as well as wearable devices such as rings and Bluetooth audio earpieces~\cite{merrill_augmenting_2007} to connect to smart devices. Our system tackles an unresolved issue of such IR-based approaches -- navigating an area dense with potential targets.
+\bjoern{I tried to fold in some of the points about QR codes into the text above.}
+%\subsection{Markers and Vision Methods}
+%\achal{Not sure where to put this, feel free to move.}
+%
+%\ben{For CV, I think related work is one option to go; however, the requirement of being related work is that -- we need to reference them. There are a few examples ``require large, obtrusive tags, and inevitably lack feedback from passive devices in the environment'' which should be referenced. That's why I am thinking of putting this to discussion.}
+%
 
-\subsection{Markers and Vision Methods}
-\achal{Not sure where to put this, feel free to move.}
 
-\ben{For CV, I think related work is one option to go; however, the requirement of being related work is that -- we need to reference them. There are a few examples ``require large, obtrusive tags, and inevitably lack feedback from passive devices in the environment'' which should be referenced. That's why I am thinking of putting this to discussion.}
+%\ben{Reviewers suggest considering computer vision-based techniques with markers in the environment (such as %QR codes, or Bokode [Mohan] which extends the working distance to a few meters for visual tags). We considered this direction and found several drawbacks, including computational complexity, low accuracy when targets are far, the absence of real-time environment feedback with passive tags, and aesthetic issues with QR codes. While we don't claim our choice of IR is optimal, it has important advantages -- it is low-cost, readily available and quite suitable for area selection. We can weaken our claim and add explanations of how disambiguation techniques might generalize to other methods of implementing target identification.}
 
-\changes{Many alternative solutions for detecting devices in contained spaces
-rely on passive tags on devices, combined with computer vision methods for
-detection. Unfortunately, these methods either impose significant constraints
-on the camera used for detection, or require large, obtrusive tags, and
-inevitably lack feedback from passive devices in the environment. \cite{Bokode},
-for example, relies on visually imperceptible codes, but has significant
-drawbacks: despite using a 12.1 megapixel DSLR camera, detections are no
-longer robust past an angle of 20. Similarly, in our experiments, we found
-that striking a balance between the size of the tag, the prices of the
-device, and the computational cost of detection was unfeasible with current
-cameras and algorithms.}
-
-\ben{Reviewers suggest considering computer vision-based techniques with markers in the environment (such as QR codes, or Bokode [Mohan] which extends the working distance to a few meters for visual tags). We considered this direction and found several drawbacks, including computational complexity, low accuracy when targets are far, the absence of real-time environment feedback with passive tags, and aesthetic issues with QR codes. While we don't claim our choice of IR is optimal, it has important advantages -- it is low-cost, readily available and quite suitable for area selection. We can weaken our claim and add explanations of how disambiguation techniques might generalize to other methods of implementing target identification.}
-
-\achal{Read and discussed the Bokode paper and CV in general. Unsure about what
-to do regarding "weakening our claim."}
+%\achal{Read and discussed the Bokode paper and CV in general. Unsure about what
+%to do regarding "weakening our claim."}
 
 %\ben{new related works from reviewers}. \bjoern{folded in}
 %\changes{RFIG Lamps and photosensing wireless tags [Raskar et al] use a projector and data is encoded in each pixel so that tags can localize themselves for target selection. Our IR emitter, a relatively low-cost solution, doesn’t have this feature but shares the commonality of covering an area for the ease of selection. At the end of their paper, they envision an IR-based system to solve ambient light problems. Our work lies in that direction and also contributes evaluations with user studies.

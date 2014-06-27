@@ -1,0 +1,70 @@
+We thank the reviewers for their detailed feedback. Below, we answer the
+raised questions and clarify some points of confusion.
+
+CONTRIBUTION  LEVEL (AC, R1, R2, R3)
+Reviewers find this work’s contribution limited and suggest focusing on
+interacting with complex targets. In the past, we built interfaces to
+control complex appliances including smart TVs; however, CHI reviewers on
+a prior application-centric paper suggested focusing on fundamental
+selection techniques instead, resulting in the abbreviated description of
+applications in our paper. Some examples can be found in the APPLICATION
+section; we are happy to reintroduce more material in our revision.
+
+We focus on the fundamental question of target selection itself, which is
+likely to be a problem in a future rich with smart devices. Existing
+commercial solutions (primarily list selection) don’t scale well (we
+envision a swarm of interactive devices as the contexts) and exhibit
+naming problems when multiple identical objects are within the same
+space. Our work contributes a sophisticated understanding of methods for
+using head-orientation as an indication of user’s point of interest in
+physical space.
+
+LOW DISAMBIGUATION SUCCESS RATE (R1)
+R1 comments that our technique barely outperforms chance. However, our
+success rate of 55% in iteration 2 is much higher than random chance
+given that there are at least 4 targets in the user’s field of view in
+our setup (in this case, chance would be 25%).
+ 
+COMPUTER VISION APPROACH (AC, R2, R3)
+Reviewers suggest considering computer vision-based techniques with
+markers in the environment (such as QR codes, or Bokode [Mohan] which
+extends the working distance to a few meters for visual tags). We
+considered this direction and found several drawbacks, including
+computational complexity, low accuracy when targets are far, the absence
+of real-time environment feedback with passive tags, and aesthetic issues
+with QR codes. While we don’t claim our choice of IR is optimal, it has
+important advantages -- it is low-cost, readily available and quite
+suitable for area selection. We can weaken our claim and add explanations
+of how disambiguation techniques might generalize to other methods of
+implementing target identification.
+
+SYSTEM DESCRIPTION (AC)
+The AC commented that “the description of the system is very
+lacking”. We provided brief implementation information in order to
+focus on the design and evaluation within a shorter paper to match the
+magnitude of contribution. This may have been counterproductive. We list
+part numbers in the "Hardware" subsection but can describe how IDs are
+exchanged over IR and 802.15.4 in more detail.
+
+MISSING RELATED WORK (AC, R3)
+We will add the additional references.
+RFIG Lamps and photosensing wireless tags [Raskar et al] use a projector
+and data is encoded in each pixel so that tags can localize themselves
+for target selection. Our IR emitter, a relatively low-cost solution,
+doesn't have this feature but shares the commonality of covering an area
+for the ease of selection. At the end of their paper, they envision an
+IR-based system to solve ambient light problems. Our work lies in that
+direction and also contributes evaluations with user studies.
+Progressive Refinement [Bacima] studies several progressive refinement
+selection modalities, which is close to our two-stage selection; but our
+contexts are head-orientation as it reflects users’ point of interest.
+Tinmith-metro [Piekarski et al] tracks the users’ hand movements and
+uses a HUD for augmented reality, while our work focuses on direct
+selection on physical targets.
+
+MISC (AC)
+The AC asked why users couldn't swipe in a certain direction on Glass for
+disambiguation. Two major factors preclude this interaction: 1) the Glass
+physical form factor makes upward swipes awkward to perform; 2) the plane
+of the touchpad is orthogonal to the plane of the targets, leading to
+ambiguity what lateral swipes mean.
