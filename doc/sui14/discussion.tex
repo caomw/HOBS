@@ -2,13 +2,13 @@
 \section{Discussion}
 \label{sec:discussion}
 %%%NOTES FROM YANG%%%%
-The rapid development of sensing technologies has created many opportunities for new ways to interact with smart objects. In our exploration of the design space of head orientation-based target selection, we carefully selected sensing techniques that are readily available and easy to deploy; and we added complexity to our system only when necessary. 
+The rapid development of sensing technologies has created many opportunities for new ways to interact with smart objects. In our exploration of the design space of HOBS, we carefully selected sensing techniques that are readily available and easy to deploy; and we added complexity to our system only when necessary. 
 
 \subsection{Interpretation of results}
 
-A primary goal of this paper was to provide an effective and efficient method for target selections in physical spaces. Targeting is a fundamental building block across many interaction tasks - it has a significant impact on user experiences collectively and can provide seamless interaction when designed well.
+A primary goal of this paper was to provide an effective and efficient method for target selections in physical spaces. Targeting is a fundamental building block across many interaction tasks -- it has a significant impact on user experiences collectively and can provide seamless interaction when designed well.
 
-We formalized a scan and refine model of head orientation-based selection (Equation~\ref{eq:time}). We first introduced head orientation as an alternative to list selection and showed that {\em scanning} can outperform list selection. Our redesigns then focused on the case where refinement is needed. The two ways to reduce refinement time are 1) to reduce $P(refine)$, the probability that a manual refinement is necessary; and 2) to reduce $t_{refine}$, the time required to perform the refinement interaction itself. Using IR intensity readings addresses both these terms, as it can be used to both avoid showing refinement dialogs, and to optimize their display when they are needed. 
+We formalized a {\em scan} and {\em refine} model of head orientation-based selection (Equation~\ref{eq:time}). We first introduced head orientation as an alternative to list selection and showed that {\em scanning} can outperform list selection. Our redesigns then focused on the case where refinement is needed. The two ways to reduce refinement time are 1) to reduce $P(refine)$, the probability that a manual refinement is necessary; and 2) to reduce $t_{refine}$, the time required to perform the refinement interaction itself. Using IR intensity readings addresses both these terms, as it can be used to both avoid showing refinement dialogs, and to optimize their display when they are needed. 
 
 Our final head-orientation technique improves the nature of the mapping between items in the refinement dialog and the layout of targets in space. Informal testing suggests that users prefer using this spatial mapping.
 
@@ -20,11 +20,11 @@ Our final head-orientation technique improves the nature of the mapping between 
 %The rapid development of sensing technologies has created many opportunities for new ways to interact with smart objects. While we explored the design space of head orientation-based target selection, we cautiously selected sensing techniques that are easy to deploy and added complexity to our system only when necessary. Our work thoroughly examined the design space via an iterative design process. Theorize the design space as you had in Equation 1. Ben already had some good points in the draft.
 
 \subsection{Limitations}
-We introduced new refinement operations based on IR intensity and spatial adjacency tracking that improve the performance of head orientation in environments with dense targets. These techniques have several limitations. 
 
-First, IR intensity measurements only work within the dynamic range of our sensor. Additional strong IR sources like direct sunlight may saturate the sensor and make discrimination impossible. Second, our adjacency map is built assuming stable relative target locations. If targets move, the map will have to be recalculated. This may be done incrementally during everyday interactions, but we have not yet tackled this challenge. 
+Our system faces a few limitations. First, IR intensity measurements only work within the dynamic range of our sensor. Additional strong IR sources like direct sunlight may saturate the sensor and make discrimination impossible. Second, our adjacency map is built assuming stable relative target locations. If targets move, the map will have to be recalculated. This may be done incrementally during everyday interactions, but we have not yet tackled this challenge. 
 
-Finally, we acknowledge several limitations of our study design: we have not yet systematically studied target density variation, our study was performed in a lab environment, and only measured first use. Future work should study how the technique applies in realistic settings over longer periods of time.
+We also acknowledge several limitations of our study design: we have not yet systematically studied target density variation, our study was performed in a lab environment, and only measured first use. Future work should study how the technique applies in realistic settings over longer periods of time.
+
 %Point 3: Limitation
 %Highlight the novelty of technique 2 & 3 while point out its weakness:
 %- How sunlight will impact the techniques
