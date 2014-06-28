@@ -13,7 +13,7 @@ We deployed 10 wireless nodes in an indoor environment (Figure~\ref{fig:targetin
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=1.0\columnwidth]{figures/study-layout1.png}
+\includegraphics[width=0.9\columnwidth]{figures/study-layout1.png}
 \caption{In the targeting study, participants were asked to find and select one of 10 targets in the lab environment.}
 \label{fig:targeting-study-layout}
 \end{figure}
@@ -33,21 +33,21 @@ while {\em list selection} took 8.86 seconds (see Figure~\ref{fig:ir_vs_list}). 
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=1.0\columnwidth]{figures/result_study1a.pdf}
+\includegraphics[width=0.95\columnwidth]{figures/result_study1a.pdf}
 \caption{Boxplot of target acquisition time for {\em IR selection} and {\em list selection} is shown on the left. The center is the median value, and the mean value is shown using white dashed lines. The cumulative distributions are on the right.}
 \label{fig:ir_vs_list}
 \end{figure}
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=1.0\columnwidth]{figures/result_study1b.pdf}
+\includegraphics[width=0.95\columnwidth]{figures/result_study1b.pdf}
 \caption{Boxplot and CDF of target acquisition time when refinement is needed or not in {\em IR selection}}.
 \label{fig:with_without_refinement}
 \end{figure}
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=1.0\columnwidth]{figures/result_study1c.pdf}
+\includegraphics[width=0.95\columnwidth]{figures/result_study1c.pdf}
 \caption{Times taken to select a device vs.~its order in the {\em list selection}. The dotted line is a linear fit between the average time and target orders in the list. Two horizontal solid lines are the average target acquisition times in {\em Naive IR} when refinement is needed or not.}
 \label{fig:time-vs-list-order}
 \end{figure}
@@ -59,7 +59,7 @@ Because many targets were spaced far apart, refinements were only necessary in 1
 
 To further generalize the results, in Figure~\ref{fig:time-vs-list-order}, we show the acquisition time for each individual target in {\em list selection} condition, ordered by their relative position in the list. Since with IR technique, the acquisition time is invariant from each target's order, we use solid lines to represent the average performance of {\em IR selection}. From this figure, we can see that once there are more than 6 targets, the average acquisition time will be larger than IR selection, even if disambiguation is needed. %Therefore, we argue that once there are more targets in the physical space, the {\em list selection} method is not scalable. Further more, in real-life scenarios, targets would have longer names than an alphabet letter. This would increase the searching and text comparison time and also reduce the number of targets being shown in the UI screen.
 
-As for the qualitative feedback, 11 out of 14 participants preferred IR selection over list mode (two preferred list, one was undecided). While both interfaces were judged similarly on overall ease of connecting, \changes{IR selection was perceived to be more direct and pleasurable. One user noted benefit of {\em IR selection}  \studyquote{allowing users to focus on the targeted objects instead of the screen. \achal{This seems rather weak... Don't really need all the quotes.} One subject called it \studyquote{natural to interact with things just by looking at them}. Another mentioned that \studyquote{it's really convenient that what I'm looking at is what I'm targeting}, and many participants compared the overall time of target acquisition.}}
+As for the qualitative feedback, 11 out of 14 participants preferred IR selection over list mode (two preferred list, one was undecided). While both interfaces were judged similarly on overall ease of connecting, \changes{IR selection was perceived to be more direct and pleasurable. One user noted benefit of {\em IR selection}  \studyquote{allowing users to focus on the targeted objects instead of the screen}. \achal{This seems rather weak... Don't really need all the quotes.} One subject called it \studyquote{natural to interact with things just by looking at them}. Another mentioned that \studyquote{it's really convenient that what I'm looking at is what I'm targeting}}.
 
 In summary, {\em Naive IR} can outperform linear list selection, and most users prefer this head-orientation based targeting. From our quantitative result, however, we found that the refinement step detracts significantly from the efficiency of the technique.
 
