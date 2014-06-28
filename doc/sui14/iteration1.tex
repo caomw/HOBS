@@ -3,6 +3,7 @@
 \section{Iteration 1: Naive IR}
 Our initial research question is: {\em Can IR-based targeting reduce the selection time compared to the case where only UI list navigation is used on a head-worn device?} 
 
+\vfill
 \subsection{Technique}
 In our first implementation, we use IR for scanning as described in the previous section. For the refinement stage, we simply show a list of the subset of targets that have received IR signals on the Glass display. Users swipe to select from that list and tap to confirm the intended target.
 
@@ -13,7 +14,7 @@ We deployed 10 wireless nodes in an indoor environment (Figure~\ref{fig:targetin
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=1.0\columnwidth]{figures/study-layout1.png}
+\includegraphics[width=0.9\columnwidth]{figures/study-layout1.png}
 \caption{In the targeting study, participants were asked to find and select one of 10 targets in the lab environment.}
 \label{fig:targeting-study-layout}
 \end{figure}
@@ -33,21 +34,21 @@ while {\em list selection} took 8.86 seconds (see Figure~\ref{fig:ir_vs_list}). 
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=1.0\columnwidth]{figures/result_study1a.pdf}
+\includegraphics[width=0.95\columnwidth]{figures/result_study1a.pdf}
 \caption{Boxplot of target acquisition time for {\em IR selection} and {\em list selection} is shown on the left. The center is the median value, and the mean value is shown using white dashed lines. The cumulative distributions are on the right.}
 \label{fig:ir_vs_list}
 \end{figure}
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=1.0\columnwidth]{figures/result_study1b.pdf}
+\includegraphics[width=0.95\columnwidth]{figures/result_study1b.pdf}
 \caption{Boxplot and CDF of target acquisition time when refinement is needed or not in {\em IR selection}}.
 \label{fig:with_without_refinement}
 \end{figure}
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=1.0\columnwidth]{figures/result_study1c.pdf}
+\includegraphics[width=0.95\columnwidth]{figures/result_study1c.pdf}
 \caption{Times taken to select a device vs.~its order in the {\em list selection}. The dotted line is a linear fit between the average time and target orders in the list. Two horizontal solid lines are the average target acquisition times in {\em Naive IR} when refinement is needed or not.}
 \label{fig:time-vs-list-order}
 \end{figure}
