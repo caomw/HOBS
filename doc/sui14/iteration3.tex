@@ -19,13 +19,14 @@ We introduce a third technique that uses a combination of motion sensors and IR
 to learn the relative orientations of targets in a room and intelligently
 suggest targets during refinement (see Figure~\ref{fig:third_technique}).
 
-In the learning stage, the user scans over the targets, and the system attains
-the absolute orientation of each device from IR and motion sensors. From this
-information it can abstract out their relative positions and build an {\em
-adjacency map}.
+In the learning stage, as the user scans over targets in their normal use, the
+system attains the absolute orientation of each device from IR and motion
+sensors. From this information it can abstract out their relative positions and
+build an {\em adjacency map}. This process is transparent to the user, and the
+map can be built without an explicit calibration phase.
 
 This absolute orientation cannot be applied to all indoor environments, since
-the user’s movements through the space could change the relationships between
+the user's movements through the space could change the relationships between
 targets. However, with the constraint that the targets are spread around the
 periphery, their relative orientations are stable (see
 Figure~\ref{fig:third_principle}).

@@ -39,3 +39,6 @@ Backup[ ]of[ ]*.numbers/
  
 # Mac finder files and hidden folders
 .DS_Store
+
+# Some random symlink that was committed earlier.
+gs
