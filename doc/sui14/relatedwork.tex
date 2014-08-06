@@ -1,13 +1,13 @@
 %!TEX root = sui14.tex
 \vfill
-\ben{make sure no section title appears at the end of any column.}
+%\ben{make sure no section title appears at the end of any column.}
 
 \section{Background and Related Work}
 Our approach is related to head- and eye-controlled interfaces, area cursors, pointing in physical spaces and computer vision-based selections.
 
 
 \subsection{Head and Gaze Input}
-\changes{Head movement has long been used for virtual camera control in VR applications~\cite{pausch_user_1993} and as an assistive input technology for cursor control of desktop applications~\cite{radwin1990method}. However, it is notable that human neck muscles have a lower bandwidth than other muscle groups, e.g., the wrist~\cite{card_morphological_1991}.}
+Head movement has long been used for virtual camera control in VR applications~\cite{pausch_user_1993} and as an assistive input technology for cursor control of desktop applications~\cite{radwin1990method}. However, it is notable that human neck muscles have a lower bandwidth than other muscle groups, e.g., the wrist~\cite{card_morphological_1991}.
 %
 %Card, summarizing other work, shows that neck muscles are a poor muscle group for pointing in general: neck muscles only have a bandwidth of about $4.2bits/s$ (compared to $23bits/s$ of wrist muscles used by a standard mouse~\cite{Card:1991:MAD:123078.128726}. 
 %
@@ -19,11 +19,11 @@ Our system works through point-to-point IR communication and does not require an
 %Our work is closer in spirit to Selker's headworn system~\cite{Selker:2001:EGE:634067.634176}.
 
 \subsection{Area Cursors}
-\changes{
+
 In 2D area cursors for GUIs, the activation area of the cursor is enlarged, which facilitates acquiring smaller targets~\cite{kabbash1995prince}. We argue that head orientation pointing has analogous characteristics (limited pointing performance and accuracy). Area cursors are especially appropriate for individuals with motor control impairments or difficulties~\cite{worden1997making,findlater2010enhanced}. Similar ideas have also been extended into 3D to provide selection with progressive refinement in 3D scenes~\cite{bacim2013design}. All area and space cursors necessitate disambiguation when there are multiple targets and no clear winner. This paper describes the trade-offs between several disambiguation approaches.
 
 %We conceptualize area pointing as a two-stage process: in the {\em coarse} phase, which we call {\em scanning}, users move so the activation area intersects with the target object (and possibly other, unintended targets). In the {\em refinement} phase, they adjust so only the intended target will be selected. Many disambiguation techniques are possible for refinement -- this paper describes the trade-offs between several of them.
-}
+
 
 \subsection{Pointing in Physical Spaces}
 Rukzio ~\cite{rukzio_experimental_2006} studied alternative methods for selecting devices in physical spaces and found that users strongly preferred either tapping target appliances with a mobile device or pointing at a distance to browsing a list. Several other approaches to spatial selection with handheld devices~\cite{beigl_point_1999,patel_2-way_2003,wilson_xwand:_2003,schmidt_picontrol:_2012,kemp_point-and-click_2008} or finger-worn devices~\cite{merrill_augmenting_2007} exist. 
@@ -34,7 +34,7 @@ Other approaches rely on virtual room models in which a user's location is estim
 Our system tackles an unresolved issue of prior approaches -- navigating an area dense with potential targets and resolving selection ambiguity.
 
 \subsection{Vision- and Projection-Based Target Selection}
-\changes{Many alternative solutions for detecting devices in contained spaces
+Many alternative solutions for detecting devices in contained spaces
 rely on computer-vision recognition of printed tags on devices. Unfortunately,
 these methods either impose significant constraints on the camera used for
 detection~\cite{Bokode}, require large or obtrusive tags~\cite{Dataglyphs}, or
@@ -46,8 +46,7 @@ codes in Picontrol~\cite{schmidt_picontrol:_2012} and RFIG
 Lamps~\cite{raskar_rfig_2004}) or spatially (using QR codes in the infrared
 spectrum in SideBySide~\cite{willis_sidebyside:_2011}). Our solution is similar
 in spirit but requires only small, low-cost IR emitters and detectors.
-\bjoern{need a stronger statement here}} \achal{Tried emphasizing the smaller
-requirements, not sure what else we can say.}
+
 
 %However, visible tags at appropriate sizes may be rejected by users because of their negative aesthetic effect on the space.
 
