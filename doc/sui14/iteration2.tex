@@ -13,12 +13,12 @@ Previously we only used IR reception as a binary signal for identifying potentia
 % transmitter webpage: http://www.digikey.com/product-search/en?x=0&y=0&lang=en&site=us&KeyWords=475-2919-ND
 % http://www.digikey.com/product-detail/en/TSL267-LF/TSL267-LF-ND/3095052
 
-We have empirically measured the intensity distribution at the receiver for this configuration in Figure~\ref{fig:measurement}. Our measurements confirm that angular difference has a large effect on the intensity readings (see how the IR intensity distribution changes when the offset from the center increases).
+We have empirically measured the intensity distribution at the receiver for this configuration in Figure~\ref{fig:measurement}. Our measurements confirm that angular difference has a large effect on the intensity readings (see how the IR intensity distribution changes when the \changes{angle has increased}).
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.95\columnwidth]{figures/IRIntensityDistribution.pdf}
-\caption{Empirical measurement of IR intensity at different positions. We measure the intensity at a plane every meter away from the IR emitter. On that plane, we obtain a sample every 5 centimeters. The size and color brightness in this graph represents the intensity readings.}
+\caption{This figure shows an empirical measurement of IR intensity at different positions. We measure the intensity at a plane every meter away from the IR emitter. On that plane, a sample is mesaured every 5 centimeters, \changes{and we stop when the reading is smaller than ambient noise.} \changes{To match with our assumption about the relationship between angles and intensities, the vertical axis is changed to the degree of the angle.} The size and color brightness in this graph represents the intensity readings for visualization.}
 \label{fig:measurement}
 \end{figure}
 
