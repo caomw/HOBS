@@ -171,16 +171,17 @@ df <- cbind(new, offset, distance)
 df_mirror <- df[df$offset > 0,]
 df_mirror$offset <- -df_mirror$offset
 whole <- rbind(df, df_mirror)
+whole$angle <- atan(whole$offset * 0.01 / whole$distance) / pi * 180
 
-p <- ggplot(whole, aes(x=distance, y=offset, colour = value)) +
+p <- ggplot(whole, aes(x=distance, y=angle, colour = value)) +
   geom_point(aes(size= log(value))) +
   theme_bw() +
   theme(legend.position="none") +
   xlab("distance (m) between IR and the receiver") +
-  ylab("offset (cm) from the center") +
+  ylab("angle (degree) from the center") +
   ggtitle("IR intensity distribution (measured)") +
   scale_fill_brewer() +
   xlim(0, 8.1)
-pdf("figures/IRIntensityDistribution.pdf", width = 10, height = 3)
+pdf("figures/IRIntensityDistribution.pdf", width = 10, height = 3.5)
 p
 dev.off()
