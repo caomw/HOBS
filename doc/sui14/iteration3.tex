@@ -9,9 +9,9 @@ users must switch their focus back and forth between the physical scene and the
 near-eye display. These problems motivated us to design an approach that
 harnesses the head orientation during the {\em refinement} stage.
 
-In our third iteration, we ask the question {\em can we build a system purely
-using head orientation and visual feedback from the environment for target
-selection?}
+In our third iteration, we ask the \changes{research} question --
+{\em can we build a system purely using head orientation and visual
+  feedback from the environment for target selection?}
 
 \subsection{Technique}
 
@@ -19,25 +19,18 @@ We introduce a third technique that uses a combination of motion sensors and IR
 to learn the relative orientations of targets in a room and intelligently
 suggest targets during refinement (see Figure~\ref{fig:third_technique}).
 
-In the learning stage, as the user scans over targets in their normal use, the
-system attains the absolute orientation of each device from IR and motion
-sensors. From this information it can abstract out their relative positions and
-build an {\em adjacency map}. This process is transparent to the user, and the
+In the learning stage, as the user scans over targets in their normal
+use, the system attains the absolute orientation of each device from
+IR and motion sensors. From this information it can abstract out
+\changes{the} relative positions \changes{of targets} and construct an
+{\em adjacency map}. The absolute orientations in the map cannot be
+applied to all indoor environments, since the user's movements through
+the space could change the relationships between targets. However,
+with the constraint that the targets are spread around the periphery
+\changes{at similar distances}, their relative orientations are stable
+(see Figure~\ref{fig:third_principle}). And since we are using IR at
+the same time, the learning process is transparent to the user and the
 map can be built without an explicit calibration phase.
-
-This absolute orientation cannot be applied to all indoor environments, since
-the user's movements through the space could change the relationships between
-targets. However, with the constraint that the targets are spread around the
-periphery \changes{at similar distances}, their relative orientations are
-stable (see Figure~\ref{fig:third_principle}).
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.95\columnwidth]{figures/third_principle.png}
-\caption{This illustrates that the change of a user's absolution position
-doesn't change the relative relationship of physical targets.}
-\label{fig:third_principle}
-\end{figure}
 
 \begin{figure}[t]
 \centering
@@ -48,14 +41,23 @@ is based on relative changes to a reference point.}
 \label{fig:third_technique}
 \end{figure}
 
-After the map is created, the user can hold down on the touchpad to enter a
-quasi-mode for refinement. In this quasi-mode, one device lights up at a time.
-When the user turns their head in the direction of another device, the light
-switches to that device. Therefore, the user can move between devices one at a
-time with slight head movements. We implement this interaction by calculating
-the user's direction of motion using a low-passed history of sensor
-measurements and searching through the adjacency map for the nearest device in
-that direction.
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.95\columnwidth]{figures/third_principle.png}
+\caption{This illustrates that the change of a user's absolution position
+doesn't change the relative relationship of physical targets.}
+\label{fig:third_principle}
+\end{figure}
+
+\changes{After the map is created, the user can enter a quasi-mode for
+  refinement by holding down on the touchpad. In this quasi-mode, one
+  device lights up at a time. When the user turns their head in the
+  direction of another device, the light switches to that
+  device. Therefore, the user can move between devices one at a time
+  with slight head movements. This prediction is implemented by
+  calculating the user's direction of motion using a low-passed
+  history of sensor measurements and searching through the adjacency
+  map for the nearest device in that direction.}
 
 \subsection{Evaluation}
 We evaluate the head motion refinement method by holding an informal study and
