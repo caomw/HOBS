@@ -50,14 +50,18 @@ doesn't change the relative relationship of physical targets.}
 \end{figure}
 
 \changes{After the map is created, the user can enter a quasi-mode for
-  refinement by holding down on the touchpad. In this quasi-mode, one
-  device lights up at a time. When the user turns their head in the
-  direction of another device, the light switches to that
-  device. Therefore, the user can move between devices one at a time
-  with slight head movements. This prediction is implemented by
-  calculating the user's direction of motion using a low-passed
-  history of sensor measurements and searching through the adjacency
-  map for the nearest device in that direction.}
+refinement by holding down on the touchpad. In this quasi-mode, one device
+lights up at a time. When the user turns his head in the direction of another
+device, the light switches to that device. Therefore, the user can move between
+devices one at a time with slight head movements. This prediction is
+implemented by first calculating the user's direction of motion, and searching
+through the adjacency map for the nearest device in that direction.  To
+calculate the direction, we maintain a circular buffer of the last 10 sensor
+measurements, passed through a low pass filter. The direction is then
+calculated as the difference between the last sample and the first sample.
+Note that we use a hysteresis method to temporarily lock to the current device
+- if the variance of the buffer is below a threshold, we assume no movement has
+occurred and do not select another device.}
 
 \subsection{Evaluation}
 We evaluate the head motion refinement method by holding an informal study and
