@@ -1,4 +1,5 @@
-%!TEX root = uist14.tex
+%!TEX root = sui14.tex
+\newpage
 \section{Iteration 3: Head motion refinement}
 \label{sec:iteration-3:-head}
 
@@ -28,9 +29,8 @@ applied to all indoor environments, since the user's movements through
 the space could change the relationships between targets. However,
 with the constraint that the targets are spread around the periphery
 \changes{at similar distances}, their relative orientations are stable
-(see Figure~\ref{fig:third_principle}). And since we are using IR at
-the same time, the learning process is transparent to the user and the
-map can be built without an explicit calibration phase.
+(see Figure~\ref{fig:third_principle}). \changes{This learning process can be transparent to the user and the
+map can be built without an explicit calibration phase.}
 
 \begin{figure}[t]
 \centering
@@ -50,34 +50,32 @@ doesn't change the relative relationship of physical targets.}
 \end{figure}
 
 \changes{After the map is created, the user can enter a quasi-mode for
-refinement by holding down on the touchpad. In this quasi-mode, one device
+refinement by holding down on the touchpad. In this quasi-mode, a single selected device
 lights up at a time. When the user turns his head in the direction of another
-device, the light switches to that device. Therefore, the user can move between
+device, the selection (and indicator light) switches to that device. Therefore, the user can move between
 devices one at a time with slight head movements. This prediction is
-implemented by first calculating the user's direction of motion, and searching
+implemented by first calculating the user's direction of head motion, and searching
 through the adjacency map for the nearest device in that direction.  To
 calculate the direction, we maintain a circular buffer of the last 10 sensor
 measurements, passed through a low pass filter. The direction is then
 calculated as the difference between the last sample and the first sample.
-Note that we use a hysteresis method to temporarily lock to the current device
-- if the variance of the buffer is below a threshold, we assume no movement has
+We use a hysteresis method to avoid spurrious selection changes
+--- if the variance of the buffer is below a threshold, we assume no movement has
 occurred and do not select another device.}
 
 \subsection{Evaluation}
-We evaluate the head motion refinement method by holding an informal study and
-collecting qualitative feedback from a subset of 4 users from the Iteration 2
-study. In the study, we asked users to try cycling through the targets using
+We evaluated the head motion refinement method through an informal study and
+collected qualitative feedback from a subset of 4 users from the Iteration 2
+study. In this evaluation, we asked users to cycle through multiple targets using
 the new quasi-mode.
 
 The users had strong preferences for the new method of refinement.
-\changes{Though we lack formal data to evaluate the performance of
-this method, from our observation during the experiments, we found
-that each trial became much easier than previous iterations. We
+\changes{Our observations suggest that each trial became much easier than previous iterations. We
 conducted a survey to collect qualitative feedback after the
-experiment.} \achal{I vote changing to "Thoguh we lack... during the experiments,
-we conducted..."} On a scale from 1-7, 1 being the least mental effort and
+experiment.} 
+On a scale from 1-7, 1 being the least mental effort and
 7 being the most mental effort users rated the old technique 4.25 and
-the new technique 2 on average. 100\% indicated a preference for head
+the new technique 2 on average. All users indicated a preference for head
 movement to list navigation. One user referenced the issue of naming
 targets that the list necessitates, preferring the experience of
 \studyquote{matching visual cues rather than numbers}.  Another

@@ -1,28 +1,29 @@
-%!TEX root = uist14.tex
+%!TEX root = sui14.tex
 
 \section{Iteration 1: Naive IR}
 Our initial research question is: {\em Can IR-based targeting reduce the selection time compared to the case where only UI list navigation is used on a head-worn device?} 
 
+\newpage
 \subsection{Technique}
 In our first implementation, we use IR for scanning as described in the previous section. For the refinement stage, we simply show a list of the subset of targets that have received IR signals on the Glass display. Users swipe to select from that list and tap to confirm the intended target.
 
 A natural point of comparison is an interface that does not use any head orientation information - it always shows a complete list of all targets. We implemented a list view where users swiped forward and backward on the Glass touchpad to navigate incrementally through the list. To quantify the benefit of using IR for the scanning step, we carried out a target acquisition study which compares the {\em Naive IR selection} and {\em list selection}.  
 
 \subsection{Method}
-We deployed 10 wireless nodes in an indoor environment (Figure~\ref{fig:targeting-study-layout}), each with a number ID and a letter representing the name. For the study, we recruited \changes{16} participants from our institution \changes{(8 males and 6 females)} \changes{using email invitations}. \changes{They are composed of undergrad students, graduate students, and university staff. Their background ranges from Information(6), Engineering(4), Math and Science(4), Design(1), Others(1)}  \changes{14} had never used Google Glass before, so we offered a tutorial before the experiment in order to introduce the device. Four participants wore prescription glasses, which makes Glass more cumbersome to use and adjust and may have affected their task performance. In this study, the IR LED was fixed and not repositionable as shown in Figure~\ref{fig:glass}.
+We deployed 10 wireless nodes in an indoor environment (Figure~\ref{fig:targeting-study-layout}), each with a number ID and a letter representing the name. For the study, \changes{we recruited 16 participants from our institution (8 males and 6 females) by email.} \changes{Participants included undergraduate and graduate students, as well as university staff. Their educational backgrounds included Information Science (6), Engineering (4), Math and Science (4), Design (1), Others(1).}  \changes{14} had never used Google Glass before, so we offered a tutorial before the experiment in order to introduce the device. Four participants wore prescription glasses, which makes Glass more cumbersome to use and adjust and may have affected their task performance. In this study, the IR LED was fixed and not repositionable as shown in Figure~\ref{fig:glass}.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.9\columnwidth]{figures/study-layout1.png}
+\includegraphics[width=1.0\columnwidth]{figures/study-layout1.png}
 \caption{In the targeting study, participants were asked to find and select one of 10 targets in the lab environment.}
 \label{fig:targeting-study-layout}
 \end{figure}
 
-In the within-subject study, half of the participants performed {\em IR selection} first and the other half used {\em list selection} first. For each selection condition, we conducted 15 target selections by randomly choosing from all the targets. During the study, we measured the {\bf target acquisition time} for each target selection. \changes{At the beginning of each acquisition, participants were asked to stand at a fixed position approximately 10-12 feet away from the nodes, looking down until the target is provided. As they attempt to connect, they may move around if they decided it would help them select. After each task, they were asked to move back to the starting position.} Afterward, participants were asked to complete a survey of primarily open-ended \changes{questions} about their experience.
+In the within-subject study, half of the participants performed {\em IR selection} first and the other half used {\em list selection} first. For each selection condition, we conducted 15 target selections by randomly choosing from all the targets. During the study, we measured the {\bf target acquisition time} for each target selection. \changes{At the beginning of each acquisition, participants were asked to stand at a fixed position approximately 10-12 feet away from the nodes, looking down until a target is announced. Participants were allowed to physically move towards targets if they decided that this would help them with the task. After each task, they were asked to move back to the starting position.} Afterwards, participants were asked to complete a survey of primarily open-ended \changes{questions} about their experience.
 
 %% remove this for now
 %% Our measurements suggest that IR communication can be targeted to an area about 60-120cm in diameter, up to 5m in front of the user. These values are a reasonable match for selecting targets in a room-size environment. A wider beam would lead to an increased chance of multiple appliances receiving IR signals simultaneously. A narrower beam will make targeting more challenging, given the precision constraints of human head movement.
-
+\newpage %bjoern - hack fix to avoid orphaned heading
 \subsection{Results}
 Our results indicate that {\em IR selection} outperforms {\em list selection}.  The average target acquisition time for {\em IR selection} is 6.67 seconds 
 while {\em list selection} took 8.86 seconds (see Figure~\ref{fig:ir_vs_list}). A t-test shows a significant difference ($t(279)=-3.81, \changes{p < 0.001}$).
@@ -37,7 +38,7 @@ while {\em list selection} took 8.86 seconds (see Figure~\ref{fig:ir_vs_list}). 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.95\columnwidth]{figures/result_study1b.pdf}
-\caption{Boxplot and CDF of target acquisition time when refinement is needed or not in {\em IR selection}}.
+\caption{Boxplot and CDF of target acquisition time when refinement is needed or not in {\em IR selection}.}
 \label{fig:with_without_refinement}
 \end{figure}
 
@@ -48,14 +49,14 @@ while {\em list selection} took 8.86 seconds (see Figure~\ref{fig:ir_vs_list}). 
 \label{fig:time-vs-list-order}
 \end{figure}
 
-To understand how scanning and refinement contribute to total selection time, we split the data from {\em IR selection} into two parts -- trials that required refinement and ones that did not. It takes 6.40 seconds (on average) to complete  a selection without any refinement, but 9.16 seconds with refinement, indicating that an additional 2.76 seconds are needed for disambiguation (see Figure~\ref{fig:with_without_refinement}). This difference is significant $(t(19)=-2.7827, p=0.012)$ using t-test.
+To understand how scanning and refinement contribute to total selection time, we split the data from {\em IR selection} into two parts -- trials that required refinement and ones that did not. It takes 6.40 seconds (on average) to complete  a selection without any refinement, but 9.16 seconds with refinement, indicating that an additional 2.76 seconds are needed for disambiguation (see Figure~\ref{fig:with_without_refinement}). This difference is significant $(t(19)=-2.7827, \changes{p<0.05})$.% using t-test. %p=0.012
 %  \bjoern{I don't understand why we have 279 DF in the previous test but only 19 here??}). 
 %% \ben{Because the times when refinement is needed is only 18 times, so the DF is bounded by the samples.}
 Because many targets were spaced far apart, refinements were only necessary in 10\% of total {\em IR selection} trials in this study.
 
-To further generalize the results, in Figure~\ref{fig:time-vs-list-order}, we show the acquisition time for each individual target in {\em list selection} condition, ordered by their relative position in the list. Since with IR technique, the acquisition time is invariant from each target's order, we use solid lines to represent the average performance of {\em IR selection}. From this figure, we can see that once there are more than 6 targets, the average acquisition time will be larger than IR selection, even if disambiguation is needed. %Therefore, we argue that once there are more targets in the physical space, the {\em list selection} method is not scalable. Further more, in real-life scenarios, targets would have longer names than an alphabet letter. This would increase the searching and text comparison time and also reduce the number of targets being shown in the UI screen.
+To further generalize the results, in Figure~\ref{fig:time-vs-list-order}, we show the acquisition time for each individual target in the {\em list selection} condition, ordered by their relative position in the list. Since with IR technique, the acquisition time is invariant from each target's order, we use solid lines to represent the average performance of {\em IR selection}. From this figure, we can see that once there are more than 6 targets, the average acquisition time will be larger than IR selection, even if disambiguation is needed. %Therefore, we argue that once there are more targets in the physical space, the {\em list selection} method is not scalable. Further more, in real-life scenarios, targets would have longer names than an alphabet letter. This would increase the searching and text comparison time and also reduce the number of targets being shown in the UI screen.
 
-As for the qualitative feedback, 11 out of \changes{16} participants preferred IR selection over list mode (\changes{3} preferred list, \changes{2} was undecided). \changes{When asked: \studyquote{When you have multiple candidate targets within sight, which method for selecting between them did you use?} (multiple choices), among 16 participates, 81\% chose {\em adjust head so that only one candidate is signaled}, 56\% chose {\em tap (to enter refinement stage) and then choose between list}, and 25\% chose {\em walk closer to the candidate for a better result}}. Although through our observation, many participants walked one or two steps during some tasks, this suggests that participants viewed their moving as a followed-through action of adjusting their heads instead of an intention to walk closer to the targets. 
+\changes{In the elicited qualitative feedback, 11 out of 16 participants preferred IR selection over list mode (3 preferred list, 2 were undecided)}. \changes{When asked: \studyquote{When you have multiple candidate targets within sight, which method for selecting between them did you use?}, 81\% chose {\em adjust head so that only one candidate is signaled}, 56\% chose {\em tap (to enter refinement stage) and then choose between list}, and 25\% chose {\em walk closer to the candidate for a better result} (multiple choices were allowed)}. \changes{While we observed more participants walking one or two steps during some tasks, this suggests that participants viewed their moving as a followed-through action of adjusting their heads instead of an intentional to walk closer to the targets.}
 
 While both interfaces were judged similarly on overall ease of connecting, IR selection was perceived to be more direct and \changes{pleasant}. One user noted benefit of {\em IR selection}  \studyquote{allowing users to focus on the targeted objects instead of the screen}. \achal{This seems rather weak... Don't really need all the quotes.} One subject called it \studyquote{natural to interact with things just by looking at them}. Another mentioned that \studyquote{it's really convenient that what I'm looking at is what I'm targeting}.
 
