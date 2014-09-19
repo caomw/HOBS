@@ -67,12 +67,12 @@ while True:
   while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
     line = sys.stdin.readline()
     ts = datetime.now().strftime('%Y-%m-%d %H:%M:%S %f')
-    print '[', ts, ', Console]: ', line,
+    print '[', ts, '| Console]: ', line,
     ser.write(line)
 
   while ser.inWaiting() > 0:
     ts = datetime.now().strftime('%Y-%m-%d %H:%M:%S %f')
-    print '[', ts, ', Serial]: ',
+    print '[', ts, '| Serial]: ',
     line = ser.readline()
     sys.stdout.write(line)
     if len(line.strip()) > 0 and is_osc_on:
