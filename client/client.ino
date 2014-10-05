@@ -1,15 +1,19 @@
 /*
   client.ino
 
-  This is a general framework to fit in any clients that can be remotely controlled with XBee. Each clients will add additional function of parsing certain commands, while the major application takes charge of external communication.
+  This is a general framework to fit in any clients that can be remotely
+  controlled with XBee. Each clients will add additional function of parsing
+  certain commands, while the major application takes charge of external
+  communication.
 
   Examples of clients include, for now, lamps and laptops.
 
-  Lamps are simple, dump clients that only support on/off.
-  Laptops now are viewed as video players, thus supporting play/pause, volume adjustment, and brightness adjustment, etc.
+  Lamps are simple, dump clients that only support on/off. Laptops now are
+  viewed as video players, thus supporting play/pause, volume adjustment, and
+  brightness adjustment, etc.
 
 
-  Created 07/17/2013
+  Created 07/17/2013, modified on 10/05/2014
   By benzh@eecs.berkeley.edu
 
 */
@@ -18,10 +22,11 @@
 #include <IRremote.h>
 #include <string.h>
 
-// #define DEBUG 
-#define DEBUG_TAG
-
 #include "utils.h"
+
+// uncomment for debugging
+// #define DEBUG
+// #define DEBUG_TAG
 
 SoftwareSerial XBee(3,2); // RX, TX
 
@@ -62,30 +67,31 @@ int bucket = 0;
 
 char message[20];
 
-// hard coded appliance IDs
+// Hard coded IDs for appliances
 const char deviceTV[3] = "12";
 const char deviceMusic[3] = "13";
 const char deviceLamp[3] = "11";
 const char deviceFan[3] = "14";
 
+
 boolean statePending = false;
 boolean signal_response = false;
 
-// EXPERIMENT
+// Parameter used for EXPERIMENT
 const int MODE_IR = 1;
 const int MODE_LIST = 2;
 int exp_mode = MODE_IR;
 boolean notMe = false;
 
-void setup()  
+void setup()
 {
   Serial.begin(9600);
   Serial.println("Configuring...");
   pinMode(led_state_pin, OUTPUT);
-  pinMode(led_signal_pin, OUTPUT); 
+  pinMode(led_signal_pin, OUTPUT);
   pinMode(control_pin, OUTPUT);
-  pinMode(led_target_pin, OUTPUT); 
-  pinMode(tsl267_pin, INPUT); 
+  pinMode(led_target_pin, OUTPUT);
+  pinMode(tsl267_pin, INPUT);
 
   // set the data rate for the SoftwareSerial port
   XBee.begin(9600);
@@ -115,14 +121,14 @@ void loop()
 {
   // results.value = 0xFFFE;
 
-  // irrecv.decode will return non zero result when the data is ready. 
+  // irrecv.decode will return non zero result when the data is ready.
   // before that we should keep polling the data from the tsl267_pin
   // and tracks the maximum
   ir_rssi = analogRead(tsl267_pin);
   if (ir_rssi > ir_rssi_current_max)
     ir_rssi_current_max = ir_rssi;
 
-  if(irrecv.decode(&results)) {    
+  if(irrecv.decode(&results)) {
     delay(5);
     Serial.print("IR: ");
     Serial.print(results.value);
@@ -136,7 +142,7 @@ void loop()
       // send the rssi back through XBee
       // digitalWrite(led_signal_pin, HIGH);
       // think about how to do the scheduling such that there is no conflict
-      
+
       if (ir_rssi_increase > 50) {
 	XBee.println(deviceId + String("i") + String(ir_rssi_last_max));
       }
@@ -164,7 +170,7 @@ void loop()
     } else {
       //garbage message
     }
-    irrecv.resume();    
+    irrecv.resume();
   }
 
   if(signal_response){
@@ -174,11 +180,10 @@ void loop()
     }
   }
 
-  
   if (XBee.available()) {
     delay(5);
     readStringfromSerial(&XBee, message, true);
-    
+
     // the led only lights up when it receives commands from the master
     if ( message[0] == 'H') {   // hover
       digitalWrite(led_state_pin, LOW);
@@ -231,7 +236,7 @@ void loop()
 void sendBackDeviceID() {
   // randomDelay = random(500);
   // avoid conflicts
-  
+
   if(atoi(deviceId) >10) {
     randomDelay = (atoi(deviceId) - 10) * random_mutiplier;
     // if it's 11 - 14 ==> test 2
@@ -242,7 +247,7 @@ void sendBackDeviceID() {
   DEBUG_TAGGING(randomDelay, " delay, sending back device ID\n" );
   // send back acknowledge packet
   sendXBeePacketFromRaw(&XBee, deviceId, "A", " ID", "XXX");
-  
+
 }
 
 void readXBeeDeviceId() {
@@ -273,11 +278,11 @@ void readXBeeDeviceId() {
     itoa(id, a, 10);
     deviceId[1] = a[0];
   } else {
-    itoa(id, deviceId, 10);  
+    itoa(id, deviceId, 10);
   }
 
   Serial.print("my device ID: ");
-  Serial.println(deviceId);  
+  Serial.println(deviceId);
 }
 
 void powerClient(struct XBeePacket p) {
@@ -292,12 +297,16 @@ void powerClient(struct XBeePacket p) {
   //   }
   // }
   //taking out because now it auto reply when selected, glass won't send R msg
-  if (strcmp(p.func, "C") == 0 && strcmp(p.var, "POW") == 0 && strcmp(p.data, " ON") == 0) {
+  if (strcmp(p.func, "C") == 0 &&
+	  strcmp(p.var, "POW") == 0 &&
+	  strcmp(p.data, " ON") == 0) {
     DEBUG_PRINTLN("turned on");
     digitalWrite(control_pin, HIGH);
     sendXBeePacketFromRaw(&XBee, deviceId, "A", "POW", " ON");
   }
-  else if (strcmp(p.func, "C") == 0 && strcmp(p.var, "POW") == 0 && strcmp(p.data, "OFF") == 0) {
+  else if (strcmp(p.func, "C") == 0 &&
+		   strcmp(p.var, "POW") == 0 &&
+		   strcmp(p.data, "OFF") == 0) {
     DEBUG_PRINTLN("turned off");
     digitalWrite(control_pin, LOW);
     sendXBeePacketFromRaw(&XBee, deviceId, "A", "POW", "OFF");
@@ -317,7 +326,8 @@ void replyStatus() {
     } else {
       sendXBeePacketFromRaw(&XBee, deviceId, "A", "POW", " ON");
     }
-  } else if(strcmp(deviceId, deviceTV) == 0 || strcmp(deviceId, deviceMusic) == 0) {
+  } else if (strcmp(deviceId, deviceTV) == 0 ||
+			 strcmp(deviceId, deviceMusic) == 0) {
     //send a read status cmd to the laptop and wait for reply
     //curently only volume is needed
     Serial.print(deviceId);
@@ -346,7 +356,6 @@ void laptopBridging(struct XBeePacket p) {
   str[9] = '\0';
   Serial.println(str);
 
-
   // char strArray[20];
   // int i = 0;
 
@@ -361,7 +370,7 @@ void laptopBridging(struct XBeePacket p) {
   //   XBee.println(strArray);
   // } else {
   //   // sendXBeePacketFromRaw(&XBee, deviceId, "A", p.var, p.data);
-  // }   
+  // }
 }
 
 int readStringfromSerial (SoftwareSerial *SS, char *strArray, bool debug) {

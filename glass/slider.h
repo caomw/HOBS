@@ -1,3 +1,6 @@
+// This code serves as the driver to use softpot slider
+// After we use Google Glass, this code is obselete now.
+
 #ifndef slider_h
 #define slider_h
 
@@ -68,12 +71,12 @@ gesture_t sliderEvent(int* sDelta, int* sVal) {
 
       } else {
         //within duration but still unpressed -> keep waiting
-        
+
         return gHOVER;
       }
     }
 
-    
+
   }
 
   if(checkDTap) {
@@ -103,7 +106,7 @@ gesture_t sliderEvent(int* sDelta, int* sVal) {
       release_time = millis();
       DEBUG_PRINT("pressed duration: ");
       DEBUG_PRINT(release_time - start_time);
-      
+
       DEBUG_PRINTLN();
       if(release_time - start_time < HOLD_THRESHOLD) {
         //a tap -> check for double tap
@@ -137,7 +140,7 @@ gesture_t sliderEvent(int* sDelta, int* sVal) {
           // return gTAP;
         }
 
-        
+
       } else {
         //relase from hover (long hold)
 
@@ -156,32 +159,32 @@ gesture_t sliderEvent(int* sDelta, int* sVal) {
         // return gRELEASE;
       }
 
-      
-    } 
+
+    }
     else {
       // has been idle
       sliderState = gsIDLE;
       return gNONE;
     }
-  } 
+  }
   else {  // slider is being pressed
-    
+
     if(sliderState == gsPRESS) {
       // continuously pressing
       *sDelta = softpotReading - *sVal;
       if(abs(*sDelta) > SOFTPOT_DELTA_THRESHOLD){ //avoid noise
         *sVal = softpotReading;
-        
+
         return gHOVERCHANGE;
       } else {
-        
-        return gHOVER;    
+
+        return gHOVER;
       }
-      
-    } 
+
+    }
     else {
       // first time pressed
-      
+
       sliderState = gsPRESS;
       start_time = millis();
       *sVal = softpotReading;
