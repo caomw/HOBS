@@ -1,6 +1,6 @@
 HOBS
 ===============
-![Alt text](doc/sui14/figures/GlassWithArduino.jpg =600x)
+<img src="https://github.com/nebgnahz/HOBS/raw/master/doc/sui14/figures/GlassWithArduino.jpg" width="600">
 
 Emerging head-worn computing devices can enable interactions with smart objects
 in physical spaces. We present the iterative design and evaluation of HOBS - a
