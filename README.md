@@ -1,5 +1,6 @@
 HOBS
 ===============
+![Alt text](doc/sui14/figures/GlassWithArduino.jpg =600x)
 
 Emerging head-worn computing devices can enable interactions with smart objects
 in physical spaces. We present the iterative design and evaluation of HOBS - a
@@ -14,3 +15,4 @@ location, our third design infers a spatial data structure of the targets
 enabling a natural head-motion based disambiguation. Finally, we demonstrate a
 universal remote control application using HOBS and report qualitative user
 impressions.
+
